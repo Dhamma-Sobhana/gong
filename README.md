@@ -1,2 +1,5 @@
-# gong-server
-Gong server which remotes and players connect to
+# Gong Server
+
+## Development
+
+    docker-compose up --build

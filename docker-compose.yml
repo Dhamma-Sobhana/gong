@@ -1,0 +1,12 @@
+version: "2"
+volumes:
+    config:
+services:
+  mqtt:
+    build:
+      context: ./mqtt
+    ports:
+      - 1883:1883
+  server:
+    build:
+      context: ./server

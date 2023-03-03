@@ -4,7 +4,8 @@
   "description": "Server for connecting remote and player for playing gong sounds",
   "main": "server.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "NODE_PATH=./build node build/server.js",
+    "build": "tsc -p .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

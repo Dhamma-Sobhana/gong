@@ -11,5 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "mqtt": "^4.3.7"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
   }
 }

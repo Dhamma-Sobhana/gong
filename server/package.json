@@ -6,6 +6,7 @@
   "scripts": {
     "start": "NODE_PATH=./build node build/server.js",
     "build": "tsc -p .",
+    "dev": "nodemon src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,6 +16,8 @@
   },
   "devDependencies": {
     "@types/node": "^18.14.5",
+    "nodemon": "^2.0.21",
+    "ts-node": "^10.9.1",
     "typescript": "^4.9.5"
   }
 }

@@ -1,0 +1,17 @@
+version: "2"
+volumes:
+    config:
+services:
+  mqtt:
+    build:
+      context: ./mqtt
+    ports:
+      - 1883:1883
+  server:
+    build:
+      context: ./server
+      target: base
+    volumes:
+      - ./server/src:/usr/src/app/src
+      - ./server/nodemon.json:/usr/src/app/nodemon.json
+    command: npm run dev

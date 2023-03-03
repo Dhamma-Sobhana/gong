@@ -10,3 +10,4 @@ services:
   server:
     build:
       context: ./server
+    command: node build/server.js

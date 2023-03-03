@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:lts-alpine as base
 
 # change working directory
 WORKDIR /usr/src/app
@@ -12,5 +12,9 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-# the command that starts our app
-CMD ["node", "src/server.js"]
+# Building for production
+FROM base as production
+
+ENV NODE_PATH=./build
+
+RUN npm run build

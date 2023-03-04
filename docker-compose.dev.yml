@@ -19,7 +19,7 @@ services:
   server:
     build:
       context: ./server
-      target: base
+      target: development
     volumes:
       - ./server/src:/usr/src/app/src
       - ./server/nodemon.json:/usr/src/app/nodemon.json

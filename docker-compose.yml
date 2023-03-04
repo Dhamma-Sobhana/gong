@@ -19,4 +19,5 @@ services:
   server:
     build:
       context: ./server
+      target: production
     command: node build/server.js

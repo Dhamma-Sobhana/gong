@@ -11,5 +11,5 @@ client.on('connect', function () {
 
 client.on('message', function (topic: string, message: object) {
   // message is Buffer
-  console.log("NoMore!!", message.toString())
+  console.log("Received: ", message.toString())
 })

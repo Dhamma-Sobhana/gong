@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "NODE_PATH=./build node build/server.js",
-    "build": "tsc -p .",
+    "build": "./node_modules/typescript/bin/tsc -p .",
     "dev": "nodemon src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,0 +1,20 @@
+{
+  "name": "gong-player",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node .",
+    "start-nodemon": "nodemon",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "mqtt": "^4.3.7",
+    "play-sound": "^1.1.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.21"
+  }
+}

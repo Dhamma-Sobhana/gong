@@ -24,3 +24,13 @@ services:
       - ./server/src:/usr/src/app/src
       - ./server/nodemon.json:/usr/src/app/nodemon.json
     command: npm run dev
+  player:
+    build:
+      context: ./player
+      target: development
+    volumes:
+      - ./player/src:/usr/src/app/src
+    environment:
+      MQTT_SERVER: "${MQTT_SERVER}"
+      NAME: "${PLAYER_NAME}"
+    command: npm run start

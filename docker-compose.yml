@@ -21,3 +21,8 @@ services:
       context: ./server
       target: production
     command: node build/server.js
+  player:
+    build:
+      context: ./player
+      target: development
+    command: node src/index.js

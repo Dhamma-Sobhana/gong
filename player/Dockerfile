@@ -15,5 +15,7 @@ RUN npm install
 # Bundle app source
 COPY . .
 
+# Balena Audio
+RUN apk add --no-cache alsa-plugins-pulse
 # Install dependencies
 RUN apk add --no-cache mpg123

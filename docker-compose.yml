@@ -1,6 +1,7 @@
 version: "2"
 volumes:
     mqtt-config-dir:
+    pulse:
 services:
   mqtt-config:
     build:
@@ -21,8 +22,21 @@ services:
       context: ./server
       target: production
     command: node build/server.js
+  audio:
+    image: bh.cr/balenalabs/audio-rpi # where <arch> is one of rpi, armv7hf, aarch64 or amd64
+    privileged: true
+    volumes:
+      - 'pulse:/run/pulse'
+    environment:
+      AUDIO_VOLUME: "100"
   player:
     build:
       context: ./player
       target: development
+    environment:
+      MQTT_SERVER: "${MQTT_SERVER}"
+      NAME: "${PLAYER_NAME}"
+      PULSE_SERVER: "unix:/run/pulse/pulseaudio.socket"
+    volumes:
+      - 'pulse:/run/pulse'
     command: node src/index.js

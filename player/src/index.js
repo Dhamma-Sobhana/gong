@@ -56,9 +56,9 @@ client.on('connect', function () {
 function playGong(affectedAreas) {
   // TODO: Turn GPIO on or off
   console.log('Playing')
-  player.play('../sound/static_sound_gong_gong.mp3', function(err) {
+  player.play('./sound/static_sound_gong_gong.mp3', function(err) {
     if (err) {
-      console.error("Error", err)
+      console.error("Error: ", err)
     } else {
       let now = new Date().getTime()
       payload = {

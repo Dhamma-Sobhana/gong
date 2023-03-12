@@ -46,7 +46,7 @@ The server logic. Communicates with players and remotes.
 ### Player
 
 #### Audio
-Prebuilt image by balena that handles audio playback. Sound data is sent to this container using a pulse socket.
+Prebuilt image by balena that handles audio playback. Sound data is sent to this container using a [pulse socket](https://wiki.archlinux.org/title/PulseAudio).
 
 #### Player
 The software that plays a sound file and ouputs the sound to the pulse socket for the audio container to pick up. Communicates with the server.

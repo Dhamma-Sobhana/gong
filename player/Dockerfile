@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Update NPM until Alpine image does it
-RUN npm install -g npm@9.6.0
+RUN npm install -g npm@9.6.1
 
 # run npm install in our local machine
 RUN npm install

@@ -1,0 +1,11 @@
+version: "2"
+services:
+  remote:
+    build:
+      context: ./remote
+    environment:
+      MQTT_SERVER: "${MQTT_SERVER}"
+      NAME: "${BUTTON_NAME}"
+    labels:
+      io.balena.features.sysfs: '1'
+    command: node app.js

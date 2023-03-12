@@ -40,3 +40,12 @@ services:
     volumes:
       - 'pulse:/run/pulse'
     command: node src/index.js
+  remote:
+    build:
+      context: ./remote
+    environment:
+      MQTT_SERVER: "${MQTT_SERVER}"
+      NAME: "${REMOTE_NAME}"
+    labels:
+      io.balena.features.sysfs: '1'
+    command: npm run start

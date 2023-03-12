@@ -2,7 +2,7 @@ version: "2"
 services:
   remote:
     build:
-      context: ./remote
+      context: ./
     environment:
       MQTT_SERVER: "${MQTT_SERVER}"
       NAME: "${BUTTON_NAME}"

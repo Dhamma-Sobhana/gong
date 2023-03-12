@@ -4,7 +4,7 @@ volumes:
 services:
   mqtt-config:
     build:
-      context: ./mqtt-config
+      context: ./server/mqtt-config
     volumes:
       - 'mqtt-config-dir:/mosquitto/config'
     restart: "no"
@@ -18,16 +18,15 @@ services:
       - mqtt-config
   server:
     build:
-      context: ./server
+      context: ./server/server
       target: development
     volumes:
-      - ./server/src:/usr/src/app/src
-      - ./server/nodemon.json:/usr/src/app/nodemon.json
+      - ./server/server/src:/usr/src/app/src
+      - ./server/server/nodemon.json:/usr/src/app/nodemon.json
     command: npm run dev
   player:
     build:
       context: ./player
-      target: development
     volumes:
       - ./player/src:/usr/src/app/src
     environment:

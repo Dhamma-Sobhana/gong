@@ -5,7 +5,7 @@ volumes:
 services:
   mqtt-config:
     build:
-      context: ./mqtt-config
+      context: ./server/mqtt-config
     volumes:
       - 'mqtt-config-dir:/mosquitto/config'
     restart: "no"
@@ -19,7 +19,7 @@ services:
       - mqtt-config
   server:
     build:
-      context: ./server
+      context: ./server/server
       target: production
     command: node build/server.js
   audio:

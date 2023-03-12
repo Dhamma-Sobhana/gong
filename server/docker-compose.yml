@@ -1,0 +1,24 @@
+version: "2"
+volumes:
+    mqtt-config-dir:
+    pulse:
+services:
+  mqtt-config:
+    build:
+      context: ./mqtt-config
+    volumes:
+      - 'mqtt-config-dir:/mosquitto/config'
+    restart: "no"
+  mqtt:
+    image: eclipse-mosquitto:2
+    volumes:
+      - 'mqtt-config-dir:/mosquitto/config'
+    ports:
+      - 1883:1883
+    depends_on:
+      - mqtt-config
+  server:
+    build:
+      context: ./server
+      target: production
+    command: node build/server.js

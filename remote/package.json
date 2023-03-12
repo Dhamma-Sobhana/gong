@@ -1,0 +1,18 @@
+{
+  "name": "gong-remote",
+  "description": "A LED push button that controls and show status of gong playback",
+  "version": "0.1.0",
+  "main": "app.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dhamma-Sobhana/gong-remote.git"
+  },
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "onoff": "~6.0.3",
+    "mqtt": "^4.3.7"
+  }
+}

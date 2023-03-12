@@ -1,0 +1,51 @@
+version: "2"
+volumes:
+    mqtt-config-dir:
+    pulse:
+services:
+  mqtt-config:
+    build:
+      context: ./server/mqtt-config
+    volumes:
+      - 'mqtt-config-dir:/mosquitto/config'
+    restart: "no"
+  mqtt:
+    image: eclipse-mosquitto:2
+    volumes:
+      - 'mqtt-config-dir:/mosquitto/config'
+    ports:
+      - 1883:1883
+    depends_on:
+      - mqtt-config
+  server:
+    build:
+      context: ./server/server
+      target: production
+    command: node build/server.js
+  audio:
+    image: bh.cr/balenalabs/audio-rpi # where <arch> is one of rpi, armv7hf, aarch64 or amd64
+    privileged: true
+    volumes:
+      - 'pulse:/run/pulse'
+    environment:
+      AUDIO_VOLUME: "100"
+  player:
+    build:
+      context: ./player
+      target: development
+    environment:
+      MQTT_SERVER: "${MQTT_SERVER}"
+      NAME: "${PLAYER_NAME}"
+      PULSE_SERVER: "unix:/run/pulse/pulseaudio.socket"
+    volumes:
+      - 'pulse:/run/pulse'
+    command: node src/index.js
+  remote:
+    build:
+      context: ./remote
+    environment:
+      MQTT_SERVER: "${MQTT_SERVER}"
+      NAME: "${REMOTE_NAME}"
+    labels:
+      io.balena.features.sysfs: '1'
+    command: npm run start

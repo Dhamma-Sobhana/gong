@@ -1,0 +1,35 @@
+version: "2"
+volumes:
+    mqtt-config-dir:
+services:
+  mqtt-config:
+    build:
+      context: ./server/mqtt-config
+    volumes:
+      - 'mqtt-config-dir:/mosquitto/config'
+    restart: "no"
+  mqtt:
+    image: eclipse-mosquitto:2
+    volumes:
+      - 'mqtt-config-dir:/mosquitto/config'
+    ports:
+      - 1883:1883
+    depends_on:
+      - mqtt-config
+  server:
+    build:
+      context: ./server/server
+      target: development
+    volumes:
+      - ./server/server/src:/usr/src/app/src
+      - ./server/server/nodemon.json:/usr/src/app/nodemon.json
+    command: npm run dev
+  player:
+    build:
+      context: ./player
+    volumes:
+      - ./player/src:/usr/src/app/src
+    environment:
+      MQTT_SERVER: "${MQTT_SERVER}"
+      NAME: "${PLAYER_NAME}"
+    command: npm run start

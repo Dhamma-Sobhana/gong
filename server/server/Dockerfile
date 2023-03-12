@@ -1,4 +1,4 @@
-FROM node:lts-alpine as development
+FROM balenalib/armv7hf-alpine-node:18.12-3.17-run as development
 
 # change working directory
 WORKDIR /usr/src/app
@@ -18,7 +18,7 @@ COPY . .
 RUN npm run build
 
 # Building for production
-FROM node:lts-alpine as production
+FROM balenalib/armv7hf-alpine-node:18.12-3.17-run as production
 
 WORKDIR /usr/src/app
 

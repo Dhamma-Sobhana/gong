@@ -8,4 +8,4 @@ services:
       NAME: "${BUTTON_NAME}"
     labels:
       io.balena.features.sysfs: '1'
-    command: node app.js
+    command: npm run start

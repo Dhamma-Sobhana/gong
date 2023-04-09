@@ -1,4 +1,6 @@
-FROM balenalib/armv7hf-alpine-node:18.12-3.17-run as development
+FROM balenalib/armv7hf-alpine-node:18.12-3.17-run as base
+
+FROM base as development
 
 # change working directory
 WORKDIR /usr/src/app
@@ -6,30 +8,31 @@ WORKDIR /usr/src/app
 # copy the package.json files from local machine to the workdir in container
 COPY package*.json ./
 
-# Update NPM until Balena does it
-RUN npm install -g npm@9.6.1
-
 # run npm install in our local machine
-RUN npm install
+RUN npm config set update-notifier false && npm install
 
-# Bundle app source
+#dev-cmd-live=node node_modules/nodemon/bin/nodemon.js src/server.ts
+
+# bundle app source
 COPY . .
 
+# run nodemon
 RUN npm run build
 
 # Building for production
-FROM balenalib/armv7hf-alpine-node:18.12-3.17-run as production
+FROM base as production
 
+# change working directory
 WORKDIR /usr/src/app
 
+# copy the package.json files from local machine to the workdir in container
 COPY package*.json ./
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-# Update NPM until Alpine image does it
-RUN npm install -g npm@9.6.1
-
-RUN npm ci --omit=dev
-
 COPY --from=development /usr/src/app/build ./build
+
+RUN npm config set update-notifier false &&  npm ci --omit=dev
+
+CMD ["npm", "run", "start"]

@@ -21,5 +21,6 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
-      target: production
+      target: development # For local push
+      #target: production # For deployment
 

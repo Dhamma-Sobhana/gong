@@ -43,11 +43,7 @@ class Button {
     }
 
     sendButtonState = () => {
-        let payload = {
-            "type": "gong",
-            "areas": [0]
-        }
-        client.publish(`play`, JSON.stringify(payload));
+        client.publish('activated')
     }
 
     /**
@@ -133,8 +129,9 @@ class Button {
             } else {
                 console.log('State activated');
                 this.active = 1;
-                this.sendButtonState();
             }
+
+            this.sendButtonState();
             
             this.led.writeSync(this.active);
             clearTimeout(this.timeout);

@@ -5,6 +5,8 @@ services:
   audio:
     image: bh.cr/balenalabs/audio-rpi # where <arch> is one of rpi, armv7hf, aarch64 or amd64
     privileged: true
+    labels:
+      io.balena.features.dbus: 1 # For bluetooth support but prevents some error messages
     volumes:
       - 'pulse:/run/pulse'
     environment:

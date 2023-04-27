@@ -5,8 +5,9 @@ let server = process.env.MQTT_SERVER || 'localhost'
 let name = process.env.NAME
 
 // Configuration
-const threashold = 5000;
-const initialToggleTime = 500;
+const threasholdActivate = 2000;
+const threasholdCancel = 40;
+const initialToggleTime = 300;
 const minToggleTime = 100;
 const toggleDelta = 30;
 
@@ -122,7 +123,9 @@ class Button {
      * @returns nothing
      */
     alternate = () => {
-        // Hold for long eough
+        // Hold for long enough
+        let threashold = this.active ? threasholdCancel : threasholdActivate
+
         if (Date.now() > (this.pressTime + threashold)) {
             if (this.active) {
                 console.log('State deactivated');

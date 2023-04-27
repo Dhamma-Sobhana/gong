@@ -13,10 +13,7 @@ const toggleDelta = 30;
 
 // MQTT
 let client  = mqtt.connect(`mqtt://${server}`);
-
-client.on('connect', () => {
-    console.log('Connected')
-})
+let topics = ['play', 'stop']
 
 class Button {
 
@@ -40,6 +37,30 @@ class Button {
         this.timeout = null;
 
         this.button.watch((err, value) => this.buttonChanged(err, value))
+
+        this.setupMqtt()
+    }
+
+    setupMqtt = () => {
+        client.on('connect', () => {
+            console.log('Connected! Listening for topics:\n', topics.join(', '))
+            for (let topic of topics) {
+                client.subscribe(topic)
+            }
+        })
+
+        client.on('message', (topic, message) => {
+            // message is Buffer
+            console.log(`Topic: ${topic} Message: ${message.toString()}`)
+          
+            if (topic === 'stop') {
+                this.active = 0;
+                this.led.writeSync(this.active);
+            } else if (topic === 'play') {
+                this.active = 1;
+                this.led.writeSync(this.active);
+            }
+        })
     }
 
     sendButtonState = () => {

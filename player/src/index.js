@@ -3,6 +3,7 @@ const { networkInterfaces } = require('os')
 
 let mqtt = require('mqtt');
 var player = require('play-sound')(opts = {})
+var audio
 
 let name = process.env.NAME || getMac() || randomUUID()
 let areas = (process.env.AREAS || '0').split(',')
@@ -11,7 +12,7 @@ let server = process.env.MQTT_SERVER || 'localhost'
 process.env.TZ = process.env.TZ || 'Europe/Stockholm'
 
 let client  = mqtt.connect(`mqtt://${server}`);
-let topics = ['ping', 'play']
+let topics = ['ping', 'play', 'stop']
 
 /**
  * Check for interfaces that looks like physical ones and return the first found mac address.
@@ -55,9 +56,24 @@ client.on('connect', function () {
  */
 function playGong(affectedAreas) {
   // TODO: Turn GPIO on or off
-  console.log('Playing')
-  player.play('./sound/static_sound_gong_gong.mp3', function(err) {
-    if (err) {
+
+  console.log(`Playing in areas '${affectedAreas}'`)
+
+  let now = new Date().getTime()
+
+  let payload = {
+    "name": name,
+    "areas": affectedAreas,
+    "timestamp-millis": now,
+    "timestamp": formatDateTime(now),
+  }
+  
+  client.publish(`playing`, JSON.stringify(payload));
+
+  audio = player.play('./sound/gong-short.mp3', function(err) {
+    if (err && err.killed) {
+      console.log(`Playback stopped by server`)
+    } else if (err) {
       console.error("Error: ", err)
     } else {
       let now = new Date().getTime()
@@ -69,6 +85,7 @@ function playGong(affectedAreas) {
       }
       console.log(`Play finished at ${formatDateTime(now)}`)
       client.publish(`played`, JSON.stringify(payload));
+      client.publish(`stop`);
     }
   })
 }
@@ -111,33 +128,22 @@ client.on('message', function (topic, message) {
     // Respond that I am alive
     sendPong()
   } else if (topic == 'play') {
-    let now = new Date().getTime()
-    const affectedAreas = getAffectedAreas(data.areas)
+    // const affectedAreas = getAffectedAreas(data.areas)
 
-    if (affectedAreas.length === 0) {
-      console.log('Area not handled by this device')
-      return
-    }
+    // if (affectedAreas.length === 0) {
+    //   console.log('Area not handled by this device')
+    //   return
+    // }
 
-    // Schedule play next change of second
-    let future = parseInt(now / 1000) * 1000 + 1000
-    let delay = future - now
-    setTimeout(playGong, delay, affectedAreas)
-
-    console.log(`Will play type '${data.type}' in areas '${affectedAreas}' at ${formatDateTime(future)}`)
-
-    let payload = {
-      "name": name,
-      "areas": affectedAreas,
-      "timestamp-millis": now,
-      "timestamp": formatDateTime(now),
-      "scheduled-millis": future,
-      "scheduled": formatDateTime(future)
-    }
+    playGong([0])
+  } else if (topic == 'stop') {
     
-    client.publish(`scheduled`, JSON.stringify(payload));
+    if (audio !== undefined) {
+      audio.kill()
+      console.log('Stopping playback')
+    }
   }
 })
 
-let time = formatDateTime(new Date().getTime())
-console.log(`Gong client starting.\n\nName: ${name}\nAreas: ${areas}\nTime: ${time}\nServer: ${server}\n\nConnecting to MQTT server..`)
+console.log(`Gong client starting.\n\nName: ${name}\nAreas: ${areas}\nServer: ${server}\n\nConnecting to MQTT server..`)
+console.log(`ENV: ${process.env.PULSE_SERVER}`)

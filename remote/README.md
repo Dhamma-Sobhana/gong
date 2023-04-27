@@ -21,3 +21,5 @@ LED_PIN: Where LED is connected. Default 3
 If the device is set to local mode in balena cloud, push code to it like this:
 
     balena push <device_ip> --env MQTT_SERVER=<server_ip> --env NAME=<device_name>
+    
+    balena push 10.0.0.72 --env MQTT_SERVER=10.0.0.70 --env NAME=remote

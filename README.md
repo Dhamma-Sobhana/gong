@@ -68,7 +68,7 @@ For running the project using docker on the developement machine:
 
 For running all services on a single device in local mode using belanaCloud:
 
-    balena push <ip>
+    balena push <device_ip> --env MQTT_SERVER=<server_ip> --env NAME=<device_name>
 
 ## Deployment
 

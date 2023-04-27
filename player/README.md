@@ -14,6 +14,14 @@ Planned to be deployed on Raspberry Pi's using [balenaCloud](https://www.balena.
     npm install
     npm run start-nodemon
 
+## Local mode development
+
+If the device is set to local mode in balena cloud, push code to it like this:
+
+    balena push <device_ip> --env MQTT_SERVER=<server_ip> --env NAME=<device_name> --env PULSE_SERVER=unix:/run/pulse/pulseaudio.socket --env AUDIO_VOLUME=100
+    
+    balena push 10.0.0.71 --env MQTT_SERVER=10.0.0.70 --env NAME=player --env PULSE_SERVER=unix:/run/pulse/pulseaudio.socket --env AUDIO_VOLUME=100
+
 # Configuration
 Configure by setting environment variables:
 
@@ -59,18 +67,8 @@ Expected data:
 
 - type: string
 - areas: array of areas: 0 (all), 1-16
-
 Publishes *scheduled*.
 
-## scheduled
-Containting this data:
-
-- name: string
-- areas: array of areas: 0 (all), 1-16
-- timestamp-millis: unix time
-- timestamp: human readable date time
-- scheduled-millis: unix time when sound will be played
-- scheduled: human readable date time when sound will be played
 
 ## played
 Publish after gong has been played with this data:
@@ -80,8 +78,6 @@ Publish after gong has been played with this data:
 - timestamp-millis: unix time
 - timestamp: human readable date time
 
-# Time keeping
-To improve synchronization of sound being played, sync time to local NTP server regularly. Instead of playing sound directly when message is received, which can take different amount of time to different devices, play based on time in short future. 
 
 # Optional hardware
 
@@ -91,12 +87,3 @@ If using a device with GPIO a simple relay can be connected to this.
 
 This can also be used to handle more than one area using one device by opening circuits based on areas received.
 
-# See also
-
-[Gong Backend][gong-backend]
-
-[Gong Frontend][gong-frontend]
-
-[gong-backend]: https://github.com/Dhamma-Sobhana/gong-backend
-
-[gong-frontend]: https://github.com/Dhamma-Sobhana/gong-frontend

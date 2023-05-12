@@ -1,6 +1,6 @@
 # Gong
 
-System for playing gong sounds in multiple locations. Managed using [balenaCloud](https://www.balena.io/cloud).
+A system for playing gong sounds in multiple locations at meditation centers. Managed using [balenaCloud](https://www.balena.io/cloud).
 
 # Table of Contents
 * [Device types](#device-types)
@@ -75,7 +75,7 @@ Name of device in lowercase and dashes instead of space.
 
 Ending with a dash and the device type: -remote, -player
 
-Configured with device variable *NAME* in balenaCloud dashboard.
+Configured with device variable *NAME* in *balenaCloud* dashboard.
 
 Example names:
 
@@ -83,7 +83,7 @@ Example names:
 * main-house-player
 * female-house-player
 * male-house-player
-* server-house-player
+* staff-house-player
 * dhamma-hall-player
 
 ### Zone
@@ -91,10 +91,10 @@ Which zones should be affected by a play message.
 
 Configured with device variable *ZONES* in balenaCloud dashboard.
 
-* all - Play everywhere. This should not be used in early mornings to not disturb neighbours by playing outside or waking up servers that are sleeping.
-* accommodation - All the accommodation houses. Should be played every time.
+* all - Play everywhere. This should not be used in early mornings to not disturb neighbours by playing outside or waking up staff that are sleeping.
+* student-accommodation - Speakers in student accommodation houses. Should be played every time.
+* staff-accommodation - Speakers in staff accommodation houses. Should not be played in the early mornings.
 * outside - Speakers mounted on the outside of the main house and the Dhamma hall. Should not be played in early mornings.
-* servers - Speakers in the server house. Should not be played in the early mornings and preferably not when only students should meditate.
 
 ## Messages
 
@@ -102,7 +102,7 @@ Configured with device variable *ZONES* in balenaCloud dashboard.
 Request devices to send their status by publishing a *pong* message.
 
 ### pong (global)
-Send message telling that the device is online.
+Send a message telling that the device is online. Sent when device has booted and as a response to *ping* message.
 
 - name: string - Name of the device to easily identify it.
 - zones: array of zones handled by the player. (player)
@@ -110,31 +110,33 @@ Send message telling that the device is online.
 Example data:
 
     {"name": "main-house-remote"}
-    {"name": "female-house-player", "zones": ["accommodation"]}
+    {"name": "female-house-player", "zones": ["student-accommodation"]}
+    {"name": "main-house-player", "zones": ["student-accommodation", "outside"]}
 
 ### play (player)
-Wait until the next even second, then play gong sound.
+Play gong sound if player is configured to handle the zone requested.
 
 - zones: array of zones.
 
 Example data:
 
     {"zones": ["all"]}
-    {"zones": ["accommodation", "outside"]}
+    {"zones": ["student-accommodation"]}
+    {"zones": ["student-accommodation", "outside"]}
 
 ### played (player)
-Publish after gong has been played with this data:
+Sent after gong has been played with this data:
 
 - name: string. The name of the device.
 - zones: array of zones player played in.
 
 Example data:
 
-    {"name": "female-house-player", "zones": ["accommodation"]}
-    {"name": "main-house-player", "zones": ["accommodation", "outside"]}
+    {"name": "female-house-player", "zones": ["student-accommodation"]}
+    {"name": "main-house-player", "zones": ["student-accommodation", "outside"]}
 
 ### stop (player, remote)
-Stop playback and update state of remote to show that gong is not playing anymore.
+Stop playback and update state of remotes to show that gong is not playing anymore.
 
 ### activated (remote)
 Sent by remote when button has been pressed.
@@ -143,10 +145,10 @@ Sent by remote when button has been pressed.
 
 Example data:
 
-    {"name": ["main-house-remote"]}
+    {"name": "main-house-remote"}
 
 # Configuration
-Configuration is set using fleet or device variables in balenaCloud dashboard.
+Configuration is set using fleet or device variables in *balenaCloud* dashboard.
 
 ## AUDIO_VOLUME (player)
 Audio ouput volume of the audio block.
@@ -162,15 +164,15 @@ Always set to: `unix:/run/pulse/pulseaudio.socket`
 IP address or hostname of server.
 
 ## NAME (player, remote)
-Name of device.
+Name of the device, used for identification.
 
 ## ZONES (player)
 Array of zones the player handles.
 
 ## MORNING_TIME (server)
-Time in format hh:mm
+Time in format `hh:mm`.
 
-If server recieves an *activated* message from remote before this time, only play in zone **accommodation**.
+If server recieves an *activated* message from a remote before this time, only play in zone **student-accommodation**.
 
 # Development
 
@@ -184,7 +186,7 @@ For running all services on a single device in local mode using belanaCloud:
 
 # Deployment
 
-Deployment to balena and devices is done from subfolders for each device type.
+Deployment to *balenaCloud* and devices is done from subfolders for each device type.
 
 ## Server
 

@@ -20,5 +20,7 @@ services:
   server:
     build:
       context: ./server
-      target: production
-    command: node build/server.js
+      dockerfile: Dockerfile
+      target: development # For local push
+      #target: production # For deployment
+

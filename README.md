@@ -1,6 +1,14 @@
 # Gong
 
-System for playing gong sounds in multiple locations. Managed using [balenaCloud](https://www.balena.io/cloud).
+A system for playing gong sounds in multiple locations at meditation centers. Managed using [balenaCloud](https://www.balena.io/cloud).
+
+# Table of Contents
+* [Device types](#device-types)
+* [Architecture](#architecture)
+* [Communication](#communication)
+* [Configuration](#configuration)
+* [Development](#development)
+* [Deployment](#deployment)
 
 # Device types
 
@@ -24,7 +32,7 @@ Has a button connected on [GPIO](https://projects.raspberrypi.org/en/projects/ph
 
 ## Code
 
-Code is written in nodejs using TypeScript.
+Code will be written in nodejs using TypeScript. Some existing code is for now just JavaScript.
 
 ## Containers
 
@@ -56,11 +64,117 @@ The software that plays a sound file and ouputs the sound to the pulse socket fo
 #### Remote
 Reads a GPIO pin for button presses and writes to a GPIO pin for giving feedback using a LED. Communicates with the server.
 
-## Communication
+# Communication
 
-MQTT message broker is used for communication between the different devices.
+MQTT message broker is used for communication between the different devices. If data is needed it is in JSON format.
 
-## Development
+## Data
+
+### Name
+Name of device in lowercase and dashes instead of space.
+
+Ending with a dash and the device type: -remote, -player
+
+Configured with device variable *NAME* in *balenaCloud* dashboard.
+
+Example names:
+
+* main-house-remote
+* main-house-player
+* female-house-player
+* male-house-player
+* staff-house-player
+* dhamma-hall-player
+
+### Zone
+Which zones should be affected by a play message.
+
+Configured with device variable *ZONES* in balenaCloud dashboard.
+
+* all - Play everywhere. This should not be used in early mornings to not disturb neighbours by playing outside or waking up staff that are sleeping.
+* student-accommodation - Speakers in student accommodation houses. Should be played every time.
+* staff-accommodation - Speakers in staff accommodation houses. Should not be played in the early mornings.
+* outside - Speakers mounted on the outside of the main house and the Dhamma hall. Should not be played in early mornings.
+
+## Messages
+
+### ping (global)
+Request devices to send their status by publishing a *pong* message.
+
+### pong (global)
+Send a message telling that the device is online. Sent when device has booted and as a response to *ping* message.
+
+- name: string - Name of the device to easily identify it.
+- zones: array of zones handled by the player. (player)
+
+Example data:
+
+    {"name": "main-house-remote"}
+    {"name": "female-house-player", "zones": ["student-accommodation"]}
+    {"name": "main-house-player", "zones": ["student-accommodation", "outside"]}
+
+### play (player)
+Play gong sound if player is configured to handle the zone requested.
+
+- zones: array of zones.
+
+Example data:
+
+    {"zones": ["all"]}
+    {"zones": ["student-accommodation"]}
+    {"zones": ["student-accommodation", "outside"]}
+
+### played (player)
+Sent after gong has been played with this data:
+
+- name: string. The name of the device.
+- zones: array of zones player played in.
+
+Example data:
+
+    {"name": "female-house-player", "zones": ["student-accommodation"]}
+    {"name": "main-house-player", "zones": ["student-accommodation", "outside"]}
+
+### stop (player, remote)
+Stop playback and update state of remotes to show that gong is not playing anymore.
+
+### activated (remote)
+Sent by remote when button has been pressed.
+
+- name: string. Name of device that initiated the request.
+
+Example data:
+
+    {"name": "main-house-remote"}
+
+# Configuration
+Configuration is set using fleet or device variables in *balenaCloud* dashboard.
+
+## AUDIO_VOLUME (player)
+Audio ouput volume of the audio block.
+
+For maximal volume: `100`
+
+## PULSE_SERVER (player)
+How player application and audio block communicates.
+
+Always set to: `unix:/run/pulse/pulseaudio.socket`
+
+## MQTT_SERVER (player, remote)
+IP address or hostname of server.
+
+## NAME (player, remote)
+Name of the device, used for identification.
+
+## ZONES (player)
+Array of zones the player handles.
+
+## MORNING_TIME (server)
+Time in format `hh:mm`.
+
+If server recieves an *activated* message from a remote before this time, only play in zone **student-accommodation**.
+
+# Development
 
 For running the project using docker on the developement machine:
 
@@ -68,23 +182,23 @@ For running the project using docker on the developement machine:
 
 For running all services on a single device in local mode using belanaCloud:
 
-    balena push <ip>
+    balena push <device_ip> --env MQTT_SERVER=<server_ip> --env NAME=<device_name>
 
-## Deployment
+# Deployment
 
-Deployment to balena and devices is done from subfolders for each device type.
+Deployment to *balenaCloud* and devices is done from subfolders for each device type.
 
-### Server
+## Server
 
     cd server
     balena push gong/server
 
-### Player
+## Player
 
     cd player
     balena push gong/player
 
-### Remote
+## Remote
 
     cd remote
     balena push gong/remote

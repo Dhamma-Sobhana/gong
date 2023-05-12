@@ -2,19 +2,30 @@
 
 Button to play gong and show if gong is playing.
 
-To activate, hold for 5 seconds. Blinks faster until light stays on.
+To activate, hold for 2 seconds. Blinks faster until light stays on and message is sent.
 
-To disable, hold for 5 seconds. Blinks slower until light turns off.
+To disable, press once. Message is sent directly.
 
 ## Environment variables
+See README in root for detailed explaination.
 
-MQTT_SERVER: IP or hostname of the server running the MQTT broker
+### MQTT_SERVER
+IP or hostname of the server running the MQTT broker.
 
-NAME: The device name
+### NAME
+The device name.
 
-BUTTON_PIN: Where button is connected. Default 2
+Example: **main-house-remote**
 
-LED_PIN: Where LED is connected. Default 3
+### BUTTON_PIN
+GPIO pin the button is connected to.
+
+Default: **2**
+
+### LED_PIN
+GPIO pin the LED is connected to.
+
+Default: **3**
 
 ## Local mode development
 

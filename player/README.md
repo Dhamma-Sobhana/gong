@@ -1,8 +1,6 @@
-# Gong - Client
+# Gong Player
 
-A node service for playing gong when told by [Gong Backend][gong-backend].
-
-Planned to be deployed on Raspberry Pi's using [balenaCloud](https://www.balena.io/cloud/).
+A device connected to an amplifier with speakers that plays gong when told to by server.
 
 # Dependencies
 
@@ -23,61 +21,38 @@ If the device is set to local mode in balena cloud, push code to it like this:
     balena push 10.0.0.71 --env MQTT_SERVER=10.0.0.70 --env NAME=player --env PULSE_SERVER=unix:/run/pulse/pulseaudio.socket --env AUDIO_VOLUME=100
 
 # Configuration
-Configure by setting environment variables:
+See README in root for detailed explaination.
 
 ## NAME
-Name of instance (male_house, dhamma_hall, kitchen, ...). Used to identify device.
+The device name.
 
-Default: First found mac address
+Example: **female-house-player**
 
-## AREAS
-Areas this client handles. Separate multiple with ',' (0 (all), 1-16).
+If no name is set the first found MAC address of the device will be used.
 
-Default: 0
+## ZONES
+Array of zones this player handles.
+
+Example: **["accommodation", "outside"]**
 
 ## MQTT_SERVER
 IP or hostname of MQTT server.
 
-Default: localhost
+### AUDIO_VOLUME
+Audio ouput volume of the audio block.
 
-## TZ
-Timezone of device. For correct logging of time.
+For maximal volume: `100`
 
-Default: Europe/Stockholm
+### PULSE_SERVER
+How player application and audio block communicates.
+
+Always set to: `unix:/run/pulse/pulseaudio.socket`
 
 # Communication
 
 Service connects to MQTT message broker and subscribes to topics.
 
-## ping
-Respond by publish a *pong*.
-
-## pong
-Containing this data:
-
-- name: string
-- areas: array of areas: 0 (all), 1-16
-- timestamp-millis: unix time
-- timestamp: human readable date time
-
-## play
-Wait until the next even second, then play gong sound.
-
-Expected data:
-
-- type: string
-- areas: array of areas: 0 (all), 1-16
-Publishes *scheduled*.
-
-
-## played
-Publish after gong has been played with this data:
-
-- name: string
-- areas: array of areas: 0 (all), 1-16
-- timestamp-millis: unix time
-- timestamp: human readable date time
-
+See README in root for detail of messages.
 
 # Optional hardware
 
@@ -85,5 +60,5 @@ To prevent static noise from speakers a relay can be used to keep the circuit op
 
 If using a device with GPIO a simple relay can be connected to this.
 
-This can also be used to handle more than one area using one device by opening circuits based on areas received.
+This can also be used to handle more than one area using one device by opening circuits based on zones received.
 

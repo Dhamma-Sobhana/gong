@@ -24,7 +24,7 @@ Has a button connected on [GPIO](https://projects.raspberrypi.org/en/projects/ph
 
 ## Code
 
-Code is written in nodejs using TypeScript.
+Code will be written in nodejs using TypeScript. Some existing code is for now just JavaScript.
 
 ## Containers
 
@@ -58,7 +58,111 @@ Reads a GPIO pin for button presses and writes to a GPIO pin for giving feedback
 
 ## Communication
 
-MQTT message broker is used for communication between the different devices.
+MQTT message broker is used for communication between the different devices. If data is needed it is in JSON format.
+
+### Data
+
+#### Name
+Name of device in lowercase and dashes instead of space.
+
+Ending with a dash and the device type: -remote, -player
+
+Configured with device variable *NAME* in balenaCloud dashboard.
+
+Example names:
+
+* main-house-remote
+* main-house-player
+* female-house-player
+* male-house-player
+* server-house-player
+* dhamma-hall-player
+
+#### Zone
+Which zones should be affected by a play message.
+
+Configured with device variable *ZONES* in balenaCloud dashboard.
+
+* all - Play everywhere. This should not be used in early mornings to not disturb neighbours by playing outside or waking up servers that are sleeping.
+* accommodation - All the accommodation houses. Should be played every time.
+* outside - Speakers mounted on the outside of the main house and the Dhamma hall. Should not be played in early mornings.
+* servers - Speakers in the server house. Should not be played in the early mornings and preferably not when only students should meditate.
+
+### Messages
+
+#### ping (global)
+Request devices to send their status by publishing a *pong* message.
+
+#### pong (global)
+Send message telling that the device is online.
+
+- name: string - Name of the device to easily identify it.
+- zones: array of zones handled by the player. (player)
+
+Example data:
+
+    {"name": "main-house-remote"}
+    {"name": "female-house-player", "zones": ["accommodation"]}
+
+#### play (player)
+Wait until the next even second, then play gong sound.
+
+- zones: array of zones.
+
+Example data:
+
+    {"zones": ["all"]}
+    {"zones": ["accommodation", "outside"]}
+
+#### played (player)
+Publish after gong has been played with this data:
+
+- name: string. The name of the device.
+- zones: array of zones player played in.
+
+Example data:
+
+    {"name": "female-house-player", "zones": ["accommodation"]}
+    {"name": "main-house-player", "zones": ["accommodation", "outside"]}
+
+#### stop (player, remote)
+Stop playback and update state of remote to show that gong is not playing anymore.
+
+#### activated (remote)
+Sent by remote when button has been pressed.
+
+- name: string. Name of device that initiated the request.
+
+Example data:
+
+    {"name": ["main-house-remote"]}
+
+## Configuration
+Configuration is set using fleet or device variables in balenaCloud dashboard.
+
+### AUDIO_VOLUME (player)
+Audio ouput volume of the audio block.
+
+For maximal volume: `100`
+
+### PULSE_SERVER (player)
+How player application and audio block communicates.
+
+Always set to: `unix:/run/pulse/pulseaudio.socket`
+
+### MQTT_SERVER (player, remote)
+IP address or hostname of server.
+
+### NAME (player, remote)
+Name of device.
+
+### ZONES (player)
+Array of zones the player handles.
+
+### MORNING_TIME (server)
+Time in format hh:mm
+
+If server recieves an *activated* message from remote before this time, only play in zone **accommodation**.
 
 ## Development
 

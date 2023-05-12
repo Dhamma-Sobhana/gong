@@ -2,6 +2,13 @@
 
 System for playing gong sounds in multiple locations. Managed using [balenaCloud](https://www.balena.io/cloud).
 
+# Table of Contents
+* [Device types](#device-types)
+* [Architecture](#architecture)
+* [Communication](#communication)
+* [Configuration](#configuration)
+* [Development](#development)
+
 # Device types
 
 The system consists of 3 device types:

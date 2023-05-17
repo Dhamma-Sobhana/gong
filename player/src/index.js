@@ -1,7 +1,7 @@
 const { randomUUID } = require('crypto')
 const mqtt = require('mqtt')
 var playSound = require('play-sound')(opts = {})
-const { getMac, formatDateTime, getAffectedAreas } = require('./lib.js')
+const { getMac, formatDateTime, getAffectedAreas } = require('./lib')
 
 let name = process.env.NAME || getMac() || randomUUID()
 let areas = (process.env.AREAS || '0').split(',')
@@ -10,7 +10,7 @@ let server = process.env.MQTT_SERVER || 'localhost'
 process.env.TZ = process.env.TZ || 'Europe/Stockholm'
 
 let client  = mqtt.connect(`mqtt://${server}`);
-let topics = ['ping', 'play', 'stop']
+const topics = ['ping', 'play', 'stop']
 
 class Player {
   audio;
@@ -18,53 +18,56 @@ class Player {
   constructor() {
     this.audio = undefined
 
-    this.setupMqtt()
+    client.on('connect', () => {
+      this.mqttConnect()
+    })
+
+    client.on('message', (topic, message) => {
+      this.mqttMessage(topic, message)
+    })
   }
 
-  setupMqtt = () => {
-    /**
-     * Subscribe to topics on MQTT connection
-     */
-    client.on('connect', () => {
-      console.log('Connected! Listening for topics:\n', topics.join(', '))
-      for (let topic of topics) {
-        client.subscribe(topic)
-      }
-      // Send message telling that the device is alive
+  /**
+   * Subscribe to topics and send alive message
+   */
+  mqttConnect = () => {
+    console.log('Connected! Listening for topics:\n', topics.join(', '))
+    for (let topic of topics) {
+      client.subscribe(topic)
+    }
+
+    // Send message telling that the device is alive
+    this.sendPong()
+  }
+
+  /**
+   * Handle subscribed messages received
+   */
+  mqttMessage = (topic, message) => {
+    console.log(`Message. Topic: '${topic}' Message: '${message}'`)
+
+    let data = undefined
+    try {
+      data = JSON.parse(message)
+    } catch {}
+
+    if (topic === 'ping') {
       this.sendPong()
-    })
+    } else if (topic == 'play') {
+      // const affectedAreas = getAffectedAreas(data.areas)
 
-    /**
-     * Handle subscribed messages received
-     */
-    client.on('message', (topic, message) => {
-      let data = undefined
-      try {
-        data = JSON.parse(message)
-      } catch {}
-      
-      console.log(topic, data)
+      // if (affectedAreas.length === 0) {
+      //   console.log('Area not handled by this device')
+      //   return
+      // }
 
-      if (topic === 'ping') {
-        // Respond that I am alive
-        this.sendPong()
-      } else if (topic == 'play') {
-        // const affectedAreas = getAffectedAreas(data.areas)
-
-        // if (affectedAreas.length === 0) {
-        //   console.log('Area not handled by this device')
-        //   return
-        // }
-
-        this.playGong([0])
-      } else if (topic == 'stop') {
-        
-        if (this.audio !== undefined) {
-          this.audio.kill()
-          console.log('Stopping playback')
-        }
+      this.playGong([0])
+    } else if (topic == 'stop') {
+      if (this.audio !== undefined) {
+        this.audio.kill()
+        console.log('Stopping playback')
       }
-    })
+    }
   }
 
   /**

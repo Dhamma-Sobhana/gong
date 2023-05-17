@@ -1,10 +1,10 @@
 const { randomUUID } = require('crypto')
 const mqtt = require('mqtt')
 var playSound = require('play-sound')(opts = {})
-const { getMac, getAffectedAreas } = require('./lib')
+const { getMac, getZones } = require('./lib')
 
 let name = process.env.NAME || getMac() || randomUUID()
-let zones = (process.env.ZONES || 'all').split(',')
+let playerZones = (process.env.ZONES || 'student-accommodation,outside').split(',')
 let server = process.env.MQTT_SERVER || 'localhost'
 
 let client  = mqtt.connect(`mqtt://${server}`);
@@ -52,14 +52,14 @@ class Player {
     if (topic === 'ping') {
       this.sendPong()
     } else if (topic == 'play') {
-      // const affectedAreas = getAffectedAreas(data.areas)
+      let zones = getZones(playerZones, data.zones)
 
-      // if (affectedAreas.length === 0) {
-      //   console.log('Area not handled by this device')
-      //   return
-      // }
+      if (zones.length === 0) {
+        console.log('Zones not handled by this device')
+        return
+      }
 
-      this.playGong([0])
+      this.playGong(zones)
     } else if (topic == 'stop') {
       if (this.audio !== undefined) {
         this.audio.kill()
@@ -72,14 +72,14 @@ class Player {
    * Play gong sound and publish played message if successful
    * @param {Array} affectedAreas areas to play in
    */
-  playGong(affectedAreas) {
+  playGong(zones) {
     // TODO: Turn GPIO on or off
 
-    console.log(`Playing in areas '${affectedAreas}'`)
+    console.log(`Playing in zones '${zones}'`)
 
     let payload = {
       "name": name,
-      "zones": affectedAreas
+      "zones": zones
     }
     
     client.publish(`playing`, JSON.stringify(payload));
@@ -92,7 +92,7 @@ class Player {
       } else {
         payload = {
           "name": name,
-          "zones": affectedAreas
+          "zones": zones
         }
         console.log(`Play finished`)
         client.publish(`played`, JSON.stringify(payload));
@@ -104,7 +104,7 @@ class Player {
   sendPong() {
     let payload = {
       "name": name,
-      "zones": zones
+      "zones": playerZones
     }
     client.publish(`pong`, JSON.stringify(payload));
   }
@@ -112,4 +112,4 @@ class Player {
 
 const player = new Player();
 
-console.log(`Gong client starting.\n\nName: ${name}\nZones: ${zones}\nServer: ${server}\n\nConnecting to MQTT server..`)
+console.log(`Gong client starting.\n\nName: ${name}\nZones: ${playerZones}\nServer: ${server}\n\nConnecting to MQTT server..`)

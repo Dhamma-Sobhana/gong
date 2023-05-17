@@ -25,14 +25,15 @@ function formatDateTime(dateTime) {
 }
 
 /**
- * Return new array containing all areas both handled and requested or [0] if included in request
- * @param {Array} requestedAreas
- * @returns Array of intersection of areas or [0]
+ * Get the zones that was received that the player also handles
+ * @param {Array} playerZones Zones the player handles
+ * @param {Array} messageZones Zones in the message
+ * @returns {Array} Zones in both arrays or ['all'] if it was received
  */
-function getAffectedAreas(requestedAreas) {
-    if (requestedAreas.includes(0)) return [0];
+function getZones(playerZones, messageZones) {
+    if (messageZones.includes('all')) return ['all'];
 
-    return areas.filter((x) => requestedAreas.includes(x));
+    return playerZones.filter((x) => messageZones.includes(x));
 }
 
-module.exports = { getMac, formatDateTime, getAffectedAreas };
+module.exports = { getMac, formatDateTime, getZones };

@@ -1,13 +1,11 @@
 const { randomUUID } = require('crypto')
 const mqtt = require('mqtt')
 var playSound = require('play-sound')(opts = {})
-const { getMac, formatDateTime, getAffectedAreas } = require('./lib')
+const { getMac, getAffectedAreas } = require('./lib')
 
 let name = process.env.NAME || getMac() || randomUUID()
-let areas = (process.env.AREAS || '0').split(',')
-areas = areas.map(str => Number(str))
+let zones = (process.env.ZONES || 'all').split(',')
 let server = process.env.MQTT_SERVER || 'localhost'
-process.env.TZ = process.env.TZ || 'Europe/Stockholm'
 
 let client  = mqtt.connect(`mqtt://${server}`);
 const topics = ['ping', 'play', 'stop']
@@ -79,13 +77,9 @@ class Player {
 
     console.log(`Playing in areas '${affectedAreas}'`)
 
-    let now = new Date().getTime()
-
     let payload = {
       "name": name,
-      "areas": affectedAreas,
-      "timestamp-millis": now,
-      "timestamp": formatDateTime(now),
+      "zones": affectedAreas
     }
     
     client.publish(`playing`, JSON.stringify(payload));
@@ -96,14 +90,11 @@ class Player {
       } else if (err) {
         console.error("Error: ", err)
       } else {
-        let now = new Date().getTime()
         payload = {
           "name": name,
-          "areas": affectedAreas,
-          "timestamp-millis": now,
-          "timestamp": formatDateTime(now),
+          "zones": affectedAreas
         }
-        console.log(`Play finished at ${formatDateTime(now)}`)
+        console.log(`Play finished`)
         client.publish(`played`, JSON.stringify(payload));
         client.publish(`stop`);
       }
@@ -111,12 +102,9 @@ class Player {
   }
 
   sendPong() {
-    let now = new Date().getTime()
     let payload = {
       "name": name,
-      "areas": areas,
-      "timestamp-millis": now,
-      "timestamp": formatDateTime(now)
+      "zones": zones
     }
     client.publish(`pong`, JSON.stringify(payload));
   }
@@ -124,4 +112,4 @@ class Player {
 
 const player = new Player();
 
-console.log(`Gong client starting.\n\nName: ${name}\nAreas: ${areas}\nServer: ${server}\n\nConnecting to MQTT server..`)
+console.log(`Gong client starting.\n\nName: ${name}\nZones: ${zones}\nServer: ${server}\n\nConnecting to MQTT server..`)

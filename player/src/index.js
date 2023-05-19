@@ -3,18 +3,19 @@ const mqtt = require('mqtt')
 var playSound = require('play-sound')(opts = {})
 const { getMac, getZones } = require('./lib')
 
-let name = process.env.NAME || getMac() || randomUUID()
-let playerZones = (process.env.ZONES || 'student-accommodation,outside').split(',')
-let server = process.env.MQTT_SERVER || 'localhost'
+const name = process.env.NAME || getMac() || randomUUID()
+const server = process.env.MQTT_SERVER || 'localhost'
 
 let client  = mqtt.connect(`mqtt://${server}`);
 const topics = ['ping', 'play', 'stop']
 
 class Player {
   audio;
+  zones;
 
-  constructor() {
+  constructor(zones) {
     this.audio = undefined
+    this.zones = zones
 
     client.on('connect', () => {
       this.mqttConnect()
@@ -23,6 +24,8 @@ class Player {
     client.on('message', (topic, message) => {
       this.mqttMessage(topic, message)
     })
+
+    console.log(`Gong client starting.\n\nName: ${name}\nZones: ${this.zones}\nServer: ${server}\n\nConnecting to MQTT server..`)
   }
 
   /**
@@ -44,6 +47,7 @@ class Player {
   mqttMessage = (topic, message) => {
     console.log(`Message. Topic: '${topic}' Message: '${message}'`)
 
+    // Parse message to JSON, if any
     let data = undefined
     try {
       data = JSON.parse(message)
@@ -52,7 +56,7 @@ class Player {
     if (topic === 'ping') {
       this.sendPong()
     } else if (topic == 'play') {
-      let zones = getZones(playerZones, data.zones)
+      let zones = getZones(this.zones, data.zones)
 
       if (zones.length === 0) {
         console.log('Zones not handled by this device')
@@ -70,7 +74,7 @@ class Player {
 
   /**
    * Play gong sound and publish played message if successful
-   * @param {Array} affectedAreas areas to play in
+   * @param {Array} zones to play in
    */
   playGong(zones) {
     // TODO: Turn GPIO on or off
@@ -104,12 +108,11 @@ class Player {
   sendPong() {
     let payload = {
       "name": name,
-      "zones": playerZones
+      "zones": this.zones
     }
     client.publish(`pong`, JSON.stringify(payload));
   }
 }
 
-const player = new Player();
-
-console.log(`Gong client starting.\n\nName: ${name}\nZones: ${playerZones}\nServer: ${server}\n\nConnecting to MQTT server..`)
+// Instantiate player object with zones handled 
+const player = new Player((process.env.ZONES || 'all').split(','));

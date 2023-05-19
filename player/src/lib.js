@@ -31,7 +31,7 @@ function formatDateTime(dateTime) {
  * @returns {Array} Zones in both arrays or ['all'] if it was received
  */
 function getZones(playerZones, messageZones) {
-    if (messageZones.includes('all')) return ['all'];
+    if (playerZones.includes('all') || messageZones.includes('all')) return ['all'];
 
     return playerZones.filter((x) => messageZones.includes(x));
 }

@@ -108,7 +108,8 @@ class Player {
   sendPong() {
     let payload = {
       "name": name,
-      "zones": this.zones
+      "zones": this.zones,
+      "type": "player"
     }
     client.publish(`pong`, JSON.stringify(payload));
   }

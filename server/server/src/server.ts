@@ -1,6 +1,6 @@
 const mqtt = require('mqtt')
 const client  = mqtt.connect('mqtt://mqtt')
-const topics = ["activated", "played"]
+const topics = ["pong", "activated", "played"]
 
 class Server {
   gongPlaying: boolean = false
@@ -23,6 +23,8 @@ class Server {
     for (let topic of topics) {
       client.subscribe(topic)
     }
+
+    client.publish(`ping`);
   }
 
   /**
@@ -33,6 +35,12 @@ class Server {
   mqttMessage = (topic: string, message: object) => {
     console.log(`Topic: ${topic} Message: ${message.toString()}`)
 
+    // Parse message to JSON, if any
+    let data = undefined
+    try {
+      data = JSON.parse(message.toString())
+    } catch {}
+
     if (topic === 'activated') {
       this.handleRemoteAction()
     } else if (topic === 'played') {
@@ -40,7 +48,20 @@ class Server {
         this.gongPlaying = false
         client.publish('stop')
       }
+    } else if (topic === 'pong') {
+      let pong = Object.assign(new Pong(), data)
+      this.handlePong(pong)
     }
+  }
+
+  /**
+   * Device status received
+   */
+  handlePong = (pong: Pong) => {
+    if (pong.type == 'player')
+      console.log(`Player device active. Name: ${pong.name} Zones: ${pong.zones}`)
+    else
+      console.log(`Remote device active. Name: ${pong.name}`)
   }
 
   /**
@@ -53,7 +74,7 @@ class Server {
       client.publish('stop')
     } else {
       this.gongPlaying = true
-      client.publish('play')
+      client.publish('play', JSON.stringify({"zones": ["all"]}))
     }
   }
 }
@@ -62,3 +83,10 @@ class Server {
 const server = new Server();
 
 console.log(`Gong server starting.\n\nConnecting to MQTT server..`)
+
+// Pong class
+class Pong {
+  name?: string;
+  type?: string;
+  zones?: Array<string>;
+}

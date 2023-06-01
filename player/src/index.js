@@ -63,7 +63,7 @@ class Player {
         return
       }
 
-      this.playGong(zones)
+      this.playGong(zones, data.repeat)
     } else if (topic == 'stop') {
       if (this.audio !== undefined) {
         this.audio.kill()
@@ -76,7 +76,7 @@ class Player {
    * Play gong sound and publish played message if successful
    * @param {Array} zones to play in
    */
-  playGong(zones) {
+  playGong = (zones, repeat) => {
     // TODO: Turn GPIO on or off
 
     console.log(`Playing in zones '${zones}'`)
@@ -88,23 +88,49 @@ class Player {
     
     client.publish(`playing`, JSON.stringify(payload));
 
-    this.audio = playSound.play('./sound/gong-short.mp3', function(err) {
+    this.startPlayback(zones, repeat)
+  }
+
+  /**
+   * Play sound number of times
+   * @param {Array<string>} zones 
+   * @param {number} repeat 
+   */
+  startPlayback = (zones, repeat) => {
+    this.audio = playSound.play('./sound/gong-8s.mp3', (err) => {
       if (err && err.killed) {
         console.log(`Playback stopped by server`)
       } else if (err) {
         console.error("Error: ", err)
       } else {
-        payload = {
-          "name": name,
-          "zones": zones
-        }
-        console.log(`Play finished`)
-        client.publish(`played`, JSON.stringify(payload));
-        client.publish(`stop`);
+        this.playBackFinished(zones, repeat)
       }
     })
   }
 
+  /**
+   * Play again or report playback finished
+   * @param {Array<string>} zones 
+   * @param {number} repeat 
+   */
+  playBackFinished = (zones, repeat) => {
+    repeat--
+    if (repeat > 0) {
+      this.startPlayback(zones, repeat)
+      return
+    }
+
+    let payload = {
+      "name": name,
+      "zones": zones
+    }
+    console.log(`Play finished`)
+    client.publish(`played`, JSON.stringify(payload));
+  }
+
+  /**
+   * Respond to device status request (pong)
+   */
   sendPong() {
     let payload = {
       "name": name,

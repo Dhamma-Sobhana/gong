@@ -118,12 +118,13 @@ Example data:
 Play gong sound if player is configured to handle the zone requested.
 
 - zones: array of zones.
+- repeat: number of times sound should be played.
 
 Example data:
 
-    {"zones": ["all"]}
-    {"zones": ["student-accommodation"]}
-    {"zones": ["student-accommodation", "outside"]}
+    {"zones": ["all"], repeat: 6}
+    {"zones": ["student-accommodation"], repeat: 6}
+    {"zones": ["student-accommodation", "outside"], repeat: 4}
 
 ### playing (player -> server)
 Report that playback has started.

@@ -129,7 +129,7 @@ class Server {
       client.publish('stop')
     } else {
       this.gongPlaying = true
-      client.publish('play', JSON.stringify({"zones": ["all"]}))
+      client.publish('play', JSON.stringify({"zones": ["all"], "repeat": 4}))
     }
   }
 }

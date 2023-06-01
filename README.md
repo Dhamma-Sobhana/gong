@@ -98,22 +98,23 @@ Configured with device variable *ZONES* in balenaCloud dashboard.
 
 ## Messages
 
-### ping (global)
+### ping (server -> player, remote)
 Request devices to send their status by publishing a *pong* message.
 
-### pong (global)
+### pong (player, remote -> server)
 Send a message telling that the device is online. Sent when device has booted and as a response to *ping* message.
 
 - name: string - Name of the device to easily identify it.
 - zones: array of zones handled by the player. (player)
+- type: string - Device type: remote, player
 
 Example data:
 
-    {"name": "main-house-remote"}
-    {"name": "female-house-player", "zones": ["student-accommodation"]}
-    {"name": "main-house-player", "zones": ["student-accommodation", "outside"]}
+    {"name": "main-house-remote", "type": "remote"}
+    {"name": "female-house-player", "zones": ["student-accommodation"], "type": "player"}
+    {"name": "main-house-player", "zones": ["student-accommodation", "outside"], "type": "player"}
 
-### play (player)
+### play (server -> player)
 Play gong sound if player is configured to handle the zone requested.
 
 - zones: array of zones.
@@ -124,7 +125,16 @@ Example data:
     {"zones": ["student-accommodation"]}
     {"zones": ["student-accommodation", "outside"]}
 
-### played (player)
+### playing (player -> server)
+Report that playback has started.
+
+- name: string - Name of the device.
+
+Example data:
+
+    {"name": "female-house-player"}
+
+### played (player -> server)
 Sent after gong has been played with this data:
 
 - name: string. The name of the device.
@@ -135,10 +145,10 @@ Example data:
     {"name": "female-house-player", "zones": ["student-accommodation"]}
     {"name": "main-house-player", "zones": ["student-accommodation", "outside"]}
 
-### stop (player, remote)
+### stop (server -> player, remote)
 Stop playback and update state of remotes to show that gong is not playing anymore.
 
-### activated (remote)
+### activated (remote -> server)
 Sent by remote when button has been pressed.
 
 - name: string. Name of device that initiated the request.
@@ -167,12 +177,15 @@ IP address or hostname of server.
 Name of the device, used for identification.
 
 ## ZONES (player)
-Array of zones the player handles.
+Comma separated list of zones the player handles.
 
 ## MORNING_TIME (server)
 Time in format `hh:mm`.
 
 If server recieves an *activated* message from a remote before this time, only play in zone **student-accommodation**.
+
+## DEVICES (server)
+Comma separated list of devices that should be online. Used to check status of devices.
 
 # Development
 

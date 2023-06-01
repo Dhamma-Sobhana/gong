@@ -67,6 +67,7 @@ class Player {
     } else if (topic == 'stop') {
       if (this.audio !== undefined) {
         this.audio.kill()
+        this.audio = undefined
         console.log('Stopping playback')
       }
     }
@@ -78,6 +79,9 @@ class Player {
    */
   playGong = (zones, repeat) => {
     // TODO: Turn GPIO on or off
+    if (this.audio !== undefined) {
+      this.audio.kill()
+    }
 
     console.log(`Playing in zones '${zones}'`)
 
@@ -115,7 +119,7 @@ class Player {
    */
   playBackFinished = (zones, repeat) => {
     repeat--
-    if (repeat > 0) {
+    if ((this.audio != undefined) && (repeat > 0)) {
       this.startPlayback(zones, repeat)
       return
     }

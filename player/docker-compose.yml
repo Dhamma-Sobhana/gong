@@ -14,11 +14,11 @@ services:
   player:
     build:
       context: ./
-      target: development
+      dockerfile: Dockerfile
+      target: production
     environment:
       MQTT_SERVER: "${MQTT_SERVER}"
       NAME: "${PLAYER_NAME}"
       PULSE_SERVER: "unix:/run/pulse/pulseaudio.socket"
     volumes:
       - 'pulse:/run/pulse'
-    command: node src/index.js

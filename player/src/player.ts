@@ -1,19 +1,20 @@
-const { randomUUID } = require('crypto')
-const mqtt = require('mqtt')
-var playSound = require('play-sound')(opts = {})
-const { getMac, getZones } = require('./lib')
+import { randomUUID } from 'crypto'
+import * as mqtt from 'mqtt'
+import play from 'play-sound'
+const playSound = play({})
+import { getZones } from './lib.js'
 
-const name = process.env.NAME || getMac() || randomUUID()
+const name = process.env.NAME || randomUUID()
 const server = process.env.MQTT_SERVER || 'localhost'
 
 let client  = mqtt.connect(`mqtt://${server}`);
 const topics = ['ping', 'play', 'stop']
-
+ 
 class Player {
-  audio;
-  zones;
+  audio : any;
+  zones : Array<string>;
 
-  constructor(zones) {
+  constructor(zones : Array<string>) {
     this.audio = undefined
     this.zones = zones
 
@@ -21,7 +22,7 @@ class Player {
       this.mqttConnect()
     })
 
-    client.on('message', (topic, message) => {
+    client.on('message', (topic : string, message : object) => {
       this.mqttMessage(topic, message)
     })
 
@@ -39,18 +40,19 @@ class Player {
 
     // Send message telling that the device is alive
     this.sendPong()
-  }
+  } 
 
   /**
    * Handle subscribed messages received
    */
-  mqttMessage = (topic, message) => {
-    console.log(`Message. Topic: '${topic}' Message: '${message}'`)
+  // TODO: Is message object or string?
+  mqttMessage = (topic : string, message : object) => {
+    console.log(`Message. Topic: '${topic}' Message: '${message.toString()}'`)
 
     // Parse message to JSON, if any
     let data = undefined
     try {
-      data = JSON.parse(message)
+      data = JSON.parse(message.toString())
     } catch {}
 
     if (topic === 'ping') {
@@ -77,7 +79,7 @@ class Player {
    * Play gong sound and publish played message if successful
    * @param {Array} zones to play in
    */
-  playGong = (zones, repeat) => {
+  playGong = (zones : Array<string>, repeat : number) => {
     // TODO: Turn GPIO on or off
     if (this.audio !== undefined) {
       this.audio.kill()
@@ -100,8 +102,8 @@ class Player {
    * @param {Array<string>} zones 
    * @param {number} repeat 
    */
-  startPlayback = (zones, repeat) => {
-    this.audio = playSound.play('./sound/gong-8s.mp3', (err) => {
+  startPlayback = (zones : Array<string>, repeat : number) => {
+    this.audio = playSound.play('./sound/gong-8s.mp3', (err : any) => {
       if (err && err.killed) {
         console.log(`Playback stopped by server`)
       } else if (err) {
@@ -117,7 +119,7 @@ class Player {
    * @param {Array<string>} zones 
    * @param {number} repeat 
    */
-  playBackFinished = (zones, repeat) => {
+  playBackFinished = (zones : Array<string>, repeat : number) => {
     repeat--
     if ((this.audio != undefined) && (repeat > 0)) {
       this.startPlayback(zones, repeat)

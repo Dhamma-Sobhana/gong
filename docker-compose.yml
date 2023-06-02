@@ -39,7 +39,6 @@ services:
       PULSE_SERVER: "unix:/run/pulse/pulseaudio.socket"
     volumes:
       - 'pulse:/run/pulse'
-    command: node src/index.js
   remote:
     build:
       context: ./remote

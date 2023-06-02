@@ -7,7 +7,7 @@ class Pong {
   type: string = 'undefined';
   zones?: Array<string>;
 }
-
+ 
 class DeviceStatus {
   name: string;
   type?: string;

@@ -1,26 +1,26 @@
-const { networkInterfaces } = require("os");
+//import { networkInterfaces } from "os";
 
 /**
  * Check for interfaces that looks like physical ones and return the first found mac address.
  * @returns: mac address string or false
  */
-function getMac() {
-    const validInterfaces = ["eth0", "en0", "wlan0"];
-    let interfaces = networkInterfaces();
+// function getMac() {
+//     const validInterfaces = ["eth0", "en0", "wlan0"];
+//     let interfaces = networkInterfaces();
 
-    for (const interface of validInterfaces) {
-        if (interface in interfaces) {
-            return interfaces[interface][0].mac;
-        }
-    }
-}
+//     for (const netInterface of validInterfaces) {
+//         if (netInterface in interfaces) {
+//             return interfaces[netInterface][0].mac;
+//         }
+//     }
+// }
 
 /**
  * Format time with timezone and ISO format
  * @param {Date} dateTime
  * @returns Formatted string in ISO format using time zone
  */
-function formatDateTime(dateTime) {
+export const formatDateTime = (dateTime : Date) : string => {
     return new Date(dateTime).toLocaleString("sv", { timeZoneName: "short" });
 }
 
@@ -30,10 +30,10 @@ function formatDateTime(dateTime) {
  * @param {Array} messageZones Zones in the message
  * @returns {Array} Zones in both arrays or ['all'] if it was received
  */
-function getZones(playerZones, messageZones) {
+export const getZones = (playerZones : Array<string>, messageZones : Array<string>) : Array<string> => {
     if (playerZones.includes('all') || messageZones.includes('all')) return ['all'];
 
     return playerZones.filter((x) => messageZones.includes(x));
 }
 
-module.exports = { getMac, formatDateTime, getZones };
+//module.exports = { formatDateTime, getZones };

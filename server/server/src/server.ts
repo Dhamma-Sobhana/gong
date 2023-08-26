@@ -106,6 +106,8 @@ class Server {
     app.listen(http_port, () => {
       log(`[web]: Listening on port ${http_port}...`)
     })
+
+    log(`Gong server starting. Devices: ${this.devices}\n\nConnecting to MQTT server..`)
   }
 
   /**
@@ -126,7 +128,7 @@ class Server {
    * @param message if any, in JSON format
    */
   mqttMessage = (topic: string, message: object) => {
-    console.log(`Topic: ${topic} Message: ${message.toString()}`)
+    log(`Topic: ${topic} Message: ${message.toString()}`)
 
     // Parse message to JSON, if any
     let data = undefined
@@ -164,9 +166,9 @@ class Server {
    */
   handlePong = (pong: Pong) => {
     if (pong.type == 'player')
-      console.log(`Player device active. Name: ${pong.name} Zones: ${pong.zones}`)
+      log(`Player device active. Name: ${pong.name} Zones: ${pong.zones}`)
     else
-      console.log(`Remote device active. Name: ${pong.name}`)
+      log(`Remote device active. Name: ${pong.name}`)
     
     for (let device of this.devices) {
       if (device.name == pong.name) {
@@ -179,7 +181,7 @@ class Server {
    * Handle remote button press
    */
   handleRemoteAction = () => {
-    console.log(`New playing state: ${!this.gongPlaying}`)
+    log(`New playing state: ${!this.gongPlaying}`)
     if (this.gongPlaying) {
       this.gongPlaying = false
       client.publish('stop')

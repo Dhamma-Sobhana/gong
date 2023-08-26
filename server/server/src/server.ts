@@ -1,6 +1,44 @@
 const mqtt = require('mqtt')
-const client  = mqtt.connect('mqtt://mqtt')
+const mqtt_server = process.env.MQTT_SERVER || 'mqtt'
+const client  = mqtt.connect(`mqtt://${mqtt_server}`)
 const topics = ["pong", "activated", "played"]
+
+process.env.TZ = 'Europe/Stockholm'
+
+// Express.js and Nunjucks for web interface
+import express, { Express, Request, Response } from 'express';
+const nunjucks = require('nunjucks')
+const dateFilter = require('nunjucks-date')
+
+const app: Express = express();
+const http_port = process.env.HTTP_PORT || 8080;
+
+let njEnv = nunjucks.configure('views', {
+  autoescape: true,
+  express: app
+})
+
+dateFilter.install(njEnv)
+dateFilter.setDefaultFormat('YYYY-MM-DD HH:mm:ss.SS');
+
+app.set('view engine', 'html')
+app.use(express.static('public'))
+
+let logArray: Array<string> = [];
+
+/**
+ * Log messages to in memory cache and console.
+ * Limit number of messages to 10
+ * @param message String to log
+ */
+function log(message: string) {
+  if (logArray.length >= 10)
+    logArray.shift()
+  
+  let now = new Date().toLocaleString('sv-SE')
+  logArray.push(`${now}: ${message}`)
+  console.log(message)
+}
 
 class Pong {
   name: string = 'undefined';
@@ -49,7 +87,25 @@ class Server {
       this.mqttMessage(topic, message)
     })
 
-    console.log(`Gong server starting. Devices: ${this.devices}\n\nConnecting to MQTT server..`)
+    app.get('/', (req: Request, res: Response) => {
+      res.render('index.njk', {devices: this.devices, playing: this.gongPlaying, log: logArray})
+    })
+
+    app.post('/activated', (req, res) => {
+      log('[web] Play/Stop')
+      this.handleRemoteAction()
+      res.redirect('/')
+    })
+
+    app.post('/ping', (req, res) => {
+      log('[web] Refresh')
+      client.publish(`ping`);
+      res.redirect('/')
+    })
+    
+    app.listen(http_port, () => {
+      log(`[web]: Listening on port ${http_port}...`)
+    })
   }
 
   /**

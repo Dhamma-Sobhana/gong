@@ -24,4 +24,6 @@ services:
       dockerfile: Dockerfile
       target: development # For local push
       #target: production # For deployment
+    ports:
+      - 80:8080
 

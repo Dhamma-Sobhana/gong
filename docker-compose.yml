@@ -15,6 +15,7 @@ services:
       - 'mqtt-config-dir:/mosquitto/config'
     ports:
       - 1883:1883
+      - 9001:9001
     depends_on:
       - mqtt-config
   server:
@@ -22,6 +23,8 @@ services:
       context: ./server/server
       target: production
     command: node build/server.js
+    ports:
+      - 80:8080
   audio:
     image: bh.cr/balenalabs/audio-rpi # where <arch> is one of rpi, armv7hf, aarch64 or amd64
     privileged: true

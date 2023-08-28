@@ -15,10 +15,13 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-      target: production
+      target: development # For local push
+      #target: production # For deployment
     environment:
       MQTT_SERVER: "${MQTT_SERVER}"
       NAME: "${PLAYER_NAME}"
       PULSE_SERVER: "unix:/run/pulse/pulseaudio.socket"
     volumes:
       - 'pulse:/run/pulse'
+    depends_on:
+      - audio

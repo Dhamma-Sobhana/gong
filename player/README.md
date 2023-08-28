@@ -28,8 +28,6 @@ The device name.
 
 Example: **female-house-player**
 
-If no name is set the first found MAC address of the device will be used.
-
 ## ZONES
 Array of zones this player handles.
 
@@ -39,14 +37,19 @@ Example: **["accommodation", "outside"]**
 IP or hostname of MQTT server.
 
 ### AUDIO_VOLUME
-Audio ouput volume of the audio block.
+Maximum audio ouput volume of the audio block in percentage.
 
-For maximal volume: `100`
+Default: `100`
+
+## AUDIO_VOLUME_START
+Audio volume when starting playback.
+
+Default: `50`
 
 ### PULSE_SERVER
 How player application and audio block communicates.
 
-Always set to: `unix:/run/pulse/pulseaudio.socket`
+Default: `unix:/run/pulse/pulseaudio.socket`
 
 # Communication
 

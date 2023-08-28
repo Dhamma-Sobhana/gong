@@ -1,4 +1,4 @@
-FROM balenalib/armv7hf-alpine-node:18.12-3.17-run AS base
+FROM balenalib/armv7hf-alpine-node:16.19.1-3.17-run AS base
 
 # Balena Audio
 # Install dependencies
@@ -39,7 +39,5 @@ COPY --from=development /usr/src/app/build ./build
 COPY --from=development /usr/src/app/sound ./sound
 
 RUN npm config set update-notifier false &&  npm ci --omit=dev
-
-RUN ls build
 
 CMD ["npm", "run", "start"]

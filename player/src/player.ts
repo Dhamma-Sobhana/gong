@@ -2,14 +2,25 @@ import { randomUUID } from 'crypto'
 import * as mqtt from 'mqtt'
 import play from 'play-sound'
 const playSound = play({})
-import { getZones } from './lib.js'
 
 const name = process.env.NAME || randomUUID()
 const server = process.env.MQTT_SERVER || 'localhost'
 
 let client  = mqtt.connect(`mqtt://${server}`);
 const topics = ['ping', 'play', 'stop']
- 
+
+/**
+* Get the zones that was received that the player also handles
+* @param {Array} playerZones Zones the player handles
+* @param {Array} messageZones Zones in the message
+* @returns {Array} Zones in both arrays or ['all'] if it was received
+*/
+function getZones(playerZones : Array<string>, messageZones : Array<string>) {
+  if (playerZones.includes('all') || messageZones.includes('all')) return ['all'];
+
+  return playerZones.filter((x) => messageZones.includes(x));
+}
+
 class Player {
   audio : any;
   zones : Array<string>;

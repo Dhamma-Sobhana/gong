@@ -161,15 +161,20 @@ Example data:
 # Configuration
 Configuration is set using fleet or device variables in *balenaCloud* dashboard.
 
-## AUDIO_VOLUME (player)
-Audio ouput volume of the audio block.
+### AUDIO_VOLUME (player)
+Maximum audio ouput volume of the audio block in percentage.
 
-For maximal volume: `100`
+Default: `100`
+
+## AUDIO_VOLUME_START (player)
+Audio volume when starting playback.
+
+Default: `50`
 
 ## PULSE_SERVER (player)
 How player application and audio block communicates.
 
-Always set to: `unix:/run/pulse/pulseaudio.socket`
+Default: `unix:/run/pulse/pulseaudio.socket`
 
 ## MQTT_SERVER (player, remote)
 IP address or hostname of server.

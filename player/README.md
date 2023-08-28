@@ -59,9 +59,14 @@ See README in root for detail of messages.
 
 # Optional hardware
 
+## GPIO relay **To be done**
+
 To prevent static noise from speakers a relay can be used to keep the circuit open when not playing.
 
 If using a device with GPIO a simple relay can be connected to this.
 
 This can also be used to handle more than one area using one device by opening circuits based on zones received.
 
+## DAC (digital-to-analogue converter)
+
+Raspberry Pi has a builtin 3.5 mm audio output. To incresae audio quality and volume a DAC HAT (hardware attached on top) can be attached to the GPIO pins of the Raspberry Pi. This will add a RCA connector that can be used to connect an amplifier.

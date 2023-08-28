@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "build/player.js",
-  "type": "module",
   "scripts": {
     "start": "NODE_PATH=./build node build/player.js",
     "build": "./node_modules/typescript/bin/tsc -p .",

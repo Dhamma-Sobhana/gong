@@ -15,6 +15,7 @@ services:
       - 'mqtt-config-dir:/mosquitto/config'
     ports:
       - 1883:1883
+      - 9001:9001
     depends_on:
       - mqtt-config
   server:
@@ -23,4 +24,6 @@ services:
       dockerfile: Dockerfile
       target: development # For local push
       #target: production # For deployment
+    ports:
+      - 80:8080
 

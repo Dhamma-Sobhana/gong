@@ -14,6 +14,7 @@ services:
       - 'mqtt-config-dir:/mosquitto/config'
     ports:
       - 1883:1883
+      - 9001:9001
     depends_on:
       - mqtt-config
   server:
@@ -22,8 +23,12 @@ services:
       target: development
     volumes:
       - ./server/server/src:/usr/src/app/src
+      - ./server/server/views:/usr/src/app/views
+      - ./server/server/public:/usr/src/app/public
       - ./server/server/nodemon.json:/usr/src/app/nodemon.json
     command: npm run dev
+    ports:
+      - 80:8080
   player:
     build:
       context: ./player

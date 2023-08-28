@@ -13,7 +13,7 @@ const toggleDelta = 30;
 
 // MQTT
 let client  = mqtt.connect(`mqtt://${server}`);
-let topics = ['play', 'stop']
+let topics = ['ping', 'play', 'stop']
 
 class Button {
 
@@ -38,29 +38,49 @@ class Button {
 
         this.button.watch((err, value) => this.buttonChanged(err, value))
 
-        this.setupMqtt()
+        client.on('connect', () => {
+            this.mqttConnect()
+        })
+    
+        client.on('message', (topic, message) => {
+            this.mqttMessage(topic, message)
+        })
     }
 
-    setupMqtt = () => {
-        client.on('connect', () => {
-            console.log('Connected! Listening for topics:\n', topics.join(', '))
-            for (let topic of topics) {
-                client.subscribe(topic)
-            }
-        })
+    /**
+     * Subscribe to topics and send alive message
+     */
+    mqttConnect = () => {
+        console.log('Connected! Listening for topics:\n', topics.join(', '))
+        for (let topic of topics) {
+            client.subscribe(topic)
+        }
 
-        client.on('message', (topic, message) => {
-            // message is Buffer
-            console.log(`Topic: ${topic} Message: ${message.toString()}`)
-          
-            if (topic === 'stop') {
-                this.active = 0;
-                this.led.writeSync(this.active);
-            } else if (topic === 'play') {
-                this.active = 1;
-                this.led.writeSync(this.active);
-            }
-        })
+        // Send message telling that the device is alive
+        this.sendPong()
+    }
+
+    /**
+     * Handle subscribed messages received
+     */
+    mqttMessage = (topic, message) => {
+        console.log(`Message. Topic: '${topic}' Message: '${message}'`)
+
+        // Parse message to JSON, if any
+        let data = undefined
+        try {
+            data = JSON.parse(message)
+        } catch {}
+
+        if (topic === 'ping') {
+            this.sendPong()
+        } else if (topic === 'stop') {
+            this.active = 0;
+            this.led.writeSync(this.active);
+        } else if (topic === 'play') {
+            this.active = 1;
+            this.led.writeSync(this.active);
+        }
     }
 
     sendButtonState = () => {
@@ -164,6 +184,14 @@ class Button {
         this.led.writeSync(this.toggle);
         this.updateToggleTime();
         this.timeout = setTimeout(this.alternate, this.toggleTime);
+    }
+
+    sendPong() {
+        let payload = {
+            "name": name,
+            "type": "remote"
+        }
+        client.publish(`pong`, JSON.stringify(payload));
     }
 }
 

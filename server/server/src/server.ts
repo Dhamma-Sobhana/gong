@@ -1,74 +1,11 @@
-const mqtt = require('mqtt')
-const mqtt_server = process.env.MQTT_SERVER || 'mqtt'
-const client  = mqtt.connect(`mqtt://${mqtt_server}`)
-const topics = ["pong", "activated", "played"]
+import { Request, Response } from 'express';
+
+import { Pong, DeviceStatus } from './models'
+import { logArray, printDevicesStatus } from './log'
+import { app } from './web'
+import { client } from './mqtt'
 
 process.env.TZ = 'Europe/Stockholm'
-
-// Express.js and Nunjucks for web interface
-import express, { Express, Request, Response } from 'express';
-const nunjucks = require('nunjucks')
-const dateFilter = require('nunjucks-date')
-
-const app: Express = express();
-const http_port = process.env.HTTP_PORT || 8080;
-
-let njEnv = nunjucks.configure('views', {
-  autoescape: true,
-  express: app
-})
-
-dateFilter.install(njEnv)
-dateFilter.setDefaultFormat('YYYY-MM-DD HH:mm:ss.SS');
-
-app.set('view engine', 'html')
-app.use(express.static('public'))
-
-let logArray: Array<string> = [];
-
-/**
- * Log messages to in memory cache and console.
- * Limit number of messages to 10
- * @param message String to log
- */
-function log(message: string) {
-  if (logArray.length >= 10)
-    logArray.shift()
-  
-  let now = new Date().toLocaleString('sv-SE')
-  logArray.push(`${now}: ${message}`)
-  console.log(message)
-}
-
-class Pong {
-  name: string = 'undefined';
-  type: string = 'undefined';
-  zones?: Array<string>;
-}
- 
-class DeviceStatus {
-  name: string;
-  type?: string;
-  zones?: Array<string>;
-  timestamp?: number
-
-  constructor(name: string) {
-      this.name = name
-  }
-
-  update = (type: string, zones?: Array<string>) => {
-      this.type = type
-      this.zones = zones
-      this.timestamp = Date.now()
-  }
-
-  toString() {
-      if (this.type !== undefined)
-      return `${this.name} (${this.type}) Last seen: ${this.timestamp}`
-      else
-      return `${this.name}`
-  }
-}
 
 class Server {
   gongPlaying: boolean = false
@@ -79,12 +16,8 @@ class Server {
       this.devices.push(new DeviceStatus(device))
     }
 
-    client.on('connect', () => {
-      this.mqttConnect()
-    })
-
     client.on('message', (topic: string, message: object) => {
-      this.mqttMessage(topic, message)
+      this.handleMessage(topic, message)
     })
 
     app.get('/', (req: Request, res: Response) => {
@@ -92,34 +25,18 @@ class Server {
     })
 
     app.post('/activated', (req, res) => {
-      log('[web] Play/Stop')
+      console.log('[web] Play/Stop')
       this.handleRemoteAction()
       res.redirect('/')
     })
 
     app.post('/ping', (req, res) => {
-      log('[web] Refresh')
+      console.log('[web] Refresh')
       client.publish(`ping`);
       res.redirect('/')
     })
-    
-    app.listen(http_port, () => {
-      log(`[web]: Listening on port ${http_port}...`)
-    })
 
-    log(`Gong server starting. Devices: ${this.devices}\n\nConnecting to MQTT server..`)
-  }
-
-  /**
-   * Subscribe to topics
-   */
-  mqttConnect() {
-    console.log('Connected! Listening for topics:\n', topics.join(', '))
-    for (let topic of topics) {
-      client.subscribe(topic)
-    }
-
-    client.publish(`ping`);
+    console.log(`Gong server starting. Devices: ${this.devices}\n\nConnecting to MQTT server..`)
   }
 
   /**
@@ -127,8 +44,8 @@ class Server {
    * @param topic MQTT topic
    * @param message if any, in JSON format
    */
-  mqttMessage = (topic: string, message: object) => {
-    log(`Topic: ${topic} Message: ${message.toString()}`)
+  handleMessage = (topic: string, message: object) => {
+    console.log(`Topic: ${topic} Message: ${message.toString()}`)
 
     // Parse message to JSON, if any
     let data = undefined
@@ -136,28 +53,23 @@ class Server {
       data = JSON.parse(message.toString())
     } catch {}
 
-    if (topic === 'activated') {
-      this.handleRemoteAction()
-    } else if (topic === 'played') {
-      if (this.gongPlaying == true) {
-        this.gongPlaying = false
-        client.publish('stop')
-      }
-    } else if (topic === 'pong') {
-      let pong = Object.assign(new Pong(), data)
-      this.handlePong(pong)
-      this.printDevicesStatus()
-    }
-  }
-
-  /**
-   * Print devices status to console
-   */
-  printDevicesStatus = () => {
-    console.log(`Type\t| Name\t\t| Last seen`)
-    console.log(`-----------------------------------------`)
-    for(let device of this.devices) {
-      console.log(`${device.type}\t| ${device.name}\t| ${device.timestamp}`)
+    switch (topic) {
+      case 'activated':
+        this.handleRemoteAction()
+        break;
+      case 'played':
+        if (this.gongPlaying == true) {
+          this.gongPlaying = false
+          client.publish('stop')
+        }
+        break;
+      case 'pong':
+        let pong = Object.assign(new Pong(), data)
+        this.handlePong(pong)
+        printDevicesStatus(this.devices)
+        break;
+      default:
+        break;
     }
   }
 
@@ -166,9 +78,9 @@ class Server {
    */
   handlePong = (pong: Pong) => {
     if (pong.type == 'player')
-      log(`Player device active. Name: ${pong.name} Zones: ${pong.zones}`)
+      console.log(`Player device active. Name: ${pong.name} Zones: ${pong.zones}`)
     else
-      log(`Remote device active. Name: ${pong.name}`)
+      console.log(`Remote device active. Name: ${pong.name}`)
     
     for (let device of this.devices) {
       if (device.name == pong.name) {
@@ -181,7 +93,7 @@ class Server {
    * Handle remote button press
    */
   handleRemoteAction = () => {
-    log(`New playing state: ${!this.gongPlaying}`)
+    console.log(`New playing state: ${!this.gongPlaying}`)
     if (this.gongPlaying) {
       this.gongPlaying = false
       client.publish('stop')

@@ -36,7 +36,7 @@ Example: **["accommodation", "outside"]**
 ## MQTT_SERVER
 IP or hostname of MQTT server.
 
-### AUDIO_VOLUME
+## AUDIO_VOLUME
 Maximum audio ouput volume of the audio block in percentage.
 
 Default: `100`

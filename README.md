@@ -161,7 +161,7 @@ Example data:
 # Configuration
 Configuration is set using fleet or device variables in *balenaCloud* dashboard.
 
-### AUDIO_VOLUME (player)
+## AUDIO_VOLUME (player)
 Maximum audio ouput volume of the audio block in percentage.
 
 Default: `100`

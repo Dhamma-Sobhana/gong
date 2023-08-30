@@ -9,7 +9,7 @@ const options = {
     reconnectPeriod: 1000,
     connectTimeout: 30 * 1000,
 }
-const topics = ['activated', 'pong', 'played']
+const topics = ['activated', 'pong', 'played', 'stop']
 
 console.log('Connecting to MQTT server..')
 const client = mqtt.connect(host, options)
@@ -32,6 +32,7 @@ client.on('connect', () => {
 
 client.on('message', (topic, message) => {
     console.log(`Topic: ${topic} Message: ${message.toString()}`)
+    client.end()
 
     location.reload()
 })

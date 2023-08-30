@@ -18,7 +18,7 @@ app.set('view engine', 'html')
 app.use(express.static('public'))
 
 app.listen(http_port, () => {
-    console.log(`[web]: Listening on port ${http_port}...`)
+    console.log(`[web]: Listening on port ${http_port}`)
 })
 
 export { app }

@@ -38,7 +38,7 @@ class Server {
       res.redirect('/')
     })
 
-    console.log(`Gong server starting. Devices: ${this.devices}\n\nConnecting to MQTT server..`)
+    console.log(`[server] Gong server starting. Required devices: ${this.devices}`)
   }
 
   /**
@@ -47,7 +47,7 @@ class Server {
    * @param message if any, in JSON format
    */
   handleMessage = (topic: string, message: object) => {
-    console.log(`Topic: ${topic} Message: ${message.toString()}`)
+    console.debug(`[mqtt] < ${topic}: ${message.toString()}`)
 
     // Parse message to JSON, if any
     let data = undefined
@@ -95,10 +95,11 @@ class Server {
    * Handle remote button press
    */
   handleRemoteAction = () => {
-    console.log(`New playing state: ${!this.gongPlaying}`)
+    console.log(`[server] New playing state: ${!this.gongPlaying}`)
     if (this.gongPlaying) {
       this.gongPlaying = false
       client.publish('stop')
+      console.debug(`[mqtt] > stop`)
     } else {
       let message = JSON.stringify(new PlayMessage(["all"], repeatGong))
       client.publish('play', message)

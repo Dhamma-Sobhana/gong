@@ -3,11 +3,13 @@ const mqtt_server = process.env.MQTT_SERVER || 'mqtt'
 const client = mqtt.connect(`mqtt://${mqtt_server}`)
 const topics = ["pong", "activated", "played"]
 
+console.log('[mqtt] Connecting to MQTT server..')
+
 /**
   * Subscribe to topics
   */
 client.on('connect', () => {
-    console.log('Connected! Listening for topics:\n', topics.join(', '))
+    console.log('[mqtt] Connected! Listening for topics:', topics.join(', '))
     for (let topic of topics) {
         client.subscribe(topic)
     }

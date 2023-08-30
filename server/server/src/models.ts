@@ -1,7 +1,11 @@
-class Pong {
+class Message {
     name: string = 'undefined';
-    type: string = 'undefined';
+    type?: string;
     zones?: Array<string>;
+
+    toString() {
+        return `${this.name}, ${this.type}, ${this.zones}`
+    }
 }
 
 class DeviceStatus {
@@ -14,9 +18,11 @@ class DeviceStatus {
         this.name = name
     }
 
-    update = (type: string, zones?: Array<string>) => {
-        this.type = type
-        this.zones = zones
+    update = (type?: string, zones?: Array<string>) => {
+        if (type !== undefined)
+            this.type = type
+        if (zones !== undefined)
+            this.zones = zones
         this.timestamp = Date.now()
     }
 
@@ -42,4 +48,4 @@ class PlayMessage {
 }
 
 
-export { Pong , DeviceStatus, PlayMessage }
+export { Message , DeviceStatus, PlayMessage }

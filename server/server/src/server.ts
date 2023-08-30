@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { Pong, DeviceStatus, PlayMessage } from './models'
+import { Message, DeviceStatus, PlayMessage } from './models'
 import { logArray, printDevicesStatus } from './log'
 import { app } from './web'
 import { client } from './mqtt'

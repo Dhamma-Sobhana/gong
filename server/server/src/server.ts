@@ -78,13 +78,13 @@ class Server {
     }
 
     // Update device list based on message
-    // TODO: This will overwrite zones handled by player with zones player played in
     this.updateDevice(data)
   }
 
   played() {
     if (this.gongPlaying == true) {
       this.gongPlaying = false
+      console.log(`[server] Finished playing`)
     }
   }
 
@@ -108,14 +108,15 @@ class Server {
    * Handle remote button press
    */
   remoteAction = () => {
-    console.log(`[server] New playing state: ${!this.gongPlaying}`)
     if (this.gongPlaying) {
       client.publish('stop')
       console.debug(`[mqtt] > stop`)
+      console.log(`[server] Stop playing`)
     } else {
       let message = JSON.stringify(new PlayMessage(["all"], repeatGong))
       client.publish('play', message)
       console.debug(`[mqtt] > play: ${message}`)
+      console.log(`[server] Start playing`)
     }
 
     this.gongPlaying = !this.gongPlaying

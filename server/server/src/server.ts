@@ -9,6 +9,19 @@ process.env.TZ = 'Europe/Stockholm'
 
 const repeatGong = process.env.GONG_REPEAT !== undefined ? parseInt(process.env.GONG_REPEAT) : 1
 
+/**
+ * Try to parse a message object to JSON
+ * @param message The JSON string
+ * @returns JSON object or undefined
+ */
+function parseJson(message:object) {
+  try {
+    return JSON.parse(message.toString())
+  } catch {
+    return undefined
+  }
+}
+
 class Server {
   gongPlaying: boolean = false
   devices: Array<DeviceStatus> = []
@@ -50,10 +63,7 @@ class Server {
     console.debug(`[mqtt] < ${topic}: ${message.toString()}`)
 
     // Parse message to JSON, if any
-    let data = undefined
-    try {
-      data = JSON.parse(message.toString())
-    } catch {}
+    let data = parseJson(message)
 
     switch (topic) {
       case 'activated':

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-import { Pong, DeviceStatus } from './models'
+import { Pong, DeviceStatus, PlayMessage } from './models'
 import { logArray, printDevicesStatus } from './log'
 import { app } from './web'
 import { client } from './mqtt'
@@ -98,8 +98,9 @@ class Server {
       this.gongPlaying = false
       client.publish('stop')
     } else {
-      this.gongPlaying = true
-      client.publish('play', JSON.stringify({"zones": ["all"], "repeat": 4}))
+      let message = JSON.stringify(new PlayMessage(["all"], repeatGong))
+      client.publish('play', message)
+      console.debug(`[mqtt] > play: ${message}`)
     }
   }
 }

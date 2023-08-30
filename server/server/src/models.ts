@@ -28,4 +28,18 @@ class DeviceStatus {
     }
 }
 
-export { Pong, DeviceStatus }
+class PlayMessage {
+    zones?: Array<string> = ["all"];
+    repeat: number = 4
+
+    constructor(zones?:Array<string>, repeat?:number) {
+        if (zones !== undefined)
+            this.zones = zones
+        
+        if (repeat !== undefined)
+            this.repeat = repeat
+    }
+}
+
+
+export { Pong , DeviceStatus, PlayMessage }

@@ -18,16 +18,4 @@ console.log = function () {
     _consoleLog(message)
 }
 
-
-/**
- * Print devices status to console
- */
-function printDevicesStatus(devices:Array<DeviceStatus>) {
-    console.log(`Type\t| Name\t\t| Last seen`)
-    console.log(`-----------------------------------------`)
-    for (let device of devices) {
-        console.log(`${device.type}\t| ${device.name}\t| ${device.timestamp}`)
-    }
-}
-
-export { logArray, printDevicesStatus }
+export { logArray }

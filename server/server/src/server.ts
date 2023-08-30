@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 import { Message, DeviceStatus, PlayMessage } from './models'
-import { logArray, printDevicesStatus } from './log'
+import { logArray } from './log'
 import { app } from './web'
 import { client } from './mqtt'
 

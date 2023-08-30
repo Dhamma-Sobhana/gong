@@ -41,7 +41,7 @@ class Server {
 
     app.post('/activated', (req, res) => {
       console.log('[web] Play/Stop')
-      this.handleRemoteAction()
+      this.remoteAction()
       res.redirect('/')
     })
 
@@ -67,36 +67,39 @@ class Server {
 
     switch (topic) {
       case 'activated':
-        this.handleRemoteAction()
+        this.remoteAction()
         break;
       case 'played':
-        if (this.gongPlaying == true) {
-          this.gongPlaying = false
-          client.publish('stop')
-        }
-        break;
-      case 'pong':
-        let pong = Object.assign(new Pong(), data)
-        this.handlePong(pong)
-        printDevicesStatus(this.devices)
+        this.played()
+        data.zones = undefined
         break;
       default:
         break;
     }
+
+    // Update device list based on message
+    // TODO: This will overwrite zones handled by player with zones player played in
+    this.updateDevice(data)
+  }
+
+  played() {
+    if (this.gongPlaying == true) {
+      this.gongPlaying = false
+    }
   }
 
   /**
-   * Device status received
+   * Update device list
    */
-  handlePong = (pong: Pong) => {
-    if (pong.type == 'player')
-      console.log(`Player device active. Name: ${pong.name} Zones: ${pong.zones}`)
-    else
-      console.log(`Remote device active. Name: ${pong.name}`)
-    
+  updateDevice(data:object) {
+    let message = Object.assign(new Message(), data)
+
+    if (message.name === undefined)
+      return
+
     for (let device of this.devices) {
-      if (device.name == pong.name) {
-        device.update(pong.type, pong.zones)
+      if (device.name == message.name) {
+        device.update(message.type, message.zones)
       }
     }
   }
@@ -104,10 +107,9 @@ class Server {
   /**
    * Handle remote button press
    */
-  handleRemoteAction = () => {
+  remoteAction = () => {
     console.log(`[server] New playing state: ${!this.gongPlaying}`)
     if (this.gongPlaying) {
-      this.gongPlaying = false
       client.publish('stop')
       console.debug(`[mqtt] > stop`)
     } else {
@@ -115,6 +117,8 @@ class Server {
       client.publish('play', message)
       console.debug(`[mqtt] > play: ${message}`)
     }
+
+    this.gongPlaying = !this.gongPlaying
   }
 }
 

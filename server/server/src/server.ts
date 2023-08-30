@@ -7,6 +7,8 @@ import { client } from './mqtt'
 
 process.env.TZ = 'Europe/Stockholm'
 
+const repeatGong = process.env.GONG_REPEAT !== undefined ? parseInt(process.env.GONG_REPEAT) : 1
+
 class Server {
   gongPlaying: boolean = false
   devices: Array<DeviceStatus> = []

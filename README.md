@@ -193,6 +193,9 @@ If server recieves an *activated* message from a remote before this time, only p
 ## DEVICES (server)
 Comma separated list of devices that should be online. Used to check status of devices.
 
+## GONG_REPEAT (server)
+How many times a gong should be played in a row.
+
 # Development
 
 For running the project using docker on the developement machine:

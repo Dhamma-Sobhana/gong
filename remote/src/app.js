@@ -74,7 +74,7 @@ class Button {
 
         if (topic === 'ping') {
             this.sendPong()
-        } else if (topic === 'stop') {
+        } else if (topic === 'stop' || topic === 'played') {
             this.active = 0;
             this.led.writeSync(this.active);
         } else if (topic === 'play') {

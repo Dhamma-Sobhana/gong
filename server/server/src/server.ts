@@ -78,7 +78,7 @@ class Server {
     }
 
     client.on('message', (topic: string, message: object) => {
-      this.handleMessage(topic, message)
+      this.handleMessage(topic, message.toString())
     })
 
     app.get('/', (req: Request, res: Response) => {
@@ -105,8 +105,8 @@ class Server {
    * @param topic MQTT topic
    * @param message if any, in JSON format
    */
-  handleMessage = (topic: string, message: object) => {
-    console.debug(`[mqtt] < ${topic}: ${message.toString()}`)
+  handleMessage = (topic: string, message: string) => {
+    console.debug(`[mqtt] < ${topic}: ${message}`)
 
     // Parse message to JSON, if any
     let data = parseJson(message)

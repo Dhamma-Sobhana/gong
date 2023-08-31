@@ -3,9 +3,9 @@
  * @param message The JSON string
  * @returns JSON object or undefined
  */
-function parseJson(message:object) {
+function parseJson(message:string) {
     try {
-        return JSON.parse(message.toString())
+        return JSON.parse(message)
     } catch {
         return undefined
     }

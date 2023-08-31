@@ -85,13 +85,13 @@ class Server {
       res.render('index.njk', {devices: this.devices, playing: this.gongPlaying, log: logArray})
     })
 
-    app.post('/activated', (req, res) => {
+    app.post('/activated', (req: Request, res: Response) => {
       console.log('[web] Play/Stop')
       this.gongPlaying = remoteAction(this.gongPlaying, this.gongRepeat)
       res.redirect('/')
     })
 
-    app.post('/ping', (req, res) => {
+    app.post('/ping', (req: Request, res: Response) => {
       console.log('[web] Refresh')
       client.publish(`ping`);
       res.redirect('/')
@@ -128,4 +128,4 @@ class Server {
   }
 }
 
-export { Server }
+export { Server, updateDevice, remoteAction, played }

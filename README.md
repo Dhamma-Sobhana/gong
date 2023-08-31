@@ -2,6 +2,9 @@
 
 A system for playing gong sounds in multiple locations at meditation centers. Managed using [balenaCloud](https://www.balena.io/cloud).
 
+![Server CI]
+(https://github.com/Dhamma-Sobhana/gong/actions/workflows/server.node.js.yml/badge.svg)
+
 # Table of Contents
 * [Device types](#device-types)
 * [Architecture](#architecture)

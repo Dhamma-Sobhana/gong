@@ -2,11 +2,11 @@
   "name": "gong-server",
   "version": "1.0.0",
   "description": "Server for connecting remote and player for playing gong sounds",
-  "main": "server.js",
+  "main": "main.js",
   "scripts": {
-    "start": "NODE_PATH=./build node build/server.js",
+    "start": "NODE_PATH=./build node build/main.js",
     "build": "./node_modules/typescript/bin/tsc -p .",
-    "dev": "DEVICES=remote,player nodemon src/server.ts",
+    "dev": "DEVICES=remote,player nodemon src/main.ts",
     "test": "jest"
   },
   "author": "",

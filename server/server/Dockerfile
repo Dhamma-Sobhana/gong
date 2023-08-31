@@ -11,7 +11,7 @@ COPY package*.json ./
 # run npm install in our local machine
 RUN npm config set update-notifier false && npm install
 
-#dev-cmd-live=node node_modules/nodemon/bin/nodemon.js src/server.ts
+#dev-cmd-live=node node_modules/nodemon/bin/nodemon.js src/main.ts
 
 # bundle app source
 COPY . .

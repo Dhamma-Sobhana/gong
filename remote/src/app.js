@@ -84,7 +84,10 @@ class Button {
     }
 
     sendButtonState = () => {
-        client.publish('activated')
+        let payload = {
+            "name": name
+        }
+        client.publish('activated', JSON.stringify(payload));
     }
 
     /**

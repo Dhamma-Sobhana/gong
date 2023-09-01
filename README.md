@@ -4,6 +4,10 @@ A system for playing gong sounds in multiple locations at meditation centers. Ma
 
 ![Server CI](https://github.com/Dhamma-Sobhana/gong/actions/workflows/server.node.js.yml/badge.svg)
 
+# Videos
+
+[![How to add a device](https://img.youtube.com/vi/TO895aauBFo/default.jpg)](https://youtu.be/TO895aauBFo)
+
 # Table of Contents
 * [Device types](#device-types)
 * [Architecture](#architecture)

@@ -13,7 +13,7 @@ const toggleDelta = 30;
 
 // MQTT
 let client  = mqtt.connect(`mqtt://${server}`);
-let topics = ['ping', 'play', 'stop']
+let topics = ['ping', 'play', 'played', 'stop']
 
 class Button {
 

@@ -84,14 +84,7 @@ class Player {
     if (topic === 'ping') {
       this.sendPong()
     } else if (topic == 'play') {
-      let zones = getZones(this.zones, data.zones)
-
-      if (zones.length === 0) {
-        console.log('[player] Zones not handled by this device')
-        return
-      }
-
-      this.playGong(zones, data.repeat)
+      this.playGong(data.zones, data.repeat)
     } else if (topic == 'stop') {
       if (this.audio !== undefined) {
         this.audio.kill()
@@ -107,6 +100,13 @@ class Player {
    * @param repeat number of times to play
    */
   playGong = (zones : Array<string>, repeat : number) => {
+    zones = getZones(this.zones, zones)
+
+    if (zones.length === 0) {
+      console.log('[player] Zones not handled by this device')
+      return
+    }
+
     // TODO: Turn GPIO on or off
     // Stop audio if already plaing
     if (this.audio !== undefined) {
@@ -171,3 +171,5 @@ class Player {
 
 // Instantiate player object with zones handled 
 const player = new Player((process.env.ZONES || 'all').split(','));
+
+export { Player, client }

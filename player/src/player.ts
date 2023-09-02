@@ -44,7 +44,8 @@ class Player {
 
     this.setupAudio()
 
-    console.log(`Gong client starting.\n\nName: ${name}\nZones: ${this.zones}\nServer: ${server}\n\nConnecting to MQTT server..`)
+    console.log(`[player] Gong player starting.\n\nName: ${name}\nZones: ${this.zones}\nServer: ${server}`)
+    console.log('[mqtt] Connecting to MQTT server..')
   }
 
   /**
@@ -59,7 +60,8 @@ class Player {
    * Subscribe to topics and send alive message
    */
   mqttConnect = () => {
-    console.log('Connected! Listening for topics:\n', topics.join(', '))
+    console.log('[mqtt] Connected! Listening for topics:', topics.join(', '))
+
     for (let topic of topics) {
       client.subscribe(topic)
     }
@@ -74,7 +76,7 @@ class Player {
    * @param message MQTT message, if any
    */
   mqttMessage = (topic : string, message : string) => {
-    console.log(`Message. Topic: '${topic}' Message: '${message}'`)
+    console.debug(`[mqtt] < ${topic}: ${message}`)
 
     // Parse message to JSON, if any
     let data = parseJson(message)
@@ -85,7 +87,7 @@ class Player {
       let zones = getZones(this.zones, data.zones)
 
       if (zones.length === 0) {
-        console.log('Zones not handled by this device')
+        console.log('[player] Zones not handled by this device')
         return
       }
 
@@ -94,7 +96,7 @@ class Player {
       if (this.audio !== undefined) {
         this.audio.kill()
         this.audio = undefined
-        console.log('Stopping playback')
+        console.log('[player] Stopping playback')
       }
     }
   }
@@ -111,7 +113,7 @@ class Player {
       this.audio.kill()
     }
 
-    console.log(`Playing in zones '${zones}'`)
+    console.log(`[player] Playing in zones '${zones}'`)
 
     let message = JSON.stringify(new Message(name, zones))
     client.publish(`playing`, message);
@@ -129,9 +131,9 @@ class Player {
   startPlayback = (zones : Array<string>, repeat : number) => {
     this.audio = playSound.play('./sound/gong-8s.mp3', (err : any) => {
       if (err && err.killed) {
-        console.log(`Playback stopped by server`)
+        console.log(`[player] Playback stopped by server`)
       } else if (err) {
-        console.error("Error: ", err)
+        console.error("[player] Error: ", err)
       } else {
         this.playBackFinished(zones, --repeat)
       }
@@ -155,7 +157,7 @@ class Player {
     let message = JSON.stringify(new Message(name, zones))
     client.publish(`played`, message);
 
-    console.log(`Play finished`)
+    console.log(`[player] Play finished`)
   }
 
   /**

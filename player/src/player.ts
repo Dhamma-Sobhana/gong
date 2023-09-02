@@ -4,6 +4,7 @@ import * as mqtt from 'mqtt'
 import play from 'play-sound'
 
 import { getZones, parseJson } from './lib'
+import { Message } from './models'
 
 const playSound = play({})
 
@@ -112,12 +113,8 @@ class Player {
 
     console.log(`Playing in zones '${zones}'`)
 
-    let payload = {
-      "name": name,
-      "zones": zones
-    }
-    
-    client.publish(`playing`, JSON.stringify(payload));
+    let message = JSON.stringify(new Message(name, zones))
+    client.publish(`playing`, message);
 
     audioBlock.setVolume(audioVolumeStart)
 
@@ -155,24 +152,18 @@ class Player {
       return this.startPlayback(zones, repeat)
     }
 
-    let payload = {
-      "name": name,
-      "zones": zones
-    }
+    let message = JSON.stringify(new Message(name, zones))
+    client.publish(`played`, message);
+
     console.log(`Play finished`)
-    client.publish(`played`, JSON.stringify(payload));
   }
 
   /**
    * Respond to device status request (pong)
    */
   sendPong() {
-    let payload = {
-      "name": name,
-      "zones": this.zones,
-      "type": "player"
-    }
-    client.publish(`pong`, JSON.stringify(payload));
+    let message = JSON.stringify(new Message(name, this.zones, 'player'))
+    client.publish(`pong`, message);
   }
 }
 

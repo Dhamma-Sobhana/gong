@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto'
 import * as mqtt from 'mqtt'
 import play from 'play-sound'
 
-import { getZones } from './lib'
+import { getZones, parseJson } from './lib'
 
 const playSound = play({})
 
@@ -37,8 +37,8 @@ class Player {
       this.mqttConnect()
     })
 
-    client.on('message', (topic : string, message : object) => {
-      this.mqttMessage(topic, message)
+    client.on('message', (topic : string, message: object) => {
+      this.mqttMessage(topic, message.toString())
     })
 
     this.setupAudio()
@@ -72,15 +72,11 @@ class Player {
    * @param topic MQTT topic
    * @param message MQTT message, if any
    */
-  // TODO: Is message object or string?
-  mqttMessage = (topic : string, message : object) => {
-    console.log(`Message. Topic: '${topic}' Message: '${message.toString()}'`)
+  mqttMessage = (topic : string, message : string) => {
+    console.log(`Message. Topic: '${topic}' Message: '${message}'`)
 
     // Parse message to JSON, if any
-    let data = undefined
-    try {
-      data = JSON.parse(message.toString())
-    } catch {}
+    let data = parseJson(message)
 
     if (topic === 'ping') {
       this.sendPong()

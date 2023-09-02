@@ -11,4 +11,17 @@ function getZones(playerZones : Array<string>, messageZones : Array<string>) {
     return playerZones.filter((x) => messageZones.includes(x));
 }
 
-export { getZones }
+/**
+ * Try to parse a message object to JSON
+ * @param message The JSON string
+ * @returns JSON object or undefined
+ */
+function parseJson(message:string) {
+    try {
+        return JSON.parse(message)
+    } catch {
+        return undefined
+    }
+}
+
+export { getZones, parseJson }

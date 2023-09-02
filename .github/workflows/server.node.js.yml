@@ -33,6 +33,7 @@ jobs:
     - run: npm ci
     - run: npm test
   player:
+    if: false # Disable until there are tests
     runs-on: ubuntu-latest
 
     defaults:

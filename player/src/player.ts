@@ -3,8 +3,8 @@ import { randomUUID } from 'crypto'
 import * as mqtt from 'mqtt'
 import play from 'play-sound'
 
-import { getZones, parseJson } from './lib'
-import { Message } from './models'
+import { getZones, parseJson } from '../../server/server/src/lib'
+import { Message } from '../../server/server/src/models'
 
 const playSound = play({})
 

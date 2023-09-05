@@ -2,11 +2,11 @@
   "name": "gong-player",
   "version": "1.0.0",
   "description": "",
-  "main": "build/player.js",
+  "main": "build/main.js",
   "scripts": {
-    "start": "NODE_PATH=./build node build/player.js",
+    "start": "NODE_PATH=./build node build/main.js",
     "build": "./node_modules/typescript/bin/tsc -p .",
-    "dev": "ts-node --esm src/player.ts",
+    "dev": "ts-node --esm src/main.ts",
     "test": "jest"
   },
   "author": "",
@@ -24,6 +24,7 @@
     "nodemon": "^2.0.22",
     "ts-jest": "^29.1.1",
     "ts-node": "^10.9.1",
+    "ts-sinon": "^2.0.2",
     "typescript": "^4.9.5"
   }
 }

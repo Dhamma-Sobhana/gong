@@ -1,5 +1,8 @@
-const Gpio = require('onoff').Gpio;
-let mqtt = require('mqtt');
+import { MqttClient } from 'mqtt'
+import { BinaryValue, Gpio } from 'onoff'
+
+import { parseJson } from './lib'
+import { Message } from './models'
 
 let server = process.env.MQTT_SERVER || 'localhost'
 let name = process.env.NAME
@@ -12,38 +15,33 @@ const minToggleTime = 100;
 const toggleDelta = 30;
 
 // MQTT
-let client  = mqtt.connect(`mqtt://${server}`);
 let topics = ['ping', 'play', 'played', 'stop']
 
-class Button {
+class Remote {
+    client: MqttClient
+    led: Gpio
+    button: Gpio
 
-    led;
-    button;
+    active: BinaryValue = 0
+    toggle: BinaryValue = 0
+    pressTime: number = Date.now()
+    timeout?: NodeJS.Timeout = undefined
+    toggleTime: number = 0
 
-    active;
-    toggle;
-    pressTime;
-    timeout;
-
-    constructor(ledPin, buttonPin) {
-        this.led = new Gpio(ledPin, 'out');
-        this.button = new Gpio(buttonPin, 'in', 'both');
+    constructor(client: MqttClient, ledGpio: Gpio, buttonGpio: Gpio) {
+        this.client = client
+        this.led = ledGpio
+        this.button = buttonGpio
         
-
-        this.active = 0;
-        this.toggle = 0;
         this.led.writeSync(this.toggle);
-        this.pressTime = Date.now();
-        this.timeout = null;
-
         this.button.watch((err, value) => this.buttonChanged(err, value))
 
-        client.on('connect', () => {
+        this.client.on('connect', () => {
             this.mqttConnect()
         })
     
-        client.on('message', (topic, message) => {
-            this.mqttMessage(topic, message)
+        this.client.on('message', (topic: string, message: Buffer) => {
+            this.mqttMessage(topic, message.toString())
         })
     }
 
@@ -51,9 +49,9 @@ class Button {
      * Subscribe to topics and send alive message
      */
     mqttConnect = () => {
-        console.log('Connected! Listening for topics:\n', topics.join(', '))
+        console.log('[remote] Connected! Listening for topics:', topics.join(', '))
         for (let topic of topics) {
-            client.subscribe(topic)
+            this.client.subscribe(topic)
         }
 
         // Send message telling that the device is alive
@@ -63,14 +61,11 @@ class Button {
     /**
      * Handle subscribed messages received
      */
-    mqttMessage = (topic, message) => {
-        console.log(`Message. Topic: '${topic}' Message: '${message}'`)
+    mqttMessage = (topic: string, message: string) => {
+        console.debug(`[mqtt] < ${topic}: ${message}`)
 
         // Parse message to JSON, if any
-        let data = undefined
-        try {
-            data = JSON.parse(message)
-        } catch {}
+        let data = parseJson(message)
 
         if (topic === 'ping') {
             this.sendPong()
@@ -87,20 +82,20 @@ class Button {
         let payload = {
             "name": name
         }
-        client.publish('activated', JSON.stringify(payload));
+        this.client.publish('activated', JSON.stringify(payload));
     }
 
     /**
      * Button state changed.
      * Activate led and start alternating timer
      */
-    buttonChanged  = (err, value) => {
+    buttonChanged  = (err: Error|null|undefined, value: BinaryValue) => {
         if (err) {
             throw err;
         }
 
         if (value == Gpio.LOW) { //  Button presseed            
-            if (this.timeout !== null)
+            if (this.timeout !== undefined)
                 return;
             
             this.pressTime = Date.now();
@@ -108,10 +103,10 @@ class Button {
 
             this.timeout = setTimeout(this.alternate, this.toggleTime);
             this.led.writeSync(Gpio.HIGH);
-            console.log('Button pressed');
+            console.log('[remote] Button pressed');
         } else { // Button released
             this.reset();
-            console.log('Button released');
+            console.log('[remote] Button released');
             this.led.writeSync(this.active);
         }
     }
@@ -122,7 +117,7 @@ class Button {
      */
     reset() {
         clearTimeout(this.timeout);
-        this.timeout = null;
+        this.timeout = undefined;
         if (this.active)
             this.toggleTime = minToggleTime;
         else
@@ -194,10 +189,8 @@ class Button {
             "name": name,
             "type": "remote"
         }
-        client.publish(`pong`, JSON.stringify(payload));
+       this.client.publish(`pong`, JSON.stringify(payload));
     }
 }
 
-const button = new Button(process.env.LED_PIN || 3, process.env.BUTTON_PIN || 2);
-
-console.log(`Gong remote starting.\n\nName: ${name}\nServer: ${server}\n\nConnecting to MQTT server..`)
+export { Remote }

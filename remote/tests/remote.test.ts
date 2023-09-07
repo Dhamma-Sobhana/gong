@@ -1,5 +1,5 @@
 import mqtt, { MqttClient } from "mqtt";
-import sinon, { SinonStub} from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { Gpio } from 'onoff';
 import { Remote } from "../src/remote"
@@ -11,14 +11,14 @@ class Client extends EventEmitter {
     // subscribe() {}
 }
 
-let client:MqttClient;
-let led:Gpio
-let button:Gpio
+let client: MqttClient;
+let led: Gpio
+let button: Gpio
 
-let clientOnSpy:SinonStub;
-let ledSpy:SinonStub;
-let buttonSpy:SinonStub;
-let remote:Remote
+let clientOnSpy: SinonStub;
+let ledSpy: SinonStub;
+let buttonSpy: SinonStub;
+let remote: Remote
 
 jest.mock('onoff');
 jest.mock('mqtt')

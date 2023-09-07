@@ -9,7 +9,7 @@ const name = process.env.NAME || randomUUID()
 const server = process.env.MQTT_SERVER || 'localhost'
 const pulseServer = process.env.PULSE_SERVER || 'unix:/run/pulse/pulseaudio.socket'
 
-const client  = mqtt.connect(`mqtt://${server}`);
+const client = mqtt.connect(`mqtt://${server}`);
 const audioBlock = new BalenaAudio(pulseServer)
 
 const zones = (process.env.ZONES || 'all').split(',')

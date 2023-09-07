@@ -31,14 +31,14 @@ class Remote {
         this.client = client
         this.led = ledGpio
         this.button = buttonGpio
-        
+
         this.led.writeSync(this.toggle);
         this.button.watch((err, value) => this.buttonChanged(err, value))
 
         this.client.on('connect', () => {
             this.mqttConnect()
         })
-    
+
         this.client.on('message', (topic: string, message: Buffer) => {
             this.mqttMessage(topic, message.toString())
         })
@@ -88,7 +88,7 @@ class Remote {
      * Button state changed.
      * Activate led and start alternating timer
      */
-    buttonChanged  = (err: Error|null|undefined, value: BinaryValue) => {
+    buttonChanged = (err: Error | null | undefined, value: BinaryValue) => {
         if (err) {
             throw err;
         }
@@ -96,7 +96,7 @@ class Remote {
         if (value == Gpio.LOW) { //  Button presseed            
             if (this.timeout !== undefined)
                 return;
-            
+
             this.pressTime = Date.now();
             this.reset();
 
@@ -128,7 +128,7 @@ class Remote {
     updateToggleTime() {
         let toggleTime = this.toggleTime;
         let active = this.active;
-        
+
         if (active)
             toggleTime += toggleDelta;
         else
@@ -171,7 +171,7 @@ class Remote {
             }
 
             this.sendButtonState();
-            
+
             this.led.writeSync(this.active);
             clearTimeout(this.timeout);
             return;

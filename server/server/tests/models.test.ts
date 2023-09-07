@@ -9,12 +9,12 @@ test('Message instance', () => {
 })
 
 test('Message toString', () => {
-    let message = Object.assign(new Message(), {"name": "male-house", "type": "player", "zones": ["accommodation", "outside"]})
+    let message = Object.assign(new Message(), { "name": "male-house", "type": "player", "zones": ["accommodation", "outside"] })
     expect(message.toString()).toBe('male-house, player, accommodation,outside')
 })
 
 test('Message remote', () => {
-    let message = Object.assign(new Message(), {"name": "main-building", "type": "remote"})
+    let message = Object.assign(new Message(), { "name": "main-building", "type": "remote" })
 
     expect(message.name).toBe('main-building')
     expect(message.type).toBe('remote')
@@ -55,7 +55,7 @@ test('DeviceStatus instance', () => {
 
 test('DeviceStatus toString', () => {
     let status = new DeviceStatus('main-house')
-    
+
     expect(status.toString()).toBe('main-house')
 
     status.type = 'player'
@@ -71,8 +71,8 @@ test('DeviceStatus update', () => {
     expect(status.timestamp).toBeDefined()
     expect(status.timestamp).toBeGreaterThanOrEqual(now)
 
-    status.update('player', ["accommodation","outside"])
+    status.update('player', ["accommodation", "outside"])
 
     expect(status.type).toBe('player')
-    expect(status.zones).toStrictEqual(["accommodation","outside"])
+    expect(status.zones).toStrictEqual(["accommodation", "outside"])
 })

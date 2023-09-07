@@ -2,7 +2,7 @@ import { Server, updateDevice, remoteAction, played } from "../src/server"
 import { client } from "../src/mqtt"
 import { server as webServer } from "../src/web"
 
-let server : Server
+let server: Server
 
 beforeEach(() => {
     server = new Server(["remote", "player"], 3)
@@ -30,7 +30,7 @@ test('Handle message', () => {
     }
 
     server.handleMessage('activated', JSON.stringify(data))
-    
+
     expect(server.gongPlaying).toBe(true)
     expect(server.devices[0].type).toBe('remote')
     expect(server.devices[0].timestamp).toBeDefined()

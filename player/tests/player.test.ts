@@ -1,5 +1,5 @@
 import mqtt, { MqttClient } from "mqtt";
-import sinon, { SinonStub} from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { AuthInfo, ClientInfo, ServerInfo } from '@tmigone/pulseaudio';
 
@@ -7,15 +7,15 @@ import { Player } from "../src/player"
 import BalenaAudio from "balena-audio";
 
 const EventEmitter = require('events').EventEmitter;
-class Client extends EventEmitter {}
-class Audio extends BalenaAudio {}
+class Client extends EventEmitter { }
+class Audio extends BalenaAudio { }
 
-let client:MqttClient;
-let audio:BalenaAudio
+let client: MqttClient;
+let audio: BalenaAudio
 
-let clientOnSpy:SinonStub;
-let audioListenSpy:SinonStub;
-let audioSetVolumeSpy:SinonStub;
+let clientOnSpy: SinonStub;
+let audioListenSpy: SinonStub;
+let audioSetVolumeSpy: SinonStub;
 
 beforeAll(() => {
     let mockClient = new Client();
@@ -37,5 +37,5 @@ test('Player instance', async () => {
 
     expect(clientOnSpy.called).toBe(true)
     expect(audioListenSpy.called).toBe(true)
-    expect(audioSetVolumeSpy.called).toBe(true) 
+    expect(audioSetVolumeSpy.called).toBe(true)
 })

@@ -3,8 +3,8 @@ class Message {
     type?: string;
     zones?: Array<string>;
 
-    constructor(name?: string, zones?:Array<string>, type?: string) {
-        if(name !== undefined)
+    constructor(name?: string, zones?: Array<string>, type?: string) {
+        if (name !== undefined)
             this.name = name
         this.zones = zones
         this.type = type
@@ -45,14 +45,14 @@ class PlayMessage {
     zones?: Array<string> = ["all"];
     repeat: number = 4
 
-    constructor(zones?:Array<string>, repeat?:number) {
+    constructor(zones?: Array<string>, repeat?: number) {
         if (zones !== undefined)
             this.zones = zones
-        
+
         if (repeat !== undefined)
             this.repeat = repeat
     }
 }
 
 
-export { Message , DeviceStatus, PlayMessage }
+export { Message, DeviceStatus, PlayMessage }

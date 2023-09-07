@@ -12,7 +12,7 @@ const buttonPin = process.env.BUTTON_PIN !== undefined ? parseInt(process.env.BU
 const ledGpio = new Gpio(ledPin, 'out');
 const buttonGpio = new Gpio(buttonPin, 'in', 'both');
 
-const client  = mqtt.connect(`mqtt://${server}`);
+const client = mqtt.connect(`mqtt://${server}`);
 
 console.log(`[remote] Gong remote starting.\n\nName: ${name}\nServer: ${server}`)
 const button = new Remote(client, ledGpio, buttonGpio);

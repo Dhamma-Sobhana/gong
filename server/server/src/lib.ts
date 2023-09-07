@@ -4,7 +4,7 @@
 * @param {Array} messageZones Zones in the message
 * @returns {Array} Zones in both arrays or ['all'] if it was received
 */
-function getZones(playerZones : Array<string>, messageZones : Array<string>) {
+function getZones(playerZones: Array<string>, messageZones: Array<string>) {
     if (playerZones.includes('all') || messageZones.includes('all'))
         return ['all'];
 
@@ -16,7 +16,7 @@ function getZones(playerZones : Array<string>, messageZones : Array<string>) {
  * @param message The JSON string
  * @returns JSON object or undefined
  */
-function parseJson(message:string) {
+function parseJson(message: string) {
     try {
         return JSON.parse(message)
     } catch {

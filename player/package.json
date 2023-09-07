@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "build/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dhamma-Sobhana/gong.git"
+  },
   "scripts": {
     "start": "NODE_PATH=./build node build/main.js",
     "build": "./node_modules/typescript/bin/tsc -p .",

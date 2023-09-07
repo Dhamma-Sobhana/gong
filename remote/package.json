@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dhamma-Sobhana/gong-remote.git"
+    "url": "git+https://github.com/Dhamma-Sobhana/gong.git"
   },
   "scripts": {
     "start": "node src/app.js"

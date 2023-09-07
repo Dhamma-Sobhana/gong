@@ -4,7 +4,6 @@ import { BinaryValue, Gpio } from 'onoff'
 import { parseJson } from './lib'
 import { Message } from './models'
 
-let server = process.env.MQTT_SERVER || 'localhost'
 let name = process.env.NAME
 
 // Configuration
@@ -60,6 +59,8 @@ class Remote {
 
     /**
      * Handle subscribed messages received
+     * @param topic MQTT topic
+     * @param message MQTT message, if any
      */
     mqttMessage = (topic: string, message: string) => {
         console.debug(`[mqtt] < ${topic}: ${message}`)
@@ -79,10 +80,8 @@ class Remote {
     }
 
     sendButtonState = () => {
-        let payload = {
-            "name": name
-        }
-        this.client.publish('activated', JSON.stringify(payload));
+        let message = JSON.stringify(new Message(name))
+        this.client.publish('activated', message);
     }
 
     /**
@@ -112,8 +111,7 @@ class Remote {
     }
 
     /**
-     * Cancel timer
-     * @returns initial toggle time
+     * Cancel timer and restore toggle time
      */
     reset() {
         clearTimeout(this.timeout);
@@ -144,6 +142,9 @@ class Remote {
         this.toggleTime = toggleTime;
     }
 
+    /**
+     * Toggle state
+     */
     toggleState() {
         if (this.toggle == 0)
             this.toggle = 1
@@ -155,7 +156,6 @@ class Remote {
      * Change led state or active state if button held long enough
      * Important that this is defined as an arrow function so that
      * other methods in this class can be called.
-     * @returns nothing
      */
     alternate = () => {
         // Hold for long enough
@@ -185,11 +185,8 @@ class Remote {
     }
 
     sendPong() {
-        let payload = {
-            "name": name,
-            "type": "remote"
-        }
-       this.client.publish(`pong`, JSON.stringify(payload));
+        let message = JSON.stringify(new Message(name, undefined, 'remote'))
+        this.client.publish(`pong`, message);
     }
 }
 

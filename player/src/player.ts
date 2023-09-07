@@ -2,8 +2,8 @@ import play from 'play-sound'
 import { MqttClient } from 'mqtt'
 import BalenaAudio from 'balena-audio'
 
-import { getZones, parseJson } from '../../server/server/src/lib'
-import { Message } from '../../server/server/src/models'
+import { getZones, parseJson } from './lib'
+import { Message } from './models'
 
 const playSound = play({})
 

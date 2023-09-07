@@ -37,6 +37,5 @@ test('Player instance', async () => {
 
     expect(clientOnSpy.called).toBe(true)
     expect(audioListenSpy.called).toBe(true)
-    // This should be true, but await of listen does not seem to be respected when running test
     expect(audioSetVolumeSpy.called).toBe(true) 
 })

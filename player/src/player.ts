@@ -38,7 +38,7 @@ class Player {
       this.mqttConnect()
     })
 
-    this.client.on('message', (topic : string, message: object) => {
+    this.client.on('message', (topic : string, message: Buffer) => {
       this.mqttMessage(topic, message.toString())
     })
 
@@ -74,7 +74,7 @@ class Player {
    * @param topic MQTT topic
    * @param message MQTT message, if any
    */
-  mqttMessage = (topic : string, message : string) => {
+  mqttMessage = (topic: string, message: string) => {
     console.debug(`[mqtt] < ${topic}: ${message}`)
 
     // Parse message to JSON, if any
@@ -167,8 +167,5 @@ class Player {
     this.client.publish(`pong`, message);
   }
 }
-
-// Instantiate player object with zones handled 
-//const player = new Player((process.env.ZONES || 'all').split(','));
 
 export { Player }

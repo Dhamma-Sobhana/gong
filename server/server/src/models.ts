@@ -54,5 +54,32 @@ class PlayMessage {
     }
 }
 
+class Course {
+    type: string
+    start: string
+    end: string
 
-export { Message, DeviceStatus, PlayMessage }
+    constructor(type: string, start: string, end: string) {
+        this.type = type
+        this.start = start
+        this.end = end
+    }
+
+    toString() {
+        return `${this.type}, ${this.start} - ${this.end}`
+    }
+}
+
+class TimeTable {
+    time: string
+    type: string
+    location: Array<string>
+
+    constructor(time: string, type: string, location: Array<string>) {
+        this.time = time
+        this.type = type
+        this.location = location
+    }
+}
+
+export { Message, DeviceStatus, PlayMessage, Course, TimeTable }

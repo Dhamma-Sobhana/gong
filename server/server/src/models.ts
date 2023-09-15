@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+
 class Message {
     name: string = 'undefined';
     type?: string;
@@ -56,13 +58,16 @@ class PlayMessage {
 
 class Course {
     type: string
-    start: string
-    end: string
+    start: DateTime
+    end: DateTime
+    endTime?: DateTime
 
-    constructor(type: string, start: string, end: string) {
+    constructor(type: string, start: string, end: string, endTime?:DateTime) {
         this.type = type
-        this.start = start
-        this.end = end
+        this.start = DateTime.fromISO(start)
+        this.end = DateTime.fromISO(end).set({hour: 23, minute: 59, second: 59})
+        if (endTime)
+            this.endTime = endTime
     }
 
     toString() {
@@ -71,15 +76,34 @@ class Course {
 }
 
 class TimeTable {
-    time: string
+    type: string
+    entries: Array<TimeTableEntry> = []
+    endTime?: DateTime
+
+    constructor(type: string, entries?: Array<TimeTableEntry>, endTime?: DateTime) {
+        this.type = type
+        if (entries)
+            this.entries = entries
+        if (endTime)
+            this.endTime = endTime
+    }
+
+    setEndTime(time:string) {
+        this.endTime = DateTime.fromISO(time)
+    }
+}
+
+class TimeTableEntry {
+    time: DateTime
     type: string
     location: Array<string>
 
-    constructor(time: string, type: string, location: Array<string>) {
-        this.time = time
+    constructor(date: DateTime, time: string, type: string, location: Array<string>) {
+        this.time = date.set({hour: parseInt(time.substring(0, 2)), minute: parseInt(time.substring(3, 5))})
         this.type = type
         this.location = location
     }
 }
 
-export { Message, DeviceStatus, PlayMessage, Course, TimeTable }
+
+export { Message, DeviceStatus, PlayMessage, Course, TimeTable, TimeTableEntry }

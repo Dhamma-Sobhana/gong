@@ -80,29 +80,6 @@ function getCourseDayByDate(course: Course, date: DateTime) {
     return Math.floor(interval.length("days"));
 }
 
-function getNextGong(timeTable?: TimeTable): TimeTableEntry | undefined {
-    if (timeTable === undefined) return undefined;
-
-    for (let entry of timeTable.entries) {
-        if (entry["time"] > DateTime.now()) return entry;
-    }
-
-    return undefined;
-}
-
-function getGongSchedule(courses: Array<Course>): Array<TimeTableEntry> {
-    let today = getCoursesByDate(courses, DateTime.now());
-
-    let timeTable: Array<TimeTableEntry> = [];
-
-    for (let course of courses) {
-        // @ts-ignore: Object is possibly 'null'.
-        timeTable.push(getTimeTable(DateTime.now(), course.type));
-    }
-
-    return timeTable;
-}
-
 /**
  *
  * @param timeTables Only handles 2 timeTables
@@ -137,6 +114,20 @@ function getSchedule(allCourses: Array<Course>, date: DateTime): TimeTable {
     return mergeSchedules(timeTables);
 }
 
+function getNextGong(allCourses:Array<Course>): TimeTableEntry | undefined {
+    let today = getSchedule(allCourses, DateTime.now());
+    let tomorrow = getSchedule(allCourses, DateTime.now().plus({day: 1}));
+
+    for (let entry of today.entries) {
+        if (entry["time"] > DateTime.now()) return entry;
+    }
+
+    if (tomorrow.entries.length >= 0)
+        return tomorrow.entries[0];
+
+    return undefined
+}
+
 export {
     timeTableExists,
     getTimeTableJson,
@@ -144,7 +135,6 @@ export {
     getCoursesByDate,
     getCourseDayByDate,
     getNextGong,
-    getGongSchedule,
     mergeSchedules,
     getSchedule,
 };

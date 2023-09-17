@@ -82,32 +82,6 @@ test('Get day with multiple courses', () => {
     expect(result[1].type).toBe('ServicePeriod');
 });
 
-test('Get next gong', () => {
-    let date = new Date(2023, 8, 15, 12);
-    jest.setSystemTime(date);
-
-    let timeTable = getTimeTable('ServicePeriod', 0);
-    let result: TimeTableEntry | undefined = getNextGong(timeTable);
-
-    expect(result).toBeDefined();
-    if (result) {
-        expect(result['time'].hour).toBe(14);
-        expect(result['time'].minute).toBe(20);
-    }
-
-    date = new Date(2023, 8, 15, 20);
-    jest.setSystemTime(date);
-
-    result = getNextGong(timeTable);
-
-    if (result) {
-        expect(result['time'].hour).toBe(7);
-        expect(result['time'].minute).toBe(20);
-    }
-
-    // TODO: Handle schedulue for next day
-});
-
 test('Get course day by date', () => {
     let date = DateTime.fromISO('2023-09-17T00:00:00');
     let result = getCourseDayByDate(allCourses[4], date);
@@ -167,4 +141,34 @@ test('Get Gong Schedule for today and tomorrow', () => {
 
     let tomorrow = getSchedule(allCourses, DateTime.fromISO('2023-09-18T12:00:00'));
     expect(tomorrow.entries.length).toBe(3);
+});
+
+test('Get next gong', () => {
+    jest.setSystemTime(DateTime.fromISO('2023-09-17T03:00:00').toJSDate());
+
+    let result = getNextGong(allCourses);
+
+    expect(result).toBeDefined();
+    // @ts-ignore Object is possibly 'undefined'.ts(2532)'
+    expect(result['time'].hour).toBe(4);
+    // @ts-ignore Object is possibly 'undefined'.ts(2532)'
+    expect(result['time'].minute).toBe(10);
+
+    jest.setSystemTime(DateTime.fromISO('2023-09-17T12:00:00').toJSDate());
+
+    result = getNextGong(allCourses);
+
+    // @ts-ignore Object is possibly 'undefined'.ts(2532)'
+    expect(result['time'].hour).toBe(14);
+    // @ts-ignore Object is possibly 'undefined'.ts(2532)'
+    expect(result['time'].minute).toBe(20);
+
+    jest.setSystemTime(DateTime.fromISO('2023-09-17T20:00:00').toJSDate());
+
+    result = getNextGong(allCourses);
+
+    // @ts-ignore Object is possibly 'undefined'.ts(2532)'
+    expect(result['time'].hour).toBe(7);
+    // @ts-ignore Object is possibly 'undefined'.ts(2532)'
+    expect(result['time'].minute).toBe(20);
 });

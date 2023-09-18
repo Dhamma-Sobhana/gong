@@ -1,3 +1,6 @@
+const fs = require('fs');
+import path from 'path';
+
 import { DateTime } from 'luxon'
 
 import fetch from 'node-fetch-cache';
@@ -36,8 +39,14 @@ function parseCourses(data: any): Array<Course> {
     return courses
 }
 
+function fakeFetchAndParseCourses() {
+    let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../tests/resources/schedule.json')));
+    return parseCourses(data)
+}
+
 export {
     fetchCourses,
     getDateRange,
-    parseCourses
+    parseCourses,
+    fakeFetchAndParseCourses
 }

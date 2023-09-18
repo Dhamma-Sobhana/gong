@@ -3,7 +3,7 @@ body {
 }
 
 table {
-    width: 100%;
+    border-spacing: 1rem 0;
 }
 
 th {

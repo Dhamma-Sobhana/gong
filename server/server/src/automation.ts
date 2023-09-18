@@ -4,14 +4,14 @@ import { DateTime } from 'luxon';
 
 import { Course, TimeTableEntry } from "./models";
 import { fakeFetchAndParseCourses } from './fetch';
-import { getNextGong } from './schedule';
+import { getNextGong, getSchedule } from './schedule';
 
 class Automation {
     enabled: boolean = false
     job?: Job = undefined
     called: boolean = false
     callback: Function
-    courses?: Array<Course>
+    courses: Array<Course> = []
 
     constructor(callback:Function) {
         this.callback = callback
@@ -56,6 +56,11 @@ class Automation {
             return undefined
 
         return getNextGong(this.courses)
+    }
+
+    getSchedule() {
+        let schedule = getSchedule(this.courses, DateTime.now());
+        return schedule.entries.concat(getSchedule(this.courses, DateTime.now().plus({days: 1})).entries)
     }
 }
 

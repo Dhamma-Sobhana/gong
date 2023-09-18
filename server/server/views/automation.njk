@@ -2,15 +2,15 @@
 
 {% if automation.enabled %}
 <strong>Automation enabled</strong>
+<form action="/automation/disable" method="post">
+    <button type="submit">Disable</button>
+</form>
 
 <h3>Next gong</h3>
-<p id="nextGongTime">-</p>
+<p id="nextGongTime">{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }}</p>
 <p id="nextGongDiff">-</p>
 
 <script>
-    const nextGong = DateTime.fromISO('{{ automation.getNextGong().time }}').toLocaleString(DateTime.DATETIME_SHORT, { locale: 'sv' })
-    document.getElementById('nextGongTime').textContent = nextGong;
-
     function updateDiff() {
         let nextGongDiff = formatTimeTillNextGong('{{ automation.getNextGong().time }}');
         document.getElementById('nextGongDiff').textContent = nextGongDiff;
@@ -19,9 +19,23 @@
     setInterval(updateDiff, 1000)
 </script>
 
-<form action="/automation/disable" method="post">
-    <button type="submit">Disable</button>
-</form>
+<h3>Schedule</h3>
+<table>
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Location</th>
+    </tr>
+</thead>
+{% for entry in automation.getSchedule() %}
+<tr>
+    <td>{{ entry.time.toFormat('yyyy-MM-dd HH:mm') }}</td>
+    <td>{{ entry.type }}</td>
+    <td>{{ entry.location }}</td>
+</tr>
+{% endfor %}
+</table>
 {% else %}
 <strong>Automation disabled</strong>
 

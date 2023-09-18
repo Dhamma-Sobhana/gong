@@ -1,0 +1,31 @@
+<h2>Automation</h2>
+
+{% if automation.enabled %}
+<strong>Automation enabled</strong>
+
+<h3>Next gong</h3>
+<p id="nextGongTime">-</p>
+<p id="nextGongDiff">-</p>
+
+<script>
+    const nextGong = DateTime.fromISO('{{ automation.getNextGong().time }}').toLocaleString(DateTime.DATETIME_SHORT, { locale: 'sv' })
+    document.getElementById('nextGongTime').textContent = nextGong;
+
+    function updateDiff() {
+        let nextGongDiff = formatTimeTillNextGong('{{ automation.getNextGong().time }}');
+        document.getElementById('nextGongDiff').textContent = nextGongDiff;
+    }
+
+    setInterval(updateDiff, 1000)
+</script>
+
+<form action="/automation/disable" method="post">
+    <button type="submit">Disable</button>
+</form>
+{% else %}
+<strong>Automation disabled</strong>
+
+<form action="/automation/enable" method="post">
+    <button type="submit">Enable</button>
+</form>
+{% endif %}

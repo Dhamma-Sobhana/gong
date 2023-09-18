@@ -1,3 +1,6 @@
+var DateTime = luxon.DateTime
+var Interval = luxon.Interval
+
 const clientId = 'mqttjs_' + Math.random().toString(16).substring(2, 10)
 const host = `ws://${location.hostname}:9001`
 const options = {
@@ -9,7 +12,7 @@ const options = {
     reconnectPeriod: 1000,
     connectTimeout: 30 * 1000,
 }
-const topics = ['activated', 'pong', 'played', 'stop']
+const topics = ['activated', 'pong', 'played', 'stop', 'automation']
 
 console.log('Connecting to MQTT server..')
 const client = mqtt.connect(host, options)
@@ -36,3 +39,9 @@ client.on('message', (topic, message) => {
 
     location.reload()
 })
+
+function formatTimeTillNextGong(nextGong) {
+    let now = DateTime.now()
+    let future = DateTime.fromISO(nextGong)
+    return future.diff(now, ['hours', 'minutes', 'seconds']).toFormat("hh:mm:ss")
+}

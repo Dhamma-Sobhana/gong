@@ -32,9 +32,9 @@ test('Get TimeTable Json', () => {
 
 test('Get TimeTable', () => {
     let date = DateTime.fromISO('2023-09-15');
-    expect(getTimeTable('UnknownType', 0).entries.length).toBe(0);
+    expect(getTimeTable('UnknownType', date, 0).entries.length).toBe(0);
 
-    let timeTable = getTimeTable('ServicePeriod', 1);
+    let timeTable = getTimeTable('ServicePeriod', date, 1);
 
     expect(timeTable.entries.length).toBe(3);
     let entry = timeTable.entries[0];
@@ -45,7 +45,7 @@ test('Get TimeTable', () => {
     expect(entry.type).toBe('gong');
     expect(entry.location).toStrictEqual(['all']);
 
-    expect(getTimeTable('10-Day', 11).entries.length).toBe(2);
+    expect(getTimeTable('10-Day', date, 11).entries.length).toBe(2);
 });
 
 test('Get schedule by date', () => {
@@ -105,7 +105,7 @@ test('Merge schedules', () => {
     expect(courses.length).toBe(2);
     let timeTables: Array<TimeTable> = [];
     for (let course of courses) {
-        timeTables.push(getTimeTable(course.type, getCourseDayByDate(course, date)));
+        timeTables.push(getTimeTable(course.type, date, getCourseDayByDate(course, date)));
     }
     expect(timeTables.length).toBe(2);
     expect(timeTables[0].entries.length).toBe(2);
@@ -146,7 +146,9 @@ test('Get Gong Schedule for today and tomorrow', () => {
 test('Get next gong', () => {
     jest.setSystemTime(DateTime.fromISO('2023-09-17T03:00:15').toJSDate());
 
+     
     let result = getNextGong(allCourses);
+
 
     expect(result).toBeDefined();
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
@@ -158,19 +160,24 @@ test('Get next gong', () => {
 
     jest.setSystemTime(DateTime.fromISO('2023-09-17T12:00:00').toJSDate());
 
-    result = getNextGong(allCourses);
+    result = getNextGong(allCourses)
 
+    // @ts-ignore
+    expect(result['time'].day).toBe(17)
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
     expect(result['time'].hour).toBe(14);
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
     expect(result['time'].minute).toBe(20);
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
     expect(result['time'].second).toBe(0);
+    /* ts-ignore */
 
     jest.setSystemTime(DateTime.fromISO('2023-09-17T20:00:00').toJSDate());
 
     result = getNextGong(allCourses);
 
+    // @ts-ignore
+    expect(result['time'].day).toBe(18)
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
     expect(result['time'].hour).toBe(7);
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'

@@ -24,7 +24,7 @@ function getTimeTableJson(courseType?: string): any {
     );
 }
 
-function getTimeTable(courseType: string, courseDay?: number): TimeTable {
+function getTimeTable(courseType: string, date: DateTime, courseDay?: number): TimeTable {
     let data = getTimeTableJson(courseType);
     let timeTable = new TimeTable(data["definition"]["type"]);
 
@@ -35,7 +35,7 @@ function getTimeTable(courseType: string, courseDay?: number): TimeTable {
             for (let entry of data.days.all) {
                 timeTable.entries.push(
                     new TimeTableEntry(
-                        DateTime.now(),
+                        date,
                         entry["time"],
                         entry["type"],
                         entry["location"]
@@ -46,7 +46,7 @@ function getTimeTable(courseType: string, courseDay?: number): TimeTable {
             for (let entry of data.days[`${courseDay}`]) {
                 timeTable.entries.push(
                     new TimeTableEntry(
-                        DateTime.now(),
+                        date,
                         entry["time"],
                         entry["type"],
                         entry["location"]
@@ -108,7 +108,7 @@ function getSchedule(allCourses: Array<Course>, date: DateTime): TimeTable {
     let timeTables: Array<TimeTable> = [];
     for (let course of courses) {
         timeTables.push(
-            getTimeTable(course.type, getCourseDayByDate(course, date))
+            getTimeTable(course.type, date, getCourseDayByDate(course, date))
         );
     }
 

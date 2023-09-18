@@ -144,7 +144,7 @@ test('Get Gong Schedule for today and tomorrow', () => {
 });
 
 test('Get next gong', () => {
-    jest.setSystemTime(DateTime.fromISO('2023-09-17T03:00:00').toJSDate());
+    jest.setSystemTime(DateTime.fromISO('2023-09-17T03:00:15').toJSDate());
 
     let result = getNextGong(allCourses);
 
@@ -153,6 +153,8 @@ test('Get next gong', () => {
     expect(result['time'].hour).toBe(4);
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
     expect(result['time'].minute).toBe(10);
+    // @ts-ignore Object is possibly 'undefined'.ts(2532)'
+    expect(result['time'].second).toBe(0);
 
     jest.setSystemTime(DateTime.fromISO('2023-09-17T12:00:00').toJSDate());
 
@@ -162,6 +164,8 @@ test('Get next gong', () => {
     expect(result['time'].hour).toBe(14);
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
     expect(result['time'].minute).toBe(20);
+    // @ts-ignore Object is possibly 'undefined'.ts(2532)'
+    expect(result['time'].second).toBe(0);
 
     jest.setSystemTime(DateTime.fromISO('2023-09-17T20:00:00').toJSDate());
 

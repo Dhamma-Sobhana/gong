@@ -99,7 +99,12 @@ class TimeTableEntry {
     location: Array<string>
 
     constructor(date: DateTime, time: string, type: string, location: Array<string>) {
-        this.time = date.set({hour: parseInt(time.substring(0, 2)), minute: parseInt(time.substring(3, 5))})
+        this.time = date.set({
+            hour: parseInt(time.substring(0, 2)),
+            minute: parseInt(time.substring(3, 5)),
+            second: 0,
+            millisecond: 0
+        })
         this.type = type
         this.location = location
     }

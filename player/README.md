@@ -16,9 +16,9 @@ A device connected to an amplifier with speakers that plays gong when told to by
 
 If the device is set to local mode in balena cloud, push code to it like this:
 
-    balena push <device_ip> --env MQTT_SERVER=<server_ip> --env NAME=<device_name> --env PULSE_SERVER=unix:/run/pulse/pulseaudio.socket --env AUDIO_VOLUME=100
+    balena push <device_ip> --env MQTT_SERVER=<server_ip> --env NAME=<device_name>
     
-    balena push 10.0.0.71 --env MQTT_SERVER=10.0.0.70 --env NAME=player --env PULSE_SERVER=unix:/run/pulse/pulseaudio.socket --env AUDIO_VOLUME=100
+    balena push 10.0.0.71 --env MQTT_SERVER=10.0.0.70 --env NAME=player
 
 # Configuration
 See README in root for detailed explaination.

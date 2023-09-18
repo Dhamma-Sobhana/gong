@@ -5,6 +5,7 @@ import { parseJson } from './lib'
 import { logArray } from './log'
 import { app } from './web'
 import { client } from './mqtt'
+import { Automation } from './automation';
 
 /**
  * Update device list
@@ -64,6 +65,7 @@ class Server {
     gongPlaying: boolean = false
     gongRepeat: number = 4
     devices: Array<DeviceStatus> = []
+    automation: Automation
 
     /**
      * 
@@ -72,6 +74,8 @@ class Server {
      */
     constructor(devices: Array<string>, gongRepeat: number = 4) {
         this.gongRepeat = gongRepeat
+        this.automation = new Automation(this.playAutomatedGong)
+        this.automation.enable()
 
         for (let device of devices) {
             this.devices.push(new DeviceStatus(device))
@@ -82,7 +86,7 @@ class Server {
         })
 
         app.get('/', (req: Request, res: Response) => {
-            res.render('index.njk', { devices: this.devices, playing: this.gongPlaying, log: logArray })
+            res.render('index.njk', { devices: this.devices, playing: this.gongPlaying, log: logArray, automation: this.automation })
         })
 
         app.post('/activated', (req: Request, res: Response) => {
@@ -97,7 +101,27 @@ class Server {
             res.redirect('/')
         })
 
+        app.post('/automation/enable', (req: Request, res: Response) => {
+            console.log('[web] Automation enabled')
+            this.automation.enable()
+            res.redirect('/')
+        })
+
+        app.post('/automation/disable', (req: Request, res: Response) => {
+            console.log('[web] Automation disabled')
+            this.automation.enable(false)
+            res.redirect('/')
+        })
+
         console.log(`[server] Gong server starting. Required devices: ${this.devices}`)
+    }
+
+    playAutomatedGong(location:Array<string>) {
+        let message = JSON.stringify(new PlayMessage(location, this.gongRepeat))
+        client.publish('play', message)
+        client.publish('automation', message)
+        console.debug(`[mqtt] > play: ${message}`)
+        console.log(`[server] Automatically start playing`)
     }
 
     /**

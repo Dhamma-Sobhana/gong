@@ -94,7 +94,8 @@ function mergeSchedules(timeTables: Array<TimeTable>): TimeTable {
     for (let timeTableEntry of timeTables[1].entries) {
         if (timeTables[0].endTime === undefined)
             result.entries.push(timeTableEntry);
-        else if (timeTableEntry.time > timeTables[0].endTime)
+        // @ts-ignore possible null
+        else if (timeTableEntry.time.toISOTime() > timeTables[0].endTime.toISOTime())
             result.entries.push(timeTableEntry);
     }
 

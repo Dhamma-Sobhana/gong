@@ -12,7 +12,7 @@ const options = {
     reconnectPeriod: 1000,
     connectTimeout: 30 * 1000,
 }
-const topics = ['activated', 'pong', 'played', 'stop', 'automation']
+const topics = ['activated', 'pong', 'played', 'stop']
 
 console.log('Connecting to MQTT server..')
 const client = mqtt.connect(host, options)

@@ -119,9 +119,7 @@ class Server {
     playAutomatedGong(location:Array<string>) {
         let message = JSON.stringify(new PlayMessage(location, this.gongRepeat))
         client.publish('play', message)
-        client.publish('automation', message)
         console.debug(`[mqtt] > play: ${message}`)
-        console.log(`[server] Automatically start playing`)
     }
 
     /**

@@ -60,7 +60,9 @@ class Automation {
 
     getSchedule() {
         let schedule = getSchedule(this.courses, DateTime.now());
-        return schedule.entries.concat(getSchedule(this.courses, DateTime.now().plus({days: 1})).entries)
+        let entries = schedule.entries.concat(getSchedule(this.courses, DateTime.now().plus({days: 1})).entries)
+
+        return entries.filter(entry => entry.time >= DateTime.now())
     }
 }
 

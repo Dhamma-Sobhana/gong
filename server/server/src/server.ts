@@ -86,7 +86,7 @@ class Server {
         })
 
         app.get('/', (req: Request, res: Response) => {
-            res.render('index.njk', { devices: this.devices, playing: this.gongPlaying, log: logArray, automation: this.automation })
+            res.render('index.njk', { devices: this.devices, playing: this.gongPlaying, log: logArray.reverse(), automation: this.automation })
         })
 
         app.post('/activated', (req: Request, res: Response) => {
@@ -135,6 +135,7 @@ class Server {
 
         switch (topic) {
             case 'activated':
+                console.log(`[remote] Playback initiated by ${data.name}`)
                 this.gongPlaying = remoteAction(this.gongPlaying, this.gongRepeat)
                 break;
             case 'played':

@@ -1,7 +1,7 @@
 <h2>Automation</h2>
 
 {% if automation.enabled %}
-<strong>Automation enabled</strong>
+<h3>Automation: enabled</h3>
 <form action="/automation/disable" method="post">
     <button type="submit">Disable</button>
 </form>
@@ -37,7 +37,7 @@
 {% endfor %}
 </table>
 {% else %}
-<strong>Automation disabled</strong>
+<h3>Automation: disabled</h3>
 
 <form action="/automation/enable" method="post">
     <button type="submit">Enable</button>

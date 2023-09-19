@@ -5,48 +5,12 @@
 {% block content %}
   <h1>Gong</h1>
   <h2>Status</h2>
-  <h3>Playing</h3>
-  {{ playing }}
-  <h2>Devices</h2>
-  <table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Location</th>
-            <th>Status</th>
-            <th>Last seen</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for device in devices %}
-        <tr>
-            <td>{{ device.name }}</td>
-            <td>{{ device.type or '-'  }}</td>
-            <td>{{ device.zones or '-'  }}</td>
-            <td>{{ device.status or '-'  }}</td>
-            <td>{% if device.timestamp %}{{ device.timestamp | date }}{% else %}-{% endif %}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-  </table>
-  <form action="/ping" method="post">
-    <button type="submit">Refresh</button>
-    </form>
-  <h2>Log</h2>
-  <ul>
-    {% for entry in log %}
-        <li>{{ entry }}</li>
-    {% else %}
-        <li>No log entries yet</li>
-    {% endfor %}
-  </ul>
-
-  <h2>Control</h2>
-  <form action="/activated" method="post">
-    <button type="submit">Play/Stop</button>
-  </form>
-
+  <h3>Playing: {{ playing }}</h3>
+  <hr>
   {% include 'automation.njk' %}
-
+  <hr>
+  {% include 'devices.njk' %}
+  <hr>
+  {% include 'log.njk' %}
+  {# {% include 'debug.njk'%} #}
 {% endblock %}

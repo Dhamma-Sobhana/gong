@@ -9,3 +9,7 @@ table {
 th {
     text-align: left;
 }
+
+form {
+    margin: 1rem 0;
+}

@@ -1,4 +1,4 @@
-import { Server, updateDevice, remoteAction, played } from "../src/server"
+import { Server, updateDevice } from "../src/server"
 import { client } from "../src/mqtt"
 import { server as webServer } from "../src/web"
 

@@ -17,11 +17,18 @@ class Message {
     }
 }
 
+enum Status {
+    OK = '🟢',
+    Warning = '🟡',
+    Failed = '🔴'
+}
+
 class DeviceStatus {
     name: string;
     type?: string;
     zones?: Array<string>;
     timestamp?: DateTime
+    status: Status = Status.Failed
 
     constructor(name: string) {
         this.name = name
@@ -33,11 +40,16 @@ class DeviceStatus {
         if (zones !== undefined)
             this.zones = zones
         this.timestamp = DateTime.now()
+        this.status = Status.OK
+    }
+
+    updateStatus(status:Status) {
+        this.status = status
     }
 
     toString() {
         if (this.type !== undefined)
-            return `${this.name} (${this.type}) Last seen: ${this.timestamp}`
+            return `${this.name} (${this.type}) Last seen: ${this.timestamp?.toISO()}`
         else
             return `${this.name}`
     }
@@ -111,4 +123,4 @@ class TimeTableEntry {
 }
 
 
-export { Message, DeviceStatus, PlayMessage, Course, TimeTable, TimeTableEntry }
+export { Message, Status, DeviceStatus, PlayMessage, Course, TimeTable, TimeTableEntry }

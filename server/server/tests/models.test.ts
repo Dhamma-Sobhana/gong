@@ -1,3 +1,4 @@
+import { DateTime } from "luxon"
 import { Message, PlayMessage, DeviceStatus } from "../src/models"
 
 test('Message instance', () => {
@@ -64,12 +65,11 @@ test('DeviceStatus toString', () => {
 })
 
 test('DeviceStatus update', () => {
-    let now = Date.now()
     let status = new DeviceStatus('main-house')
     status.update()
 
     expect(status.timestamp).toBeDefined()
-    expect(status.timestamp).toBeGreaterThanOrEqual(now)
+    expect(status.timestamp).toBeInstanceOf(DateTime)
 
     status.update('player', ["accommodation", "outside"])
 

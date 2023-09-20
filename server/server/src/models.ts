@@ -21,7 +21,7 @@ class DeviceStatus {
     name: string;
     type?: string;
     zones?: Array<string>;
-    timestamp?: number
+    timestamp?: DateTime
 
     constructor(name: string) {
         this.name = name
@@ -32,7 +32,7 @@ class DeviceStatus {
             this.type = type
         if (zones !== undefined)
             this.zones = zones
-        this.timestamp = Date.now()
+        this.timestamp = DateTime.now()
     }
 
     toString() {

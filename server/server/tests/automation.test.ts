@@ -65,11 +65,15 @@ test('Cancel schedule', () => {
 test('Enable and disable automation', () => {
     let automation = new Automation(callback)
 
-    expect(automation.enabled).toBeFalsy()
+    expect(automation.enabled).toBe(false)
 
     automation.enable()
 
-    expect(automation.enabled).toBeTruthy()
+    expect(automation.enabled).toBe(true)
+
+    automation.enable(false)
+
+    expect(automation.enabled).toBe(false)
 })
 
 test('Fetch courses', () => {

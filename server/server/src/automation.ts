@@ -51,10 +51,10 @@ class Automation {
 
     /**
      * Enable or disable automation and schedule next gong
-     * @param disable optional to diasable automation
+     * @param enable optional set to false to diasable automation
      */
-    enable(disable?: boolean) {
-        if (disable !== undefined && disable == false) {
+    enable(enable?: boolean) {
+        if (enable !== undefined && enable === false) {
             this.enabled = false
             console.log('[automation] Disabled')
         } else {

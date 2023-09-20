@@ -8,6 +8,10 @@
   <table id="device-status">
     <tbody>
       <tr>
+        <th>System enabled</th>
+        <td>{{ enabled }}</td>
+      </tr>
+      <tr>
         <th>Overall status</th>
         <td>
           {% if device_status.failed %}🔴 {{ device_status.failed }} device(s) offline
@@ -17,7 +21,7 @@
           {% endif %}
           </td>
       </tr>
-       <tr>
+      <tr>
         <th>Devices</th>
         <td>{{ device_status.ok }} online, {{ device_status.warning }} warning, {{ device_status.failed }} offline</td>
       </tr>
@@ -29,7 +33,7 @@
         <th>Automation</th>
         <td>{{ automation.enabled }}</td>
       </tr>
-      {% if automation.enabled %}
+      {% if enabled and automation.enabled %}
       <tr>
         <th>Next gong</th>
         <td>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span></td>
@@ -37,9 +41,20 @@
       {% endif %}
     </tbody>
   </table>
+  {% if enabled %}
+  <form action="/enable" method="post">
+    <button type="submit" class="red">Disable</button>
+  </form>
+  {% else %}
+  <form action="/enable" method="post">
+    <button type="submit" class="green">Enable</button>
+  </form>
+  {% endif %}
   <hr>
+  {% if enabled %}
   {% include 'automation.njk' %}
   <hr>
+  {% endif %}
   {% include 'devices.njk' %}
   <hr>
   {% include 'log.njk' %}

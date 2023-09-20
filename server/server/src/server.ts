@@ -1,10 +1,9 @@
 import { Request, Response } from 'express';
 
-import { DeviceStatus, Message, PlayMessage } from "./models"
+import { DeviceStatus, PlayMessage } from "./models"
 import { parseJson } from './lib'
 import { logArray } from './log'
 import { app } from './web'
-import { client } from './mqtt'
 import { Automation } from './automation';
 
 /**
@@ -72,7 +71,8 @@ class Server {
      * @param devices which devices should exist in the network
      * @param gongRepeat how many times a gong should be played
      */
-    constructor(devices: Array<string>, gongRepeat: number = 4) {
+    constructor(mqttClient:any, devices: Array<string>, gongRepeat: number = 4) {
+        client = mqttClient
         this.gongRepeat = gongRepeat
         this.automation = new Automation(this.playAutomatedGong)
         this.automation.enable()

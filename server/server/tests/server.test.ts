@@ -5,7 +5,7 @@ import { server as webServer } from "../src/web"
 let server: Server
 
 beforeEach(() => {
-    server = new Server(["remote", "player"], 3)
+    server = new Server(client, ["remote", "player"], 3)
 });
 
 afterEach(() => {

@@ -4,8 +4,39 @@
 
 {% block content %}
   <h1>Gong</h1>
-  <h2>Status</h2>
-  <h3>Playing: {{ playing }}</h3>
+  <h2>System status</h2>
+  <table id="device-status">
+    <tbody>
+      <tr>
+        <th>Overall status</th>
+        <td>
+          {% if device_status.failed %}🔴 {{ device_status.failed }} device(s) offline
+          {% elif device_status.warning %}🟡 {{ device_status.warning }} device(s) possibly offline
+          {% else %}
+          🟢 all devices online
+          {% endif %}
+          </td>
+      </tr>
+       <tr>
+        <th>Devices</th>
+        <td>{{ device_status.ok }} online, {{ device_status.warning }} warning, {{ device_status.failed }} offline</td>
+      </tr>
+      <tr>
+        <th>Playing</th>
+        <td>{{ playing }}</td>
+      </tr>
+      <tr>
+        <th>Automation</th>
+        <td>{{ automation.enabled }}</td>
+      </tr>
+      {% if automation.enabled %}
+      <tr>
+        <th>Next gong</th>
+        <td>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span id="nextGongDiff">-</span></td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
   <hr>
   {% include 'automation.njk' %}
   <hr>

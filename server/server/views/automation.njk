@@ -3,12 +3,11 @@
 {% if automation.enabled %}
 <h3>Automation: enabled</h3>
 <form action="/automation/disable" method="post">
-    <button type="submit">Disable</button>
+    <button type="submit" class="red">Disable</button>
 </form>
 
 <h3>Next gong</h3>
-<p id="nextGongTime">{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }}</p>
-<p id="nextGongDiff">-</p>
+<p>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span id="nextGongDiff">-</span></p>
 
 <script>
     function updateDiff() {
@@ -40,6 +39,6 @@
 <h3>Automation: disabled</h3>
 
 <form action="/automation/enable" method="post">
-    <button type="submit">Enable</button>
+    <button type="submit" class="green">Enable</button>
 </form>
 {% endif %}

@@ -1,4 +1,5 @@
 <h2>Devices</h2>
+<div class="overflow-scroll">
 <table>
 <thead>
     <tr>
@@ -6,7 +7,7 @@
         <th>Type</th>
         <th>Location</th>
         <th>Status</th>
-        <th>Last seen</th>
+        <th>Last&nbsp;seen</th>
     </tr>
 </thead>
 <tbody>
@@ -21,6 +22,7 @@
     {% endfor %}
 </tbody>
 </table>
+</div>
 <form action="/ping" method="post">
-    <button type="submit">Refresh</button>
+    <button type="submit" class="blue">Refresh</button>
 </form>

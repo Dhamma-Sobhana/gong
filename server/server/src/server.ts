@@ -5,24 +5,9 @@ import { parseJson } from './lib'
 import { logArray } from './log'
 import { app } from './web'
 import { Automation } from './automation';
+import { aggregateDeviceStatus, updateDevice, updateDevicesStatus } from './devices';
 
-/**
- * Update device list
- * @param data object received
- * @param devices list of devices
- */
-function updateDevice(data: object, devices: Array<DeviceStatus>) {
-    let message = Object.assign(new Message(), data)
-
-    if (message.name === undefined)
-        return
-
-    for (let device of devices) {
-        if (device.name == message.name) {
-            device.update(message.type, message.zones)
-        }
-    }
-}
+let client:any
 
 /**
  * Handle remote button press
@@ -57,6 +42,7 @@ function played(gongPlaying: boolean): boolean {
     return false
 }
 
+
 /**
  * Gong server. Handle requests over MQTT and web
  */
@@ -65,6 +51,7 @@ class Server {
     gongRepeat: number = 4
     devices: Array<DeviceStatus> = []
     automation: Automation
+    deviceStatusTimer: NodeJS.Timer
 
     /**
      * 
@@ -86,7 +73,7 @@ class Server {
         })
 
         app.get('/', (req: Request, res: Response) => {
-            res.render('index.njk', { devices: this.devices, playing: this.gongPlaying, log: logArray.reverse(), automation: this.automation })
+            res.render('index.njk', { devices: this.devices, device_status: aggregateDeviceStatus(this.devices), playing: this.gongPlaying, log: logArray.reverse(), automation: this.automation })
         })
 
         app.post('/activated', (req: Request, res: Response) => {
@@ -113,7 +100,18 @@ class Server {
             res.redirect('/')
         })
 
+        this.deviceStatusTimer = setInterval(() => {
+            client.publish(`ping`);
+            updateDevicesStatus(this.devices)
+        }, 60000)
+
         console.log(`[server] Gong server starting. Required devices: ${this.devices}`)
+    }
+
+    destroy() {
+        clearInterval(this.deviceStatusTimer)
+        this.automation.cancel()
+        client.end()
     }
 
     playAutomatedGong(location:Array<string>) {

@@ -9,8 +9,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-    client.end()
     webServer.close()
+    server.destroy()
 });
 
 test('Server instance', () => {

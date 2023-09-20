@@ -16,7 +16,7 @@ beforeAll(() => {
 })
 
 test.skip('Fetch schedule', async () => {
-    let result = await fetchCourses()
+    let result = await fetchCourses(1392)
 
     expect(result).toBeDefined()
 })

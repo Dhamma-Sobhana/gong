@@ -207,12 +207,12 @@ If automatic fetching and parsing of courses from dhamma.org site should be used
 
 Default: `false`
 
-## DHAMMA_LOCATION_ID (server)
+## LOCATION_ID (server)
 If automation is enabled, id of location to fetch courses for.
 
-Find by going to [Locations, Worldwide Directory](https://www.dhamma.org/en/locations/directory) and expand a center location, choose to use developer tools to inspect the location and find the `id` property.
+Find by going to [Locations, Worldwide Directory](https://www.dhamma.org/en/locations/directory) and expand a center location, choose to use developer tools to inspect the location and find the `data-id` property.
 
-Format: `location-NNNN`
+Format: `nnnn`
 
 ![Automation - Dhamma Location ID](/img/location-id.jpg)
 

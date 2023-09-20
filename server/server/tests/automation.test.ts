@@ -3,6 +3,7 @@ import { Automation } from '../src/automation'
 import { TimeTableEntry } from '../src/models'
 
 jest.useFakeTimers()
+const locationId = 1392
 
 beforeEach(() => {
     jest.setSystemTime(DateTime.fromISO('2023-09-17T12:00:00').toJSDate())
@@ -16,7 +17,7 @@ afterEach(() => {
 const callback = jest.fn();
 
 test('Schedule playing next gong', () => {
-    let automation = new Automation(callback)
+    let automation = new Automation(callback, locationId)
 
     expect(automation.job).toBeUndefined()
     expect(automation.called).toBe(false)
@@ -40,7 +41,7 @@ test('Schedule playing next gong', () => {
 })
 
 test('Cancel schedule', () => {
-    let automation = new Automation(callback)
+    let automation = new Automation(callback, locationId)
 
     // @ts-ignore
     expect(automation.job?.nextInvocation()).toBeUndefined()
@@ -63,7 +64,7 @@ test('Cancel schedule', () => {
 })
 
 test('Enable and disable automation', () => {
-    let automation = new Automation(callback)
+    let automation = new Automation(callback, locationId)
 
     expect(automation.enabled).toBe(false)
 
@@ -77,7 +78,7 @@ test('Enable and disable automation', () => {
 })
 
 test('Fetch courses', () => {
-    let automation = new Automation(callback)
+    let automation = new Automation(callback, locationId)
 
     expect(automation.courses).toBeTruthy()
 })

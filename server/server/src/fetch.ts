@@ -7,7 +7,6 @@ import fetch from 'node-fetch-cache';
 
 import { Course } from './models'
 
-const location = 'location_1392'
 const daysBefore = 14
 const daysAfter = 15
 
@@ -25,14 +24,14 @@ function getDateRange() {
 
 /**
  * Fetch schedule for daterange and a location from dhamma.org site
- * Location hard coded in this file for now.
+ * @param locationId to get courses for
  * @returns json response
  */
-async function fetchCourses() {
+async function fetchCourses(locationId:number) {
     let daterange = getDateRange()
 
     const params = new URLSearchParams();
-    let body = `regions[]=${location}&daterange=${daterange}&page=1`
+    let body = `regions[]=location_${locationId}&daterange=${daterange}&page=1`
 
     const response = await fetch('https://www.dhamma.org/en/courses/do_search', {
         method: 'POST',

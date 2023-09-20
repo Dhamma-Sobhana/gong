@@ -12,14 +12,16 @@ class Automation {
     called: boolean = false
     callback: Function
     courses: Array<Course> = []
+    locationId: number
 
     /**
      * Create an Automation to be used by server
      * @param callback function to be called when schedule executes
      */
-    constructor(callback:Function) {
+    constructor(callback:Function, locationId:number) {
         this.callback = callback
-        this.fetch()
+        this.locationId = locationId
+        this.fetch(locationId)
     }
 
     /**
@@ -67,7 +69,7 @@ class Automation {
     /**
      * Populate coures with simulated data
      */
-    fetch() {
+    fetch(locationId:number) {
         this.courses = fakeFetchAndParseCourses()
     }
 

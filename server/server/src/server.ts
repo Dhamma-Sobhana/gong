@@ -25,11 +25,11 @@ class Server {
      * @param devices which devices should exist in the network
      * @param gongRepeat how many times a gong should be played
      */
-    constructor(mqttClient:any, devices: Array<string>, gongRepeat: number = 4) {
+    constructor(mqttClient:any, devices: Array<string>, gongRepeat: number = 4, automationEnabled:boolean = false, dhammaLocationId:number = 0) {
         client = mqttClient
         this.gongRepeat = gongRepeat
-        this.automation = new Automation(this.playAutomatedGong)
-        this.automation.enable()
+        this.automation = new Automation(this.playAutomatedGong, dhammaLocationId)
+        this.automation.enable(automationEnabled)
 
         for (let device of devices) {
             this.devices.push(new DeviceStatus(device))

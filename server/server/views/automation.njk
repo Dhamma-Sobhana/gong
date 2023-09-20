@@ -7,12 +7,15 @@
 </form>
 
 <h3>Next gong</h3>
-<p>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span id="nextGongDiff">-</span></p>
+<p>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span></p>
 
 <script>
     function updateDiff() {
         let nextGongDiff = formatTimeTillNextGong('{{ automation.getNextGong().time }}');
-        document.getElementById('nextGongDiff').textContent = nextGongDiff;
+        var elements = document.querySelectorAll('.nextGongDiff');
+        for (let element of elements) {
+            element.textContent = nextGongDiff;
+        }
     }
 
     setInterval(updateDiff, 1000)

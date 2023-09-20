@@ -32,7 +32,7 @@
       {% if automation.enabled %}
       <tr>
         <th>Next gong</th>
-        <td>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span id="nextGongDiff">-</span></td>
+        <td>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span></td>
       </tr>
       {% endif %}
     </tbody>

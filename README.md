@@ -1,6 +1,6 @@
 # Gong
 
-A system for playing gong sounds in multiple locations at meditation centers. Managed using [balenaCloud](https://www.balena.io/cloud).
+A system for playing gong sounds in multiple locations at meditation centers. Managed using [balenaCloud](https://www.balena.io/cloud). Can play manually by pressing a button or automatically by fetching course schedule from dhamma.org.
 
 ![Server CI](https://github.com/Dhamma-Sobhana/gong/actions/workflows/server.node.js.yml/badge.svg)
 
@@ -201,6 +201,20 @@ Comma separated list of devices that should be online. Used to check status of d
 
 ## GONG_REPEAT (server)
 How many times a gong should be played in a row.
+
+## AUTOMATION (server)
+If automatic fetching and parsing of courses from dhamma.org site should be used.
+
+Default: `false`
+
+## DHAMMA_LOCATION_ID (server)
+If automation is enabled, id of location to fetch courses for.
+
+Find by going to [Locations, Worldwide Directory](https://www.dhamma.org/en/locations/directory) and expand a center location, choose to use developer tools to inspect the location and find the `id` property.
+
+Format: `location-NNNN`
+
+![Automation - Dhamma Location ID](/img/location-id.jpg)
 
 # Development
 

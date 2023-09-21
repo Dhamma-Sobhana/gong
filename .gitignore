@@ -109,3 +109,4 @@ dist
 
 # Build result
 build/
+server/server/schedule.json

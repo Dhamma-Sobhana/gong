@@ -13,6 +13,7 @@ A system for playing gong sounds in multiple locations at meditation centers. Ma
 * [Architecture](#architecture)
 * [Communication](#communication)
 * [Configuration](#configuration)
+* [Web interface](#web-interface)
 * [Development](#development)
 * [Deployment](#deployment)
 
@@ -215,6 +216,21 @@ Find by going to [Locations, Worldwide Directory](https://www.dhamma.org/en/loca
 Format: `nnnn`
 
 ![Automation - Dhamma Location ID](/img/location-id.jpg)
+
+# Web interface
+A basic web interface is hosted on the server device and available to check system status and enabling or disabling system and automation.
+
+![Web - System status](/img/system-status.jpg)
+Overview of system status telling which parts are anabled and if all devices are online.
+
+![Web - Automation](/img/automation.jpg)
+Allows automation to be turned on or off. Shows upcoming schedule for today and tomorrow and when next gong will be played.
+
+![Web - Devices](/img/devices.jpg)
+List all devices that should be online for system to be fully functional and when they last was in contact with the server.
+
+![Web - Log](/img/log.jpg)
+Shows the last activity logged on the server.
 
 # Development
 

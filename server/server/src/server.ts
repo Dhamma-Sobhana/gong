@@ -40,7 +40,7 @@ class Server {
         })
 
         app.get('/', (req: Request, res: Response) => {
-            res.render('index.njk', { enabled: this.enabled, devices: this.devices, device_status: aggregateDeviceStatus(this.devices), playing: this.gongPlaying, log: logArray.reverse(), automation: this.automation })
+            res.render('index.njk', { enabled: this.enabled, devices: this.devices, device_status: aggregateDeviceStatus(this.devices), playing: this.gongPlaying, log: logArray.slice(), automation: this.automation })
         })
 
         app.post('/enable', (req: Request, res: Response) => {

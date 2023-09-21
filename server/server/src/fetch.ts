@@ -10,6 +10,13 @@ import { Course } from './models'
 const daysBefore = 14
 const daysAfter = 15
 
+function getCacheFilePath() {
+    if (fs.existsSync('/data'))
+        return '/data/schedule.json'
+    else
+        return './schedule.json'
+}
+
 /**
  * Format date range for use in fetch call based on current date
  * plus and minus a set of days defined above
@@ -30,7 +37,6 @@ function getDateRange() {
 async function fetchCourses(locationId:number) {
     let daterange = getDateRange()
 
-    const params = new URLSearchParams();
     let body = `regions[]=location_${locationId}&daterange=${daterange}&page=1`
 
     const response = await fetch('https://www.dhamma.org/en/courses/do_search', {
@@ -38,8 +44,8 @@ async function fetchCourses(locationId:number) {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         'body': body
     });
-    const data = await response.json();
-
+    
+    let data = await response.json();
     return data
 }
 
@@ -61,14 +67,53 @@ function parseCourses(data: any): Array<Course> {
  * Read file with static data and parse
  * @returns array of Course
  */
-function fakeFetchAndParseCourses(): Array<Course> {
-    let data = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../tests/resources/schedule.json')));
-    return parseCourses(data)
+function fakeFetchCourses() {
+    console.log('[automation] Using fake course data')
+    return JSON.parse(fs.readFileSync(path.resolve(__dirname, '../tests/resources/schedule.json')));
+}
+
+/**
+ * Fetch courses form remote and save to cache.
+ * @param locationId to get courses for
+ * @param fake optional to use local test data
+ * @returns json or undefined
+ */
+async function fetchAndPersist(locationId:number, fake:boolean = false) {
+    let courses:any = {}
+
+    try {
+        courses = fake === true ? fakeFetchCourses() : await fetchCourses(locationId)
+    } catch {
+        console.log('[automation] Failed to fetch schedule')
+    }
+
+    if (('total_rows' in courses && courses.total_rows > 0) && (courses.courses[0].location.id == locationId)) {
+        console.log(`[automation] Writing schedule to disk cache, ${getCacheFilePath()}`)
+        fs.writeFileSync(getCacheFilePath(), JSON.stringify(courses));
+        return courses
+    }
+
+    return undefined
+}
+
+/**
+ * Reads schedule from file if it exits
+ * @returns json or undefined
+ */
+function fetchFromCache() {
+    if (fs.existsSync(getCacheFilePath())) {
+        console.log(`[automation] Reading schedule from disk cache, ${getCacheFilePath()}`)
+        return JSON.parse(fs.readFileSync(getCacheFilePath()))
+    }
+
+    return undefined
 }
 
 export {
     fetchCourses,
+    fakeFetchCourses,
     getDateRange,
     parseCourses,
-    fakeFetchAndParseCourses
+    fetchAndPersist,
+    fetchFromCache
 }

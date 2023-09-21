@@ -1,27 +1,30 @@
 import { scheduleJob, Job } from 'node-schedule'
-
 import { DateTime } from 'luxon';
 
 import { Course, TimeTableEntry } from "./models";
-import { fakeFetchAndParseCourses } from './fetch';
+import { parseCourses, fetchAndPersist, fetchFromCache } from './fetch';
 import { getNextGong, getSchedule } from './schedule';
 
 class Automation {
     enabled: boolean = false
     job?: Job = undefined
+    fetchJob?: Job = undefined
+    fetchTime: DateTime = DateTime.fromISO("01:00")
+    lastFetch?: DateTime
     called: boolean = false
     callback: Function
     courses: Array<Course> = []
-    locationId: number
+    locationId?: number
 
     /**
      * Create an Automation to be used by server
      * @param callback function to be called when schedule executes
      */
-    constructor(callback:Function, locationId:number) {
+    constructor(callback:Function, locationId:number|undefined) {
         this.callback = callback
         this.locationId = locationId
-        this.fetch(locationId)
+        this.fetch(locationId, false)
+        this.scheduleFetch()
     }
 
     /**
@@ -45,10 +48,23 @@ class Automation {
     }
 
     /**
-     * Cancel upcoming gong
+     * Schedule fetching of schedule regurlarly
+     */
+    scheduleFetch() {
+        console.log(`[automation] Scheduling fetch of schedule every day at ${this.fetchTime.toLocaleString(DateTime.TIME_24_SIMPLE)}`)
+        this.fetchJob?.cancel()
+        this.fetchJob = scheduleJob(`${this.fetchTime.minute} ${this.fetchTime.hour} * * *`, () => {
+            console.log(`[automation] Fetching schedule`);
+            this.fetch(this.locationId, true)
+        });
+    }
+
+    /**
+     * Cancel upcoming gong and fetch
      */
     cancel() {
         this.job?.cancel()
+        this.fetchJob?.cancel()
     }
 
     /**
@@ -59,18 +75,40 @@ class Automation {
         if (enable !== undefined && enable === false) {
             this.enabled = false
             console.log('[automation] Disabled')
+            this.cancel()
         } else {
             this.enabled = true
             console.log('[automation] Enabled')
             this.schedule(this.getNextGong())
+            this.scheduleFetch()
         }
     }
 
     /**
-     * Populate coures with simulated data
+     * Fetch courses from remote service, do sanity check, parse data and save result
+     * @param locationId location id used in query
+     * @param fake use fake data stored locally instead of hitting remote
      */
-    fetch(locationId:number) {
-        this.courses = fakeFetchAndParseCourses()
+    async fetch(locationId:number|undefined, fake:boolean = false) {
+        if (locationId == undefined)
+            return
+
+        let courses = await fetchAndPersist(locationId, fake)
+        
+        if (courses) {
+            this.lastFetch = DateTime.now()
+            this.courses = parseCourses(courses)
+            console.log(`[automation] Fetched schedule for ${this.courses.length} courses from remote server`)
+        } else {
+            courses = fetchFromCache()
+
+            if (courses) {
+                this.courses = parseCourses(courses)
+                console.log(`[automation] Fetched schedule for ${this.courses.length} courses from disk cache`)
+            } else {
+                console.log(`[automation] Error: Failed to fetch schedule from both remote server and disk cache`)
+            }
+        }
     }
 
     /**

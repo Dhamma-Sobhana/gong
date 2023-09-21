@@ -8,10 +8,6 @@
   <table id="device-status">
     <tbody>
       <tr>
-        <th>System enabled</th>
-        <td>{{ enabled }}</td>
-      </tr>
-      <tr>
         <th>Overall status</th>
         <td>
           {% if device_status.failed %}🔴 {{ device_status.failed }} device(s) offline
@@ -22,6 +18,24 @@
           </td>
       </tr>
       <tr>
+        <th>System</th>
+        <td>{% if enabled %}🟢 ON{% else %}🔴 OFF{% endif %}</td>
+      </tr>
+      <tr>
+        <th>Automation</th>
+        <td>{% if automation.enabled %}🟢 ON{% else %}🔴 OFF{% endif %}</td>
+      </tr>
+      {% if enabled and automation.enabled %}
+      <tr>
+        <th>Last fetch</th>
+        <td>{% if automation.lastFetch %}🟢 {{ automation.lastFetch.toFormat('yyyy-MM-dd HH:mm') }}{% else %}🔴 not fetched{% endif %}</th>
+      </tr>
+      <tr>
+        <th>Next gong</th>
+        <td>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span></td>
+      </tr>
+      {% endif %}
+      <tr>
         <th>Devices</th>
         <td>{{ device_status.ok }} online, {{ device_status.warning }} warning, {{ device_status.failed }} offline</td>
       </tr>
@@ -29,16 +43,6 @@
         <th>Playing</th>
         <td>{{ playing }}</td>
       </tr>
-      <tr>
-        <th>Automation</th>
-        <td>{{ automation.enabled }}</td>
-      </tr>
-      {% if enabled and automation.enabled %}
-      <tr>
-        <th>Next gong</th>
-        <td>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span></td>
-      </tr>
-      {% endif %}
     </tbody>
   </table>
   {% if enabled %}

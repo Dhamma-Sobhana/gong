@@ -220,17 +220,11 @@ Format: `nnnn`
 # Web interface
 A basic web interface is hosted on the server device and available to check system status and enabling or disabling system and automation.
 
-![Web - System status](/img/system-status.jpg)
-Overview of system status telling which parts are anabled and if all devices are online.
-
-![Web - Automation](/img/automation.jpg)
-Allows automation to be turned on or off. Shows upcoming schedule for today and tomorrow and when next gong will be played.
-
-![Web - Devices](/img/devices.jpg)
-List all devices that should be online for system to be fully functional and when they last was in contact with the server.
-
-![Web - Log](/img/log.jpg)
-Shows the last activity logged on the server.
+|![Web - System status](/img/system-status.jpg)|![Web - Automation](/img/automation.jpg)|
+|:-:|:-:|
+|Overview of system status telling which parts are anabled and if all devices are online.|Allows automation to be turned on or off. Shows upcoming schedule for today and tomorrow and when next gong will be played.|
+|![Web - Devices](/img/devices.jpg)|![Web - Log](/img/log.jpg)|
+|List all devices that should be online for system to be fully functional and when they last was in contact with the server.|Shows the last activity logged on the server.|
 
 # Development
 

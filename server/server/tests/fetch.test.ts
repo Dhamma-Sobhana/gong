@@ -3,7 +3,7 @@ import path from 'path';
 
 import { DateTime } from 'luxon';
 
-import { fetchCourses, parseCourses, getDateRange } from '../src/fetch'
+import { fetchSchedule, parseSchedule, getDateRange } from '../src/fetch'
 import { Course } from '../src/models'
 
 let data:any
@@ -12,11 +12,11 @@ let allCourses:Array<Course>
 beforeAll(() => {
     jest.useFakeTimers()
     data = JSON.parse(fs.readFileSync(path.resolve(__dirname, './resources/schedule.json')));
-    allCourses = parseCourses(data)
+    allCourses = parseSchedule(data)
 })
 
-test.skip('Fetch schedule', async () => {
-    let result = await fetchCourses(1392)
+test('Fetch schedule', async () => {
+    let result = await fetchSchedule(1392)
 
     expect(result).toBeDefined()
 })
@@ -30,7 +30,7 @@ test('Get date range', () => {
 })
 
 test('Parse courses', () => {
-    let result:Array<Course> = parseCourses(data)
+    let result:Array<Course> = parseSchedule(data)
 
     expect(result).toBeDefined()
     expect(result.length).toBe(6)

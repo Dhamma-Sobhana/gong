@@ -4,8 +4,8 @@ import path from 'path';
 import { DateTime } from 'luxon';
 
 import { timeTableExists, getTimeTableJson, getTimeTable, getCoursesByDate, getCourseDayByDate, getNextGong, mergeSchedules, getSchedule } from '../src/schedule';
-import { Course, TimeTableEntry, TimeTable } from '../src/models';
-import { parseCourses } from '../src/fetch';
+import { Course, TimeTable } from '../src/models';
+import { parseSchedule } from '../src/fetch';
 
 let data:any
 let allCourses:Array<Course>
@@ -14,7 +14,7 @@ beforeAll(() => {
     jest.useFakeTimers()
     jest.setSystemTime(new Date(2023, 8, 15, 12))
     data = JSON.parse(fs.readFileSync(path.resolve(__dirname, './resources/schedule.json')));
-    allCourses = parseCourses(data)
+    allCourses = parseSchedule(data)
 })
 
 test('Time table exists', () => {

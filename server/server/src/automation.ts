@@ -2,7 +2,7 @@ import { scheduleJob, Job } from 'node-schedule'
 import { DateTime } from 'luxon';
 
 import { Course, TimeTableEntry } from "./models";
-import { parseCourses, fetchAndPersist, fetchFromCache } from './fetch';
+import { parseSchedule, fetchAndPersist, fetchFromCache } from './fetch';
 import { getNextGong, getSchedule } from './schedule';
 
 class Automation {
@@ -95,13 +95,13 @@ class Automation {
         
         if (courses) {
             this.lastFetch = DateTime.now()
-            this.courses = parseCourses(courses)
+            this.courses = parseSchedule(courses)
             console.log(`[automation] Fetched schedule for ${this.courses.length} courses from remote server`)
         } else {
             courses = fetchFromCache()
 
             if (courses) {
-                this.courses = parseCourses(courses)
+                this.courses = parseSchedule(courses)
                 console.log(`[automation] Fetched schedule for ${this.courses.length} courses from disk cache`)
             } else {
                 console.log(`[automation] Error: Failed to fetch schedule from both remote server and disk cache`)

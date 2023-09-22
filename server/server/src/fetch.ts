@@ -2,7 +2,6 @@ const fs = require('fs');
 import path from 'path';
 
 import { DateTime } from 'luxon'
-
 import fetch from 'node-fetch-cache';
 
 import { Course } from './models'
@@ -50,13 +49,13 @@ async function fetchCourses(locationId:number) {
 }
 
 /**
- * Get course type, start and end of courses
- * @param data that was fetched in json format
+ * Get course type, start and end from schedule
+ * @param schedule that was fetched in json format
  * @returns array of Course
  */
-function parseCourses(data: any): Array<Course> {
+function parseSchedule(schedule: any): Array<Course> {
     let courses: Array<Course> = []
-    for (let course of data['courses']) {
+    for (let course of schedule['courses']) {
         courses.push(new Course(course['raw_course_type'], course['course_start_date'], course['course_end_date']))
     }
 
@@ -67,30 +66,30 @@ function parseCourses(data: any): Array<Course> {
  * Read file with static data and parse
  * @returns array of Course
  */
-function fakeFetchCourses() {
-    console.log('[automation] Using fake course data')
+function fakeFetchSchedule() {
+    console.log('[automation] WARNING! Using fake course data')
     return JSON.parse(fs.readFileSync(path.resolve(__dirname, '../tests/resources/schedule.json')));
 }
 
 /**
- * Fetch courses form remote and save to cache.
- * @param locationId to get courses for
+ * Fetch schedule form remote and save to cache.
+ * @param locationId to get schedule for
  * @param fake optional to use local test data
  * @returns json or undefined
  */
-async function fetchAndPersist(locationId:number, fake:boolean = false) {
-    let courses:any = {}
+async function fetchAndPersist(locationId:number) {
+    let schedule:any = {}
 
     try {
-        courses = fake === true ? fakeFetchCourses() : await fetchCourses(locationId)
+        schedule = await fetchSchedule(locationId)
     } catch {
         console.log('[automation] Failed to fetch schedule')
     }
 
-    if (('total_rows' in courses && courses.total_rows > 0) && (courses.courses[0].location.id == locationId)) {
+    if (('total_rows' in schedule && schedule.total_rows > 0) && (schedule.courses[0].location.id == locationId)) {
         console.log(`[automation] Writing schedule to disk cache, ${getCacheFilePath()}`)
-        fs.writeFileSync(getCacheFilePath(), JSON.stringify(courses));
-        return courses
+        fs.writeFileSync(getCacheFilePath(), JSON.stringify(schedule));
+        return schedule
     }
 
     return undefined
@@ -110,10 +109,10 @@ function fetchFromCache() {
 }
 
 export {
-    fetchCourses,
-    fakeFetchCourses,
+    fetchSchedule,
+    fakeFetchSchedule,
     getDateRange,
-    parseCourses,
+    parseSchedule,
     fetchAndPersist,
     fetchFromCache
 }

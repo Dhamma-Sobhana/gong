@@ -34,4 +34,4 @@ If the device is set to local mode in balena cloud, push code to it like this:
 
     balena push <device_ip> --env DEVICES=<devices,list> --env LOCATION_ID=<id> --env AUTOMATION=<true/false>
     
-    balena push 10.0.0.70 --env DEVICES=remote,player,unknown --env LOCATION_ID=1392 --env AUTOMATION=true
+    balena push 10.0.0.70 --env DEVICES=remote,player --env LOCATION_ID=1392 --env AUTOMATION=true

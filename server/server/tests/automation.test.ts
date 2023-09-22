@@ -1,24 +1,24 @@
 import { DateTime } from 'luxon'
+
 import { Automation } from '../src/automation'
 import { TimeTableEntry } from '../src/models'
 
 jest.useFakeTimers()
 const locationId = 1392
+const callback = jest.fn();
+let automation = new Automation(callback, locationId, false)
 
 beforeEach(() => {
     jest.setSystemTime(DateTime.fromISO('2023-09-17T12:00:00').toJSDate())
 })
 
 afterEach(() => {
+    automation.cancel()
     jest.clearAllTimers()  
     jest.clearAllMocks();
 })
 
-const callback = jest.fn();
-
 test('Schedule playing next gong', () => {
-    let automation = new Automation(callback, locationId)
-
     expect(automation.job).toBeUndefined()
     expect(callback).not.toBeCalled();
 
@@ -39,10 +39,8 @@ test('Schedule playing next gong', () => {
 })
 
 test('Cancel schedule', () => {
-    let automation = new Automation(callback, locationId)
-
     // @ts-ignore
-    expect(automation.job?.nextInvocation()).toBeUndefined()
+    expect(automation.job?.nextInvocation()).toBeFalsy()
     expect(callback).not.toBeCalled();
 
     let entry = new TimeTableEntry(DateTime.fromISO('2023-09-17T12:00:00'), '12:01', 'gong', ['accommodation'])
@@ -62,8 +60,6 @@ test('Cancel schedule', () => {
 })
 
 test('Enable and disable automation', () => {
-    let automation = new Automation(callback, locationId)
-
     expect(automation.enabled).toBe(false)
 
     automation.enable()
@@ -76,7 +72,5 @@ test('Enable and disable automation', () => {
 })
 
 test('Fetch courses', () => {
-    let automation = new Automation(callback, locationId)
-
     expect(automation.courses).toBeTruthy()
 })

@@ -28,8 +28,7 @@ class Server {
     constructor(mqttClient:any, devices: Array<string>, gongRepeat: number = 4, automationEnabled:boolean = false, locationId?:number) {
         client = mqttClient
         this.gongRepeat = gongRepeat
-        this.automation = new Automation(this.playAutomatedGong, locationId)
-        this.automation.enable(automationEnabled)
+        this.automation = new Automation(this.playAutomatedGong, locationId, automationEnabled)
 
         for (let device of devices) {
             this.devices.push(new DeviceStatus(device))

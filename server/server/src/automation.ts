@@ -19,10 +19,14 @@ class Automation {
      * Create an Automation to be used by server
      * @param callback function to be called when schedule executes
      */
-    constructor(callback:Function, locationId:number|undefined) {
+    constructor(callback:Function, locationId:number|undefined, automationEnabled:boolean = false) {
         this.callback = callback
         this.locationId = locationId
         this.fetch(locationId)
+        if (automationEnabled) {
+            this.scheduleFetch()
+        }
+    }
 
     /**
      * Schedule a job to play gong at a certain time using callback function.
@@ -70,11 +74,11 @@ class Automation {
     enable(enable?: boolean) {
         if (enable !== undefined && enable === false) {
             this.enabled = false
-            console.log('[automation] Disabled')
+            console.log('[automation] Automation disabled')
             this.cancel()
         } else {
             this.enabled = true
-            console.log('[automation] Enabled')
+            console.log('[automation] Automation enabled')
             this.schedule(this.getNextGong())
             this.scheduleFetch()
         }
@@ -102,7 +106,7 @@ class Automation {
                 this.courses = parseSchedule(courses)
                 console.log(`[automation] Fetched schedule for ${this.courses.length} courses from disk cache`)
             } else {
-                console.log(`[automation] Error: Failed to fetch schedule from both remote server and disk cache`)
+                console.log(`[automation] ERROR: Failed to fetch schedule from both remote server and disk cache`)
             }
         }
     }

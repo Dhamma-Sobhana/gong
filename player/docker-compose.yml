@@ -15,8 +15,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-      target: development # For local push
-      #target: production # For deployment
+      #target: development # For local push
+      target: production # For deployment
     environment:
       MQTT_SERVER: "${MQTT_SERVER}"
       NAME: "${PLAYER_NAME}"

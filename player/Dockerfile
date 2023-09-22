@@ -24,24 +24,23 @@ COPY . .
 RUN npm run build
 
 ## Added for development and commented out rest
+#CMD ["npm", "run", "start"]
+
+# Building for production
+FROM base AS production
+
+# change working directory
+WORKDIR /usr/src/app
+
+# copy the package.json files from local machine to the workdir in container
+COPY package*.json ./
+
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
+COPY --from=development /usr/src/app/build ./build
+COPY --from=development /usr/src/app/sound ./sound
+
+RUN npm config set update-notifier false &&  npm ci --omit=dev
+
 CMD ["npm", "run", "start"]
-
-
-# # Building for production
-# FROM base AS production
-
-# # change working directory
-# WORKDIR /usr/src/app
-
-# # copy the package.json files from local machine to the workdir in container
-# COPY package*.json ./
-
-# ARG NODE_ENV=production
-# ENV NODE_ENV=${NODE_ENV}
-
-# COPY --from=development /usr/src/app/build ./build
-# COPY --from=development /usr/src/app/sound ./sound
-
-# RUN npm config set update-notifier false &&  npm ci --omit=dev
-
-# CMD ["npm", "run", "start"]

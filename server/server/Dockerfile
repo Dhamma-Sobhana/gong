@@ -34,6 +34,7 @@ ENV NODE_ENV=${NODE_ENV}
 COPY --from=development /usr/src/app/build ./build
 COPY --from=development /usr/src/app/public ./public
 COPY --from=development /usr/src/app/views ./views
+COPY --from=development /usr/src/app/resources ./resources
 
 RUN npm config set update-notifier false &&  npm ci --omit=dev
 

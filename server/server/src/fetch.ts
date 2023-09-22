@@ -9,11 +9,15 @@ import { Course } from './models'
 const daysBefore = 14
 const daysAfter = 15
 
+/**
+ * Path to schedule cache
+ * @returns file path and name
+ */
 function getCacheFilePath() {
-    if (fs.existsSync('/data'))
-        return '/data/schedule.json'
-    else
+    if (['test', 'development'].includes(process.env.NODE_ENV || ''))
         return './schedule.json'
+    else
+        return '/data/schedule.json'
 }
 
 /**

@@ -1,0 +1,47 @@
+<h2>Automation</h2>
+
+{% if automation.enabled %}
+<h3>Automation: enabled</h3>
+<form action="/automation/disable" method="post">
+    <button type="submit" class="red">Disable</button>
+</form>
+
+<h3>Next gong</h3>
+<p>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span></p>
+
+<script>
+    function updateDiff() {
+        let nextGongDiff = formatTimeTillNextGong('{{ automation.getNextGong().time }}');
+        var elements = document.querySelectorAll('.nextGongDiff');
+        for (let element of elements) {
+            element.textContent = nextGongDiff;
+        }
+    }
+
+    setInterval(updateDiff, 1000)
+</script>
+
+<h3>Schedule</h3>
+<table>
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Location</th>
+    </tr>
+</thead>
+{% for entry in automation.getSchedule() %}
+<tr>
+    <td>{{ entry.time.toFormat('yyyy-MM-dd HH:mm') }}</td>
+    <td>{{ entry.type }}</td>
+    <td>{{ entry.location }}</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<h3>Automation: disabled</h3>
+
+<form action="/automation/enable" method="post">
+    <button type="submit" class="green">Enable</button>
+</form>
+{% endif %}

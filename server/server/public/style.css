@@ -2,10 +2,45 @@ body {
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 }
 
-table {
-    width: 100%;
-}
-
 th {
     text-align: left;
+}
+
+ul {
+    padding-inline-start: 1rem;
+}
+
+form {
+    margin: 1rem 0;
+}
+
+th:not(:first-child), td:not(:first-child) {
+    padding-left: 2rem
+}
+
+table#device-status td {
+    min-width: 5rem;
+}
+
+button {
+    background-color: #555555; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+  
+.green {background-color: #4CAF50;} /* Green */
+.blue {background-color: #008CBA;} /* Blue */
+.red {background-color: #f44336;} /* Red */
+.grey {background-color: #e7e7e7; color: black;} /* Gray */
+.black {background-color: #555555;} /* Black */
+
+.overflow-scroll {
+    overflow-x: auto;
+    white-space: nowrap;
 }

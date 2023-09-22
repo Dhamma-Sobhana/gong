@@ -1,0 +1,28 @@
+<h2>Devices</h2>
+<div class="overflow-scroll">
+<table>
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Location</th>
+        <th>Status</th>
+        <th>Last&nbsp;seen</th>
+    </tr>
+</thead>
+<tbody>
+    {% for device in devices %}
+    <tr>
+        <td>{{ device.name }}</td>
+        <td>{{ device.type or '-'  }}</td>
+        <td>{{ device.zones or '-'  }}</td>
+        <td>{{ device.status or '-'  }}</td>
+        <td>{% if device.timestamp %}{{ device.timestamp.toFormat('yyyy-MM-dd HH:mm:ss') }}{% else %}-{% endif %}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+</div>
+<form action="/ping" method="post">
+    <button type="submit" class="blue">Refresh</button>
+</form>

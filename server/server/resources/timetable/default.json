@@ -1,0 +1,12 @@
+{
+  "definition" : {
+    "type": "static"
+  },
+  "days": {
+    "all": [
+      {"time": "07:20", "type": "gong", "location": ["all"]},
+      {"time": "14:20", "type": "gong", "location": ["all"]},
+      {"time": "19:20", "type": "gong", "location": ["all"]}
+    ]
+  }
+}

@@ -4,47 +4,63 @@
 
 {% block content %}
   <h1>Gong</h1>
-  <h2>Status</h2>
-  <h3>Playing</h3>
-  {{ playing }}
-  <h2>Devices</h2>
-  <table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Zones</th>
-            <th>Status</th>
-            <th>Last seen</th>
-        </tr>
-    </thead>
+  <h2>System status</h2>
+  <table id="device-status">
     <tbody>
-        {% for device in devices %}
-        <tr>
-            <td>{{ device.name }}</td>
-            <td>{{ device.type or '-'  }}</td>
-            <td>{{ device.zones or '-'  }}</td>
-            <td>{{ device.status or '-'  }}</td>
-            <td>{% if device.timestamp %}{{ device.timestamp | date }}{% else %}-{% endif %}</td>
-        </tr>
-        {% endfor %}
+      <tr>
+        <th>Overall status</th>
+        <td>
+          {% if device_status.failed %}🔴 {{ device_status.failed }} device(s) offline
+          {% elif device_status.warning %}🟡 {{ device_status.warning }} device(s) possibly offline
+          {% else %}
+          🟢 all devices online
+          {% endif %}
+          </td>
+      </tr>
+      <tr>
+        <th>System</th>
+        <td>{% if enabled %}🟢 ON{% else %}🔴 OFF{% endif %}</td>
+      </tr>
+      <tr>
+        <th>Automation</th>
+        <td>{% if automation.enabled %}🟢 ON{% else %}🔴 OFF{% endif %}</td>
+      </tr>
+      {% if enabled and automation.enabled %}
+      <tr>
+        <th>Last fetch</th>
+        <td>{% if automation.lastFetch %}🟢 {{ automation.lastFetch.toFormat('yyyy-MM-dd HH:mm') }}{% else %}🔴 not fetched{% endif %}</th>
+      </tr>
+      <tr>
+        <th>Next gong</th>
+        <td>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span></td>
+      </tr>
+      {% endif %}
+      <tr>
+        <th>Devices</th>
+        <td>{{ device_status.ok }} online, {{ device_status.warning }} warning, {{ device_status.failed }} offline</td>
+      </tr>
+      <tr>
+        <th>Playing</th>
+        <td>{{ playing }}</td>
+      </tr>
     </tbody>
   </table>
-  <form action="/ping" method="post">
-    <button type="submit">Refresh</button>
-    </form>
-  <h2>Log</h2>
-  <ul>
-    {% for entry in log %}
-        <li>{{ entry }}</li>
-    {% else %}
-        <li>No log entries yet</li>
-    {% endfor %}
-  </ul>
-
-  <h2>Control</h2>
-  <form action="/activated" method="post">
-    <button type="submit">Play/Stop</button>
+  {% if enabled %}
+  <form action="/enable" method="post">
+    <button type="submit" class="red">Disable</button>
   </form>
-
+  {% else %}
+  <form action="/enable" method="post">
+    <button type="submit" class="green">Enable</button>
+  </form>
+  {% endif %}
+  <hr>
+  {% if enabled %}
+  {% include 'automation.njk' %}
+  <hr>
+  {% endif %}
+  {% include 'devices.njk' %}
+  <hr>
+  {% include 'log.njk' %}
+  {# {% include 'debug.njk'%} #}
 {% endblock %}

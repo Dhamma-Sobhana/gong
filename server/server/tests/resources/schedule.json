@@ -1,0 +1,608 @@
+{
+    "courses": [
+      {
+        "id": 94437,
+        "local_time": "2023-09-08T07:49:08.000+00:00",
+        "course_start_date": "2023-08-25",
+        "course_end_date": "2023-08-27",
+        "enrollment_open_date": "2023-05-27",
+        "localized_start_date": "25 Aug 2023",
+        "localized_end_date": "27 Aug 2023",
+        "adjusted_localized_start_date": "<span style='white-space:nowrap'>25 Aug</span>",
+        "adjusted_localized_end_date": "<span style='white-space:nowrap'>27 Aug</span>",
+        "adjusted_localized_enrollment_date": "<span style='white-space:nowrap'>27 Aug</span>",
+        "course_start_date_time": "2023-08-25T00:00:00.000+00:00",
+        "course_end_date_time": "2023-08-27T00:00:00.000+00:00",
+        "enrollment_open_date_time": "2023-05-27T00:00:00.000+00:00",
+        "raw_course_type": "Child",
+        "course_type_number_nights": 0,
+        "course_type_anchor": "Child",
+        "course_type": "Children 8-12 years",
+        "course_type_hint": "<div><p>\n\t<a name=\"Child-Teen\"></a> <a name=\"Child\"></a> <span class=\"notes-title\">Children's Courses</span> are open for all children aged 8-12 years old who wish to learn to meditate. Their parents/guardians do not have to be meditators.</p><br/></div>",
+        "location": {
+          "id": 1392,
+          "sub_domain": "sobhana",
+          "dhamma_name": "Dhamma Sobhana",
+          "dhamma_name_meaning": "Beauty of Dhamma",
+          "city": "Ödeshög",
+          "state": "Östergötlands län [SE-05]",
+          "country": "Sweden",
+          "country_iso_code": "SE",
+          "flag_icon_class": "flag pull-left flag-se",
+          "city_province": "Ödeshög, Östergötlands län [SE-05]",
+          "city_province_country": "Ödeshög, Östergötlands län [SE-05], Sweden",
+          "header_image_path": "/system/images/centers/sobhana.jpg",
+          "schedule_url": "/en/schedules/schsobhana",
+          "website_url": "http://sobhana.dhamma.org",
+          "map_enabled": true,
+          "map_url": "/en/maps#sobhana",
+          "year_of_first_course": "2007",
+          "center_noncenter": "center",
+          "pin_class": "pin-center",
+          "contact_mailto": "",
+          "contact": "<p><strong>Address:</strong> Dhamma Sobhana, Holmen 1, S-599 93 Ödeshög, Sweden</p><p><strong>Email:</strong> info@sobhana.dhamma.org</p><p><strong>Phone:</strong> [46](0) 143 - 211 36</p>",
+          "about": "Dhamma Sobhana means \"Beauty of Dhamma\" in Pali language and is the first Vipassana centre to be established in the Nordic area. It's located in central Sweden, near Ödeshög, Vadstena and Linköping. By car it's about two and a half hours from Stockholm and Gothenburg (Göteborg), and about three and a half hours from Malmö. The centre was established in 2007 mainly to serve the Nordic area but students come from all over the world. Dhamma Sobhana offers 20-25 courses a year, with about 1 800 students.",
+          "location_languages": [
+            {
+              "description": "English",
+              "schedule_url": "/en/schedules/schsobhana"
+            },
+            {
+              "description": "Suomi",
+              "schedule_url": "/fi/schedules/schsobhana"
+            },
+            {
+              "description": "Svenska",
+              "schedule_url": "/sv/schedules/schsobhana"
+            }
+          ],
+          "local_time": "2023-09-08T07:49:08.000+00:00",
+          "haversine_distance": null,
+          "sub_location": null,
+          "sub_location_url": null,
+          "sub_location_id": null,
+          "sub_loc_heading": "",
+          "instructions": "<div><div><span><span><strong>Registration procedure for students on courses in English/Swedish at Dhamma Sobhana:</strong></span></span><div><span><span>- Three months before the start of the course, registration will open at 6 am (7 am when daylight saving time). Registration will stay open until midnight.&nbsp;</span></span><div><span><span>- An electronic random selection will then be made to allocate available places for the course and to establish a waiting list.&nbsp;</span></span><div><span><span>- Within two weeks, students who were not allocated a place on the course or on the waiting list will be notified.&nbsp;</span></span></div><div><span><span>- Please note that it’s essential to send&nbsp;<strong>only one registration form</strong>&nbsp;per person and per course. Otherwise&nbsp;<strong>none of the applications</strong>&nbsp;will be taken into account.&nbsp;</span></span></div><div>&nbsp;</div><div><span><span>This procedure has been adopted since courses otherwise would fill up within minutes after registration opens.</span></span><span><span> </span></span></div></div></div></div></div>&nbsp;<table>\t<tbody>\t\t<tr>\t\t\t<td><p><span><a href=\"https://www.dhamma.org/en/schedules/noncenter/no\"><span><b>Norway</b></span></a></span></p></td>\t\t\t\t\t\t<td><p><span><b><a href=\"https://www.dhamma.org/en/schedules/noncenter/dk\"><span>Denmark</span></a></b></span></p></td>\t\t\t\t\t\t<td><p><span><strong><a href=\"https://www.dhamma.org/en/schedules/noncenter/fi\"><span>Finland</span></a></strong></span></p></td>\t\t\t\t\t</tr>\t\t\t</tbody>\t</table></br><a href=\"https://sobhana.dhamma.org/en/courses/meditation-for-children-and-young-people/\" target=\"_blank\">Please click here for more information</a></br>NotesChildTeenHTML"
+        },
+        "raw_course_instruction_languages": [
+          "Swedish"
+        ],
+        "course_instruction_languages": [
+          "Swedish"
+        ],
+        "instruction_languages_tooltip": "",
+        "country_code": "se",
+        "status": [
+          {
+            "color": "NONE",
+            "status": "Completed",
+            "label": null,
+            "type": null
+          }
+        ],
+        "comments": "The course is held in Swedish only.",
+        "service": false,
+        "can_apply_in_progress": false,
+        "can_apply_flag": true,
+        "apply_languages": [
+          {
+            "iso_code": "en",
+            "description": "English",
+            "apply_override": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/BZwTcVNuyKq6ScQ"
+          },
+          {
+            "iso_code": "sv",
+            "description": "Svenska",
+            "apply_override": "https://mycourses.dhamma.org/sv/enrolment/initial_enrolment_form/BZwTcVNuyKq6ScQ"
+          }
+        ],
+        "apply_link_url": "/portal/student_apps/new_app?course_id=94437&location_id=1392",
+        "trans_apply_link_url": "/en/portal/student_apps/new_app?course_id=94437&location_id=1392",
+        "app_page_url": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/BZwTcVNuyKq6ScQ"
+      },
+      {
+        "id": 103057,
+        "local_time": "2023-09-08T07:49:09.000+00:00",
+        "course_start_date": "2023-08-27",
+        "course_end_date": "2023-08-27",
+        "enrollment_open_date": "2023-02-28",
+        "localized_start_date": "27 Aug 2023",
+        "localized_end_date": "27 Aug 2023",
+        "adjusted_localized_start_date": "<span style='white-space:nowrap'>27 Aug</span>",
+        "adjusted_localized_end_date": "<span style='white-space:nowrap'>27 Aug</span>",
+        "adjusted_localized_enrollment_date": "<span style='white-space:nowrap'>27 Aug</span>",
+        "course_start_date_time": "2023-08-27T00:00:00.000+00:00",
+        "course_end_date_time": "2023-08-27T00:00:00.000+00:00",
+        "enrollment_open_date_time": "2023-02-28T00:00:00.000+00:00",
+        "raw_course_type": "1-DayOSC",
+        "course_type_number_nights": 0,
+        "course_type_anchor": "1-DayOSC",
+        "course_type": "1-Day",
+        "course_type_hint": "<div></div>",
+        "location": {
+          "id": 1392,
+          "sub_domain": "sobhana",
+          "dhamma_name": "Dhamma Sobhana",
+          "dhamma_name_meaning": "Beauty of Dhamma",
+          "city": "Ödeshög",
+          "state": "Östergötlands län [SE-05]",
+          "country": "Sweden",
+          "country_iso_code": "SE",
+          "flag_icon_class": "flag pull-left flag-se",
+          "city_province": "Ödeshög, Östergötlands län [SE-05]",
+          "city_province_country": "Ödeshög, Östergötlands län [SE-05], Sweden",
+          "header_image_path": "/system/images/centers/sobhana.jpg",
+          "schedule_url": "/en/schedules/schsobhana",
+          "website_url": "http://sobhana.dhamma.org",
+          "map_enabled": true,
+          "map_url": "/en/maps#sobhana",
+          "year_of_first_course": "2007",
+          "center_noncenter": "noncenter",
+          "pin_class": "pin-noncenter",
+          "contact_mailto": "",
+          "contact": "<p><strong>Address:</strong> Dhamma Sobhana, Holmen 1, S-599 93 Ödeshög, Sweden</p><p><strong>Email:</strong> info@sobhana.dhamma.org</p><p><strong>Phone:</strong> [46](0) 143 - 211 36</p>",
+          "about": "Dhamma Sobhana means \"Beauty of Dhamma\" in Pali language and is the first Vipassana centre to be established in the Nordic area. It's located in central Sweden, near Ödeshög, Vadstena and Linköping. By car it's about two and a half hours from Stockholm and Gothenburg (Göteborg), and about three and a half hours from Malmö. The centre was established in 2007 mainly to serve the Nordic area but students come from all over the world. Dhamma Sobhana offers 20-25 courses a year, with about 1 800 students.",
+          "location_languages": [
+            {
+              "description": "English",
+              "schedule_url": "/en/schedules/schsobhana"
+            },
+            {
+              "description": "Suomi",
+              "schedule_url": "/fi/schedules/schsobhana"
+            },
+            {
+              "description": "Svenska",
+              "schedule_url": "/sv/schedules/schsobhana"
+            }
+          ],
+          "local_time": "2023-09-08T07:49:09.000+00:00",
+          "haversine_distance": null,
+          "sub_location": "Stockholm",
+          "sub_location_url": null,
+          "sub_location_id": 571,
+          "sub_loc_heading": "",
+          "instructions": "<div><div><span><span><strong>Registration procedure for students on courses in English/Swedish at Dhamma Sobhana:</strong></span></span><div><span><span>- Three months before the start of the course, registration will open at 6 am (7 am when daylight saving time). Registration will stay open until midnight.&nbsp;</span></span><div><span><span>- An electronic random selection will then be made to allocate available places for the course and to establish a waiting list.&nbsp;</span></span><div><span><span>- Within two weeks, students who were not allocated a place on the course or on the waiting list will be notified.&nbsp;</span></span></div><div><span><span>- Please note that it’s essential to send&nbsp;<strong>only one registration form</strong>&nbsp;per person and per course. Otherwise&nbsp;<strong>none of the applications</strong>&nbsp;will be taken into account.&nbsp;</span></span></div><div>&nbsp;</div><div><span><span>This procedure has been adopted since courses otherwise would fill up within minutes after registration opens.</span></span><span><span> </span></span></div></div></div></div></div>&nbsp;<table>\t<tbody>\t\t<tr>\t\t\t<td><p><span><a href=\"https://www.dhamma.org/en/schedules/noncenter/no\"><span><b>Norway</b></span></a></span></p></td>\t\t\t\t\t\t<td><p><span><b><a href=\"https://www.dhamma.org/en/schedules/noncenter/dk\"><span>Denmark</span></a></b></span></p></td>\t\t\t\t\t\t<td><p><span><strong><a href=\"https://www.dhamma.org/en/schedules/noncenter/fi\"><span>Finland</span></a></strong></span></p></td>\t\t\t\t\t</tr>\t\t\t</tbody>\t</table></br></br></br><p>\n\t<a name=\"1-DayOSC\"></a><a name=\"3-DayOSC\"></a> <span class=\"notes-title\">Old Student Short Courses</span> (1-3 days) are for any student who has completed the 10-day course with S.N. Goenka and his assistant teachers. All old students are welcome to apply to attend these courses, including those where it has been some time since their last course.</p>"
+        },
+        "raw_course_instruction_languages": [],
+        "course_instruction_languages": [
+          "English",
+          "Swedish"
+        ],
+        "instruction_languages_tooltip": "<p>\n      <a name=bilingual></a>\n      <span class='notes-title'>Bilingual courses</span>\n      are courses which are taught in two languages. All students will hear daily\n      meditation instructions in both languages. The evening discourses will be\n      heard separately.\n    </p>",
+        "country_code": "se",
+        "status": [
+          {
+            "color": "NONE",
+            "status": "Completed",
+            "label": null,
+            "type": null
+          }
+        ],
+        "comments": "For <a href=\"#os\">old students</a><br>",
+        "service": false,
+        "can_apply_in_progress": false,
+        "can_apply_flag": true,
+        "apply_languages": [
+          {
+            "iso_code": "en",
+            "description": "English",
+            "apply_override": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/H2wR1AGrMPpYGR3"
+          },
+          {
+            "iso_code": "sv",
+            "description": "Svenska",
+            "apply_override": "https://mycourses.dhamma.org/sv/enrolment/initial_enrolment_form/H2wR1AGrMPpYGR3"
+          }
+        ],
+        "apply_link_url": "/portal/student_apps/new_app?course_id=103057&location_id=1392",
+        "trans_apply_link_url": "/en/portal/student_apps/new_app?course_id=103057&location_id=1392",
+        "app_page_url": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/H2wR1AGrMPpYGR3"
+      },
+      {
+        "id": 93849,
+        "local_time": "2023-09-08T07:49:09.000+00:00",
+        "course_start_date": "2023-08-30",
+        "course_end_date": "2023-09-03",
+        "enrollment_open_date": "2023-06-01",
+        "localized_start_date": "30 Aug 2023",
+        "localized_end_date": "03 Sep 2023",
+        "adjusted_localized_start_date": "<span style='white-space:nowrap'>30 Aug</span>",
+        "adjusted_localized_end_date": "<span style='white-space:nowrap'>03 Sep</span>",
+        "adjusted_localized_enrollment_date": "<span style='white-space:nowrap'>03 Sep</span>",
+        "course_start_date_time": "2023-08-30T00:00:00.000+00:00",
+        "course_end_date_time": "2023-09-03T00:00:00.000+00:00",
+        "enrollment_open_date_time": "2023-06-01T00:00:00.000+00:00",
+        "raw_course_type": "3-DayOSC",
+        "course_type_number_nights": 3,
+        "course_type_anchor": "3-DayOSC",
+        "course_type": "3 Day Course for Old Students",
+        "course_type_hint": "<div></div>",
+        "location": {
+          "id": 1392,
+          "sub_domain": "sobhana",
+          "dhamma_name": "Dhamma Sobhana",
+          "dhamma_name_meaning": "Beauty of Dhamma",
+          "city": "Ödeshög",
+          "state": "Östergötlands län [SE-05]",
+          "country": "Sweden",
+          "country_iso_code": "SE",
+          "flag_icon_class": "flag pull-left flag-se",
+          "city_province": "Ödeshög, Östergötlands län [SE-05]",
+          "city_province_country": "Ödeshög, Östergötlands län [SE-05], Sweden",
+          "header_image_path": "/system/images/centers/sobhana.jpg",
+          "schedule_url": "/en/schedules/schsobhana",
+          "website_url": "http://sobhana.dhamma.org",
+          "map_enabled": true,
+          "map_url": "/en/maps#sobhana",
+          "year_of_first_course": "2007",
+          "center_noncenter": "center",
+          "pin_class": "pin-center",
+          "contact_mailto": "",
+          "contact": "<p><strong>Address:</strong> Dhamma Sobhana, Holmen 1, S-599 93 Ödeshög, Sweden</p><p><strong>Email:</strong> info@sobhana.dhamma.org</p><p><strong>Phone:</strong> [46](0) 143 - 211 36</p>",
+          "about": "Dhamma Sobhana means \"Beauty of Dhamma\" in Pali language and is the first Vipassana centre to be established in the Nordic area. It's located in central Sweden, near Ödeshög, Vadstena and Linköping. By car it's about two and a half hours from Stockholm and Gothenburg (Göteborg), and about three and a half hours from Malmö. The centre was established in 2007 mainly to serve the Nordic area but students come from all over the world. Dhamma Sobhana offers 20-25 courses a year, with about 1 800 students.",
+          "location_languages": [
+            {
+              "description": "English",
+              "schedule_url": "/en/schedules/schsobhana"
+            },
+            {
+              "description": "Suomi",
+              "schedule_url": "/fi/schedules/schsobhana"
+            },
+            {
+              "description": "Svenska",
+              "schedule_url": "/sv/schedules/schsobhana"
+            }
+          ],
+          "local_time": "2023-09-08T07:49:09.000+00:00",
+          "haversine_distance": null,
+          "sub_location": null,
+          "sub_location_url": null,
+          "sub_location_id": null,
+          "sub_loc_heading": "",
+          "instructions": "<div><div><span><span><strong>Registration procedure for students on courses in English/Swedish at Dhamma Sobhana:</strong></span></span><div><span><span>- Three months before the start of the course, registration will open at 6 am (7 am when daylight saving time). Registration will stay open until midnight.&nbsp;</span></span><div><span><span>- An electronic random selection will then be made to allocate available places for the course and to establish a waiting list.&nbsp;</span></span><div><span><span>- Within two weeks, students who were not allocated a place on the course or on the waiting list will be notified.&nbsp;</span></span></div><div><span><span>- Please note that it’s essential to send&nbsp;<strong>only one registration form</strong>&nbsp;per person and per course. Otherwise&nbsp;<strong>none of the applications</strong>&nbsp;will be taken into account.&nbsp;</span></span></div><div>&nbsp;</div><div><span><span>This procedure has been adopted since courses otherwise would fill up within minutes after registration opens.</span></span><span><span> </span></span></div></div></div></div></div>&nbsp;<table>\t<tbody>\t\t<tr>\t\t\t<td><p><span><a href=\"https://www.dhamma.org/en/schedules/noncenter/no\"><span><b>Norway</b></span></a></span></p></td>\t\t\t\t\t\t<td><p><span><b><a href=\"https://www.dhamma.org/en/schedules/noncenter/dk\"><span>Denmark</span></a></b></span></p></td>\t\t\t\t\t\t<td><p><span><strong><a href=\"https://www.dhamma.org/en/schedules/noncenter/fi\"><span>Finland</span></a></strong></span></p></td>\t\t\t\t\t</tr>\t\t\t</tbody>\t</table></br></br><p>\n\t<a name=\"1-DayOSC\"></a><a name=\"3-DayOSC\"></a> <span class=\"notes-title\">Old Student Short Courses</span> (1-3 days) are for any student who has completed the 10-day course with S.N. Goenka and his assistant teachers. All old students are welcome to apply to attend these courses, including those where it has been some time since their last course.</p>"
+        },
+        "raw_course_instruction_languages": [],
+        "course_instruction_languages": [
+          "English",
+          "Swedish"
+        ],
+        "instruction_languages_tooltip": "<p>\n      <a name=bilingual></a>\n      <span class='notes-title'>Bilingual courses</span>\n      are courses which are taught in two languages. All students will hear daily\n      meditation instructions in both languages. The evening discourses will be\n      heard separately.\n    </p>",
+        "country_code": "se",
+        "status": [
+          {
+            "color": "NONE",
+            "status": "Completed",
+            "label": null,
+            "type": null
+          }
+        ],
+        "comments": "For <a href=\"#os\">old students</a><br>",
+        "service": false,
+        "can_apply_in_progress": true,
+        "can_apply_flag": true,
+        "apply_languages": [
+          {
+            "iso_code": "en",
+            "description": "English",
+            "apply_override": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/3xyreqqa8uXr20L"
+          },
+          {
+            "iso_code": "sv",
+            "description": "Svenska",
+            "apply_override": "https://mycourses.dhamma.org/sv/enrolment/initial_enrolment_form/3xyreqqa8uXr20L"
+          }
+        ],
+        "apply_link_url": "/portal/student_apps/new_app?course_id=93849&location_id=1392",
+        "trans_apply_link_url": "/en/portal/student_apps/new_app?course_id=93849&location_id=1392",
+        "app_page_url": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/3xyreqqa8uXr20L"
+      },
+      {
+        "id": 93884,
+        "local_time": "2023-09-08T07:49:09.000+00:00",
+        "course_start_date": "2023-09-03",
+        "course_end_date": "2023-09-06",
+        "enrollment_open_date": "2023-06-05",
+        "localized_start_date": "03 Sep 2023",
+        "localized_end_date": "06 Sep 2023",
+        "adjusted_localized_start_date": "<span style='white-space:nowrap'>03 Sep</span>",
+        "adjusted_localized_end_date": "<span style='white-space:nowrap'>06 Sep</span>",
+        "adjusted_localized_enrollment_date": "<span style='white-space:nowrap'>06 Sep</span>",
+        "course_start_date_time": "2023-09-03T00:00:00.000+00:00",
+        "course_end_date_time": "2023-09-06T00:00:00.000+00:00",
+        "enrollment_open_date_time": "2023-06-05T00:00:00.000+00:00",
+        "raw_course_type": "ServicePeriod",
+        "course_type_number_nights": 0,
+        "course_type_anchor": "ServicePeriod",
+        "course_type": "Service Period",
+        "course_type_hint": "<div><p>\n<a name=\"ServicePeriod\"></a><span class=\"notes-title\">Work Periods</span> have been set aside to work on a variety of Centre maintenance, construction, household and gardening projects. All <a href=\"#os\">Old Students</a> are welcome to participate. The daily program will include three group sittings with morning and afternoon work periods. On selected evenings, there will be tapes played of special discourses and talks that S.N. Goenka has given to Old Students.</p><br/></div>",
+        "location": {
+          "id": 1392,
+          "sub_domain": "sobhana",
+          "dhamma_name": "Dhamma Sobhana",
+          "dhamma_name_meaning": "Beauty of Dhamma",
+          "city": "Ödeshög",
+          "state": "Östergötlands län [SE-05]",
+          "country": "Sweden",
+          "country_iso_code": "SE",
+          "flag_icon_class": "flag pull-left flag-se",
+          "city_province": "Ödeshög, Östergötlands län [SE-05]",
+          "city_province_country": "Ödeshög, Östergötlands län [SE-05], Sweden",
+          "header_image_path": "/system/images/centers/sobhana.jpg",
+          "schedule_url": "/en/schedules/schsobhana",
+          "website_url": "http://sobhana.dhamma.org",
+          "map_enabled": true,
+          "map_url": "/en/maps#sobhana",
+          "year_of_first_course": "2007",
+          "center_noncenter": "center",
+          "pin_class": "pin-center",
+          "contact_mailto": "",
+          "contact": "<p><strong>Address:</strong> Dhamma Sobhana, Holmen 1, S-599 93 Ödeshög, Sweden</p><p><strong>Email:</strong> info@sobhana.dhamma.org</p><p><strong>Phone:</strong> [46](0) 143 - 211 36</p>",
+          "about": "Dhamma Sobhana means \"Beauty of Dhamma\" in Pali language and is the first Vipassana centre to be established in the Nordic area. It's located in central Sweden, near Ödeshög, Vadstena and Linköping. By car it's about two and a half hours from Stockholm and Gothenburg (Göteborg), and about three and a half hours from Malmö. The centre was established in 2007 mainly to serve the Nordic area but students come from all over the world. Dhamma Sobhana offers 20-25 courses a year, with about 1 800 students.",
+          "location_languages": [
+            {
+              "description": "English",
+              "schedule_url": "/en/schedules/schsobhana"
+            },
+            {
+              "description": "Suomi",
+              "schedule_url": "/fi/schedules/schsobhana"
+            },
+            {
+              "description": "Svenska",
+              "schedule_url": "/sv/schedules/schsobhana"
+            }
+          ],
+          "local_time": "2023-09-08T07:49:09.000+00:00",
+          "haversine_distance": null,
+          "sub_location": null,
+          "sub_location_url": null,
+          "sub_location_id": null,
+          "sub_loc_heading": "",
+          "instructions": "<div><div><span><span><strong>Registration procedure for students on courses in English/Swedish at Dhamma Sobhana:</strong></span></span><div><span><span>- Three months before the start of the course, registration will open at 6 am (7 am when daylight saving time). Registration will stay open until midnight.&nbsp;</span></span><div><span><span>- An electronic random selection will then be made to allocate available places for the course and to establish a waiting list.&nbsp;</span></span><div><span><span>- Within two weeks, students who were not allocated a place on the course or on the waiting list will be notified.&nbsp;</span></span></div><div><span><span>- Please note that it’s essential to send&nbsp;<strong>only one registration form</strong>&nbsp;per person and per course. Otherwise&nbsp;<strong>none of the applications</strong>&nbsp;will be taken into account.&nbsp;</span></span></div><div>&nbsp;</div><div><span><span>This procedure has been adopted since courses otherwise would fill up within minutes after registration opens.</span></span><span><span> </span></span></div></div></div></div></div>&nbsp;<table>\t<tbody>\t\t<tr>\t\t\t<td><p><span><a href=\"https://www.dhamma.org/en/schedules/noncenter/no\"><span><b>Norway</b></span></a></span></p></td>\t\t\t\t\t\t<td><p><span><b><a href=\"https://www.dhamma.org/en/schedules/noncenter/dk\"><span>Denmark</span></a></b></span></p></td>\t\t\t\t\t\t<td><p><span><strong><a href=\"https://www.dhamma.org/en/schedules/noncenter/fi\"><span>Finland</span></a></strong></span></p></td>\t\t\t\t\t</tr>\t\t\t</tbody>\t</table></br></br>All ten day courses begin on the evening of the first day and end on the early morning of the last day.<br />See Comments for any special instructions for events in this section."
+        },
+        "raw_course_instruction_languages": [],
+        "course_instruction_languages": [
+          "English",
+          "Swedish"
+        ],
+        "instruction_languages_tooltip": "<p>\n      <a name=bilingual></a>\n      <span class='notes-title'>Bilingual courses</span>\n      are courses which are taught in two languages. All students will hear daily\n      meditation instructions in both languages. The evening discourses will be\n      heard separately.\n    </p>",
+        "country_code": "se",
+        "status": [
+          {
+            "color": "NONE",
+            "status": "Completed",
+            "label": null,
+            "type": null
+          }
+        ],
+        "comments": "For <a href=\"#os\">old students</a><br>",
+        "service": true,
+        "can_apply_in_progress": true,
+        "can_apply_flag": true,
+        "apply_languages": [
+          {
+            "iso_code": "en",
+            "description": "English",
+            "apply_override": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/k9JDc3sR6Bl2LJW"
+          },
+          {
+            "iso_code": "sv",
+            "description": "Svenska",
+            "apply_override": "https://mycourses.dhamma.org/sv/enrolment/initial_enrolment_form/k9JDc3sR6Bl2LJW"
+          }
+        ],
+        "apply_link_url": "/portal/student_apps/new_app?course_id=93884&location_id=1392",
+        "trans_apply_link_url": "/en/portal/student_apps/new_app?course_id=93884&location_id=1392",
+        "app_page_url": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/k9JDc3sR6Bl2LJW"
+      },
+      {
+        "id": 93850,
+        "local_time": "2023-09-08T07:49:09.000+00:00",
+        "course_start_date": "2023-09-06",
+        "course_end_date": "2023-09-17",
+        "enrollment_open_date": "2023-06-08",
+        "localized_start_date": "06 Sep 2023",
+        "localized_end_date": "17 Sep 2023",
+        "adjusted_localized_start_date": "<span style='white-space:nowrap'>06 Sep</span>",
+        "adjusted_localized_end_date": "<span style='white-space:nowrap'>17 Sep</span>",
+        "adjusted_localized_enrollment_date": "<span style='white-space:nowrap'>17 Sep</span>",
+        "course_start_date_time": "2023-09-06T00:00:00.000+00:00",
+        "course_end_date_time": "2023-09-17T00:00:00.000+00:00",
+        "enrollment_open_date_time": "2023-06-08T00:00:00.000+00:00",
+        "raw_course_type": "10-Day",
+        "course_type_number_nights": 11,
+        "course_type_anchor": "10-Day",
+        "course_type": "10-Day",
+        "course_type_hint": "<div><p>\n<a name=\"10-Day\"></a> <span class=\"notes-title\">10-day Courses</span> are an introductory course to Vipassana Meditation where the technique is taught step-by-step each day. The courses begin after a 2 - 4 pm registration period and orientation, followed by 10 full days of meditation, and end the morning of the 11th day by 7:30 am.</p><br/></div>",
+        "location": {
+          "id": 1392,
+          "sub_domain": "sobhana",
+          "dhamma_name": "Dhamma Sobhana",
+          "dhamma_name_meaning": "Beauty of Dhamma",
+          "city": "Ödeshög",
+          "state": "Östergötlands län [SE-05]",
+          "country": "Sweden",
+          "country_iso_code": "SE",
+          "flag_icon_class": "flag pull-left flag-se",
+          "city_province": "Ödeshög, Östergötlands län [SE-05]",
+          "city_province_country": "Ödeshög, Östergötlands län [SE-05], Sweden",
+          "header_image_path": "/system/images/centers/sobhana.jpg",
+          "schedule_url": "/en/schedules/schsobhana",
+          "website_url": "http://sobhana.dhamma.org",
+          "map_enabled": true,
+          "map_url": "/en/maps#sobhana",
+          "year_of_first_course": "2007",
+          "center_noncenter": "center",
+          "pin_class": "pin-center",
+          "contact_mailto": "",
+          "contact": "<p><strong>Address:</strong> Dhamma Sobhana, Holmen 1, S-599 93 Ödeshög, Sweden</p><p><strong>Email:</strong> info@sobhana.dhamma.org</p><p><strong>Phone:</strong> [46](0) 143 - 211 36</p>",
+          "about": "Dhamma Sobhana means \"Beauty of Dhamma\" in Pali language and is the first Vipassana centre to be established in the Nordic area. It's located in central Sweden, near Ödeshög, Vadstena and Linköping. By car it's about two and a half hours from Stockholm and Gothenburg (Göteborg), and about three and a half hours from Malmö. The centre was established in 2007 mainly to serve the Nordic area but students come from all over the world. Dhamma Sobhana offers 20-25 courses a year, with about 1 800 students.",
+          "location_languages": [
+            {
+              "description": "English",
+              "schedule_url": "/en/schedules/schsobhana"
+            },
+            {
+              "description": "Suomi",
+              "schedule_url": "/fi/schedules/schsobhana"
+            },
+            {
+              "description": "Svenska",
+              "schedule_url": "/sv/schedules/schsobhana"
+            }
+          ],
+          "local_time": "2023-09-08T07:49:09.000+00:00",
+          "haversine_distance": null,
+          "sub_location": null,
+          "sub_location_url": null,
+          "sub_location_id": null,
+          "sub_loc_heading": "",
+          "instructions": "<div><div><span><span><strong>Registration procedure for students on courses in English/Swedish at Dhamma Sobhana:</strong></span></span><div><span><span>- Three months before the start of the course, registration will open at 6 am (7 am when daylight saving time). Registration will stay open until midnight.&nbsp;</span></span><div><span><span>- An electronic random selection will then be made to allocate available places for the course and to establish a waiting list.&nbsp;</span></span><div><span><span>- Within two weeks, students who were not allocated a place on the course or on the waiting list will be notified.&nbsp;</span></span></div><div><span><span>- Please note that it’s essential to send&nbsp;<strong>only one registration form</strong>&nbsp;per person and per course. Otherwise&nbsp;<strong>none of the applications</strong>&nbsp;will be taken into account.&nbsp;</span></span></div><div>&nbsp;</div><div><span><span>This procedure has been adopted since courses otherwise would fill up within minutes after registration opens.</span></span><span><span> </span></span></div></div></div></div></div>&nbsp;<table>\t<tbody>\t\t<tr>\t\t\t<td><p><span><a href=\"https://www.dhamma.org/en/schedules/noncenter/no\"><span><b>Norway</b></span></a></span></p></td>\t\t\t\t\t\t<td><p><span><b><a href=\"https://www.dhamma.org/en/schedules/noncenter/dk\"><span>Denmark</span></a></b></span></p></td>\t\t\t\t\t\t<td><p><span><strong><a href=\"https://www.dhamma.org/en/schedules/noncenter/fi\"><span>Finland</span></a></strong></span></p></td>\t\t\t\t\t</tr>\t\t\t</tbody>\t</table></br></br>All ten day courses begin on the evening of the first day and end on the early morning of the last day.<br />See Comments for any special instructions for events in this section."
+        },
+        "raw_course_instruction_languages": [
+          "English",
+          "Danish"
+        ],
+        "course_instruction_languages": [
+          "English",
+          "Danish"
+        ],
+        "instruction_languages_tooltip": "<p>\n      <a name=bilingual></a>\n      <span class='notes-title'>Bilingual courses</span>\n      are courses which are taught in two languages. All students will hear daily\n      meditation instructions in both languages. The evening discourses will be\n      heard separately.\n    </p>",
+        "country_code": "se",
+        "status": [
+          {
+            "color": "NONE",
+            "status": "In Progress",
+            "label": null,
+            "type": null
+          }
+        ],
+        "comments": "<p>Students with Danish as their first language are given priority until 22 June</p>",
+        "service": false,
+        "can_apply_in_progress": true,
+        "can_apply_flag": true,
+        "apply_languages": [
+          {
+            "iso_code": "en",
+            "description": "English",
+            "apply_override": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/LysMRV-oJKC1Xtw"
+          },
+          {
+            "iso_code": "sv",
+            "description": "Svenska",
+            "apply_override": "https://mycourses.dhamma.org/sv/enrolment/initial_enrolment_form/LysMRV-oJKC1Xtw"
+          }
+        ],
+        "apply_link_url": "/portal/student_apps/new_app?course_id=93850&location_id=1392",
+        "trans_apply_link_url": "/en/portal/student_apps/new_app?course_id=93850&location_id=1392",
+        "app_page_url": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/LysMRV-oJKC1Xtw"
+      },
+      {
+        "id": 93886,
+        "local_time": "2023-09-08T07:49:09.000+00:00",
+        "course_start_date": "2023-09-17",
+        "course_end_date": "2023-09-22",
+        "enrollment_open_date": "2023-06-19",
+        "localized_start_date": "17 Sep 2023",
+        "localized_end_date": "22 Sep 2023",
+        "adjusted_localized_start_date": "<span style='white-space:nowrap'>17 Sep</span>",
+        "adjusted_localized_end_date": "<span style='white-space:nowrap'>22 Sep</span>",
+        "adjusted_localized_enrollment_date": "<span style='white-space:nowrap'>22 Sep</span>",
+        "course_start_date_time": "2023-09-17T00:00:00.000+00:00",
+        "course_end_date_time": "2023-09-22T00:00:00.000+00:00",
+        "enrollment_open_date_time": "2023-06-19T00:00:00.000+00:00",
+        "raw_course_type": "ServicePeriod",
+        "course_type_number_nights": 0,
+        "course_type_anchor": "ServicePeriod",
+        "course_type": "Service Period",
+        "course_type_hint": "<div><p>\n<a name=\"ServicePeriod\"></a><span class=\"notes-title\">Work Periods</span> have been set aside to work on a variety of Centre maintenance, construction, household and gardening projects. All <a href=\"#os\">Old Students</a> are welcome to participate. The daily program will include three group sittings with morning and afternoon work periods. On selected evenings, there will be tapes played of special discourses and talks that S.N. Goenka has given to Old Students.</p><br/></div>",
+        "location": {
+          "id": 1392,
+          "sub_domain": "sobhana",
+          "dhamma_name": "Dhamma Sobhana",
+          "dhamma_name_meaning": "Beauty of Dhamma",
+          "city": "Ödeshög",
+          "state": "Östergötlands län [SE-05]",
+          "country": "Sweden",
+          "country_iso_code": "SE",
+          "flag_icon_class": "flag pull-left flag-se",
+          "city_province": "Ödeshög, Östergötlands län [SE-05]",
+          "city_province_country": "Ödeshög, Östergötlands län [SE-05], Sweden",
+          "header_image_path": "/system/images/centers/sobhana.jpg",
+          "schedule_url": "/en/schedules/schsobhana",
+          "website_url": "http://sobhana.dhamma.org",
+          "map_enabled": true,
+          "map_url": "/en/maps#sobhana",
+          "year_of_first_course": "2007",
+          "center_noncenter": "center",
+          "pin_class": "pin-center",
+          "contact_mailto": "",
+          "contact": "<p><strong>Address:</strong> Dhamma Sobhana, Holmen 1, S-599 93 Ödeshög, Sweden</p><p><strong>Email:</strong> info@sobhana.dhamma.org</p><p><strong>Phone:</strong> [46](0) 143 - 211 36</p>",
+          "about": "Dhamma Sobhana means \"Beauty of Dhamma\" in Pali language and is the first Vipassana centre to be established in the Nordic area. It's located in central Sweden, near Ödeshög, Vadstena and Linköping. By car it's about two and a half hours from Stockholm and Gothenburg (Göteborg), and about three and a half hours from Malmö. The centre was established in 2007 mainly to serve the Nordic area but students come from all over the world. Dhamma Sobhana offers 20-25 courses a year, with about 1 800 students.",
+          "location_languages": [
+            {
+              "description": "English",
+              "schedule_url": "/en/schedules/schsobhana"
+            },
+            {
+              "description": "Suomi",
+              "schedule_url": "/fi/schedules/schsobhana"
+            },
+            {
+              "description": "Svenska",
+              "schedule_url": "/sv/schedules/schsobhana"
+            }
+          ],
+          "local_time": "2023-09-08T07:49:09.000+00:00",
+          "haversine_distance": null,
+          "sub_location": null,
+          "sub_location_url": null,
+          "sub_location_id": null,
+          "sub_loc_heading": "",
+          "instructions": "<div><div><span><span><strong>Registration procedure for students on courses in English/Swedish at Dhamma Sobhana:</strong></span></span><div><span><span>- Three months before the start of the course, registration will open at 6 am (7 am when daylight saving time). Registration will stay open until midnight.&nbsp;</span></span><div><span><span>- An electronic random selection will then be made to allocate available places for the course and to establish a waiting list.&nbsp;</span></span><div><span><span>- Within two weeks, students who were not allocated a place on the course or on the waiting list will be notified.&nbsp;</span></span></div><div><span><span>- Please note that it’s essential to send&nbsp;<strong>only one registration form</strong>&nbsp;per person and per course. Otherwise&nbsp;<strong>none of the applications</strong>&nbsp;will be taken into account.&nbsp;</span></span></div><div>&nbsp;</div><div><span><span>This procedure has been adopted since courses otherwise would fill up within minutes after registration opens.</span></span><span><span> </span></span></div></div></div></div></div>&nbsp;<table>\t<tbody>\t\t<tr>\t\t\t<td><p><span><a href=\"https://www.dhamma.org/en/schedules/noncenter/no\"><span><b>Norway</b></span></a></span></p></td>\t\t\t\t\t\t<td><p><span><b><a href=\"https://www.dhamma.org/en/schedules/noncenter/dk\"><span>Denmark</span></a></b></span></p></td>\t\t\t\t\t\t<td><p><span><strong><a href=\"https://www.dhamma.org/en/schedules/noncenter/fi\"><span>Finland</span></a></strong></span></p></td>\t\t\t\t\t</tr>\t\t\t</tbody>\t</table></br></br>All ten day courses begin on the evening of the first day and end on the early morning of the last day.<br />See Comments for any special instructions for events in this section."
+        },
+        "raw_course_instruction_languages": [],
+        "course_instruction_languages": [
+          "English",
+          "Swedish"
+        ],
+        "instruction_languages_tooltip": "<p>\n      <a name=bilingual></a>\n      <span class='notes-title'>Bilingual courses</span>\n      are courses which are taught in two languages. All students will hear daily\n      meditation instructions in both languages. The evening discourses will be\n      heard separately.\n    </p>",
+        "country_code": "se",
+        "status": [
+          {
+            "color": "Green",
+            "status": "Open",
+            "label": "Servers",
+            "type": "s"
+          }
+        ],
+        "comments": "For <a href=\"#os\">old students</a><br>",
+        "service": true,
+        "can_apply_in_progress": true,
+        "can_apply_flag": true,
+        "apply_languages": [
+          {
+            "iso_code": "en",
+            "description": "English",
+            "apply_override": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/JbXjTCPHE3LyHDF"
+          },
+          {
+            "iso_code": "sv",
+            "description": "Svenska",
+            "apply_override": "https://mycourses.dhamma.org/sv/enrolment/initial_enrolment_form/JbXjTCPHE3LyHDF"
+          }
+        ],
+        "apply_link_url": "/portal/student_apps/new_app?course_id=93886&location_id=1392",
+        "trans_apply_link_url": "/en/portal/student_apps/new_app?course_id=93886&location_id=1392",
+        "app_page_url": "https://mycourses.dhamma.org/en/enrolment/initial_enrolment_form/JbXjTCPHE3LyHDF"
+      }
+    ],
+    "page": 1,
+    "pages": 1,
+    "total_rows": 6,
+    "formatted_total_rows": "6",
+    "pages_truncated": false,
+    "saved_search_uuid": "2286198f-ee6b-41b7-a1d0-927debfc3000"
+  }

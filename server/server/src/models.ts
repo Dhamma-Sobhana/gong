@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon'
+
 class Message {
     name: string = 'undefined';
     type?: string;
@@ -15,11 +17,18 @@ class Message {
     }
 }
 
+enum Status {
+    OK = '🟢',
+    Warning = '🟡',
+    Failed = '🔴'
+}
+
 class DeviceStatus {
     name: string;
     type?: string;
     zones?: Array<string>;
-    timestamp?: number
+    timestamp?: DateTime
+    status: Status = Status.Failed
 
     constructor(name: string) {
         this.name = name
@@ -30,12 +39,17 @@ class DeviceStatus {
             this.type = type
         if (zones !== undefined)
             this.zones = zones
-        this.timestamp = Date.now()
+        this.timestamp = DateTime.now()
+        this.status = Status.OK
+    }
+
+    updateStatus(status:Status) {
+        this.status = status
     }
 
     toString() {
         if (this.type !== undefined)
-            return `${this.name} (${this.type}) Last seen: ${this.timestamp}`
+            return `${this.name} (${this.type}) Last seen: ${this.timestamp?.toISO()}`
         else
             return `${this.name}`
     }
@@ -54,5 +68,59 @@ class PlayMessage {
     }
 }
 
+class Course {
+    type: string
+    start: DateTime
+    end: DateTime
+    endTime?: DateTime
 
-export { Message, DeviceStatus, PlayMessage }
+    constructor(type: string, start: string, end: string, endTime?:DateTime) {
+        this.type = type
+        this.start = DateTime.fromISO(start)
+        this.end = DateTime.fromISO(end).set({hour: 23, minute: 59, second: 59})
+        if (endTime)
+            this.endTime = endTime
+    }
+
+    toString() {
+        return `${this.type}, ${this.start} - ${this.end}`
+    }
+}
+
+class TimeTable {
+    type: string
+    entries: Array<TimeTableEntry> = []
+    endTime?: DateTime
+
+    constructor(type: string, entries?: Array<TimeTableEntry>, endTime?: DateTime) {
+        this.type = type
+        if (entries)
+            this.entries = entries
+        if (endTime)
+            this.endTime = endTime
+    }
+
+    setEndTime(time:string) {
+        this.endTime = DateTime.fromISO(time)
+    }
+}
+
+class TimeTableEntry {
+    time: DateTime
+    type: string
+    location: Array<string>
+
+    constructor(date: DateTime, time: string, type: string, location: Array<string>) {
+        this.time = date.set({
+            hour: parseInt(time.substring(0, 2)),
+            minute: parseInt(time.substring(3, 5)),
+            second: 0,
+            millisecond: 0
+        })
+        this.type = type
+        this.location = location
+    }
+}
+
+
+export { Message, Status, DeviceStatus, PlayMessage, Course, TimeTable, TimeTableEntry }

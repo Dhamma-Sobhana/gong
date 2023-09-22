@@ -1,77 +1,34 @@
 import { Request, Response } from 'express';
 
-import { DeviceStatus, Message, PlayMessage } from "./models"
+import { DeviceStatus, PlayMessage } from "./models"
 import { parseJson } from './lib'
 import { logArray } from './log'
 import { app } from './web'
-import { client } from './mqtt'
+import { Automation } from './automation';
+import { aggregateDeviceStatus, updateDevice, updateDevicesStatus } from './devices';
 
-/**
- * Update device list
- * @param data object received
- * @param devices list of devices
- */
-function updateDevice(data: object, devices: Array<DeviceStatus>) {
-    let message = Object.assign(new Message(), data)
-
-    if (message.name === undefined)
-        return
-
-    for (let device of devices) {
-        if (device.name == message.name) {
-            device.update(message.type, message.zones)
-        }
-    }
-}
-
-/**
- * Handle remote button press
- * @param gongPlaying current state
- * @param repeatGong how many times gong should be played
- * @returns reversed state
- */
-function remoteAction(gongPlaying: boolean, repeatGong: number): boolean {
-    if (gongPlaying) {
-        client.publish('stop')
-        console.debug(`[mqtt] > stop`)
-        console.log(`[server] Stop playing`)
-    } else {
-        let message = JSON.stringify(new PlayMessage(["all"], repeatGong))
-        client.publish('play', message)
-        console.debug(`[mqtt] > play: ${message}`)
-        console.log(`[server] Start playing`)
-    }
-
-    return !gongPlaying
-}
-
-/**
- * Log if gong was playing
- * @param gongPlaying current state
- * @returns false
- */
-function played(gongPlaying: boolean): boolean {
-    if (gongPlaying == true)
-        console.log(`[server] Finished playing`)
-
-    return false
-}
+let client:any
 
 /**
  * Gong server. Handle requests over MQTT and web
  */
 class Server {
+    enabled: boolean = true
     gongPlaying: boolean = false
     gongRepeat: number = 4
     devices: Array<DeviceStatus> = []
+    automation: Automation
+    deviceStatusTimer: NodeJS.Timer
 
     /**
      * 
      * @param devices which devices should exist in the network
      * @param gongRepeat how many times a gong should be played
      */
-    constructor(devices: Array<string>, gongRepeat: number = 4) {
+    constructor(mqttClient:any, devices: Array<string>, gongRepeat: number = 4, automationEnabled:boolean = false, locationId?:number) {
+        client = mqttClient
         this.gongRepeat = gongRepeat
+        this.automation = new Automation(this.playAutomatedGong, locationId, automationEnabled)
 
         for (let device of devices) {
             this.devices.push(new DeviceStatus(device))
@@ -82,12 +39,18 @@ class Server {
         })
 
         app.get('/', (req: Request, res: Response) => {
-            res.render('index.njk', { devices: this.devices, playing: this.gongPlaying, log: logArray })
+            res.render('index.njk', { enabled: this.enabled, devices: this.devices, device_status: aggregateDeviceStatus(this.devices), playing: this.gongPlaying, log: logArray.slice(), automation: this.automation })
+        })
+
+        app.post('/enable', (req: Request, res: Response) => {
+            console.log('[web] Enable/Disable')
+            this.enable(!this.enabled)
+            res.redirect('/')
         })
 
         app.post('/activated', (req: Request, res: Response) => {
             console.log('[web] Play/Stop')
-            this.gongPlaying = remoteAction(this.gongPlaying, this.gongRepeat)
+            this.gongPlaying = this.remoteAction(this.gongPlaying, this.gongRepeat)
             res.redirect('/')
         })
 
@@ -97,7 +60,91 @@ class Server {
             res.redirect('/')
         })
 
+        app.post('/automation/enable', (req: Request, res: Response) => {
+            console.log('[web] Automation enabled')
+            this.automation.enable()
+            res.redirect('/')
+        })
+
+        app.post('/automation/disable', (req: Request, res: Response) => {
+            console.log('[web] Automation disabled')
+            this.automation.enable(false)
+            res.redirect('/')
+        })
+
+        this.deviceStatusTimer = setInterval(() => {
+            client.publish(`ping`);
+            updateDevicesStatus(this.devices)
+        }, 60000)
+
         console.log(`[server] Gong server starting. Required devices: ${this.devices}`)
+    }
+
+    /**
+     * Enable or disable system. Prevents gong from being played
+     * based on manual remote or automation action.
+     * @param disable optional to diasable automation
+     */
+    enable(enable?: boolean) {
+        if (enable !== undefined && enable == false) {
+            this.enabled = false
+            console.log('[server] Disabled')
+        } else {
+            this.enabled = true
+            console.log('[server] Enabled')
+        }
+    }
+
+    destroy() {
+        clearInterval(this.deviceStatusTimer)
+        this.automation.cancel()
+        client.end()
+    }
+
+
+    /**
+     * Handle remote button press
+     * @param gongPlaying current state
+     * @param repeatGong how many times gong should be played
+     * @returns reversed state
+     */
+    remoteAction(gongPlaying: boolean, repeatGong: number): boolean {
+        if (!this.enabled)
+            return false
+
+        if (gongPlaying) {
+            client.publish('stop')
+            console.debug(`[mqtt] > stop`)
+            console.log(`[server] Stop playing`)
+        } else {
+            let message = JSON.stringify(new PlayMessage(["all"], repeatGong))
+            client.publish('play', message)
+            console.debug(`[mqtt] > play: ${message}`)
+            console.log(`[server] Start playing`)
+        }
+
+        return !gongPlaying
+    }
+
+    /**
+     * Log if gong was playing
+     * @param gongPlaying current state
+     * @returns false
+     */
+    played(gongPlaying: boolean): boolean {
+        if (gongPlaying == true)
+            console.log(`[server] Finished playing`)
+
+        return false
+    }
+
+    playAutomatedGong(location:Array<string>) {
+        if (!this.enabled)
+            return
+
+        let message = JSON.stringify(new PlayMessage(location, this.gongRepeat))
+        client.publish('play', message)
+        console.debug(`[mqtt] > play: ${message}`)
     }
 
     /**
@@ -113,10 +160,11 @@ class Server {
 
         switch (topic) {
             case 'activated':
-                this.gongPlaying = remoteAction(this.gongPlaying, this.gongRepeat)
+                console.log(`[remote] Playback initiated by ${data.name}`)
+                this.gongPlaying = this.remoteAction(this.gongPlaying, this.gongRepeat)
                 break;
             case 'played':
-                this.gongPlaying = played(this.gongPlaying)
+                this.gongPlaying = this.played(this.gongPlaying)
                 data.zones = undefined // To not overwrite zones in device list
                 break;
             default:
@@ -128,4 +176,4 @@ class Server {
     }
 }
 
-export { Server, updateDevice, remoteAction, played }
+export { Server }

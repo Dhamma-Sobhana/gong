@@ -1,0 +1,11 @@
+<h2>Log</h2>
+<p>Showing last 10 entries, newest to oldest</p>
+<div class="overflow-scroll">
+<ul>
+{% for entry in log.reverse() %}
+    <li>{{ entry }}</li>
+{% else %}
+    <li>No log entries yet</li>
+{% endfor %}
+</ul>
+</div>

@@ -1,0 +1,12 @@
+{
+  "definition" : {
+    "type": "dynamic",
+    "endTime": "09:00"
+  },
+  "days" : {
+    "11" : [
+      { "time": "04:10", "type": "gong", "location": ["accommodation"] },
+      { "time": "04:25", "type": "gong", "location": ["accommodation"] }
+    ]
+  }
+}

@@ -1,16 +1,17 @@
-import { Server, updateDevice, remoteAction, played } from "../src/server"
+import { Server } from "../src/server"
+import { updateDevice } from "../src/devices"
 import { client } from "../src/mqtt"
 import { server as webServer } from "../src/web"
 
 let server: Server
 
 beforeEach(() => {
-    server = new Server(["remote", "player"], 3)
+    server = new Server(client, ["remote", "player"], 3)
 });
 
 afterEach(() => {
-    client.end()
     webServer.close()
+    server.destroy()
 });
 
 test('Server instance', () => {
@@ -53,4 +54,23 @@ test('Update device list', () => {
     expect(server.devices[1].name).toBe('player')
     expect(server.devices[1].type).toBe('player')
     expect(server.devices[1].timestamp).toBeDefined()
+})
+
+test('Disable system', () => {
+    let spy = jest.spyOn(client, 'publish')
+    expect(server.enabled).toBe(true)
+
+    server.enable(false)
+
+    expect(server.enabled).toBe(false)
+
+    server.handleMessage('activated', JSON.stringify({name: test}))
+
+    expect(spy).not.toHaveBeenCalled()
+
+    server.enable()
+
+    server.handleMessage('activated', JSON.stringify({name: test}))
+
+    expect(spy).toHaveBeenCalled()
 })

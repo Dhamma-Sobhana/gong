@@ -2,6 +2,7 @@ version: "2"
 volumes:
     mqtt-config-dir:
     pulse:
+    data:
 services:
   mqtt-config:
     build:
@@ -23,6 +24,8 @@ services:
       context: ./server/server
       target: production
     command: node build/server.js
+    volumes:
+      - 'data:/data'
     ports:
       - 80:8080
   audio:

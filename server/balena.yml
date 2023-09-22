@@ -1,0 +1,23 @@
+name: gong-server
+type: sw.application
+description: >-
+  Has a MQTT server and contains logic for when and where gong should be played.
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/Dhamma-Sobhana/gong'
+data:
+  applicationEnvironmentVariables:
+    - DEVICES: 
+    - GONG_REPEAT: 4
+    - AUTOMATION: false
+    - LOCATION_ID: 
+  defaultDeviceType: raspberrypi3
+  supportedDeviceTypes:
+    - raspberry-pi
+    - raspberry-pi2
+    - raspberrypi3
+    - raspberrypi3-64
+    - raspberrypi4-64
+version: 1.0.0

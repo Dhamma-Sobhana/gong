@@ -1,0 +1,21 @@
+name: gong-remote
+type: sw.application
+description: >-
+  Has a button connected on GPIO pins of the device. Sends a message to the server when the button is activated or inactivated. Shows current status of playing from the server using a LED.
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/Dhamma-Sobhana/gong'
+data:
+  applicationEnvironmentVariables:
+    - NAME: 
+    - MQTT_SERVER: 
+  defaultDeviceType: raspberrypi3
+  supportedDeviceTypes:
+    - raspberry-pi
+    - raspberry-pi2
+    - raspberrypi3
+    - raspberrypi3-64
+    - raspberrypi4-64
+version: 1.0.0

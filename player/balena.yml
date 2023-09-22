@@ -1,0 +1,24 @@
+name: gong-player
+type: sw.application
+description: >-
+  Using balena audio block for access to the audio hardware on the device and a nodejs service for playing sound to the audio block when a message is recieved from the server. Connected to an amplifier with speakers.
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/Dhamma-Sobhana/gong'
+data:
+  applicationEnvironmentVariables:
+    - NAME: 
+    - ZONES: 
+    - MQTT_SERVER: 
+    - AUDIO_VOLUME: 100
+    - AUDIO_VOLUME_START: 50
+  defaultDeviceType: raspberrypi3
+  supportedDeviceTypes:
+    - raspberry-pi
+    - raspberry-pi2
+    - raspberrypi3
+    - raspberrypi3-64
+    - raspberrypi4-64
+version: 1.0.0

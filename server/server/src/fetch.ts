@@ -29,11 +29,16 @@ function getDateRange() {
 }
 
 /**
- * Fetch schedule for daterange and a location from dhamma.org site
+ * Fetch schedule for daterange and a location from dhamma.org site.
+ * If NODE_ENV is test or development, return test data
  * @param locationId to get courses for
  * @returns json response
  */
-async function fetchCourses(locationId:number) {
+async function fetchSchedule(locationId:number) {
+    if (['test', 'development'].includes(process.env.NODE_ENV || '')) {
+        return fakeFetchSchedule()
+    }
+
     let daterange = getDateRange()
 
     let body = `regions[]=location_${locationId}&daterange=${daterange}&page=1`
@@ -44,8 +49,7 @@ async function fetchCourses(locationId:number) {
         'body': body
     });
     
-    let data = await response.json();
-    return data
+    return await response.json();
 }
 
 /**

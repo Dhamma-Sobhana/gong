@@ -22,9 +22,7 @@ class Automation {
     constructor(callback:Function, locationId:number|undefined) {
         this.callback = callback
         this.locationId = locationId
-        this.fetch(locationId, false)
-        this.scheduleFetch()
-    }
+        this.fetch(locationId)
 
     /**
      * Schedule a job to play gong at a certain time using callback function.
@@ -53,7 +51,7 @@ class Automation {
         this.fetchJob?.cancel()
         this.fetchJob = scheduleJob(`${this.fetchTime.minute} ${this.fetchTime.hour} * * *`, () => {
             console.log(`[automation] Fetching schedule`);
-            this.fetch(this.locationId, true)
+            this.fetch(this.locationId)
         });
     }
 
@@ -87,11 +85,11 @@ class Automation {
      * @param locationId location id used in query
      * @param fake use fake data stored locally instead of hitting remote
      */
-    async fetch(locationId:number|undefined, fake:boolean = false) {
+    async fetch(locationId:number|undefined) {
         if (locationId == undefined)
             return
 
-        let courses = await fetchAndPersist(locationId, fake)
+        let courses = await fetchAndPersist(locationId)
         
         if (courses) {
             this.lastFetch = DateTime.now()

@@ -20,7 +20,6 @@ test('Schedule playing next gong', () => {
     let automation = new Automation(callback, locationId)
 
     expect(automation.job).toBeUndefined()
-    expect(automation.called).toBe(false)
     expect(callback).not.toBeCalled();
 
     let entry = new TimeTableEntry(DateTime.fromISO('2023-09-17T12:00:00'), '12:01', 'gong', ['accommodation'])
@@ -30,12 +29,11 @@ test('Schedule playing next gong', () => {
 
     jest.advanceTimersByTime(10000);
 
-    expect(automation.called).toBe(false)
+    expect(callback).not.toBeCalled();
 
     jest.advanceTimersByTime(60000);
 
     expect(automation.job).toBeDefined()
-    expect(automation.called).toBe(true)
     expect(callback).toBeCalled();
     expect(callback).toHaveBeenCalledTimes(1);
 })

@@ -11,7 +11,6 @@ class Automation {
     fetchJob?: Job = undefined
     fetchTime: DateTime = DateTime.fromISO("01:00")
     lastFetch?: DateTime
-    called: boolean = false
     callback: Function
     courses: Array<Course> = []
     locationId?: number
@@ -41,7 +40,6 @@ class Automation {
         this.job?.cancel()
         this.job = scheduleJob(entry.time.toJSDate(), () => {
             console.log(`[automation] Executing playing of gong in ${entry.location}`);
-            this.called = true
             this.callback(entry.location)
             this.schedule(this.getNextGong())
         });

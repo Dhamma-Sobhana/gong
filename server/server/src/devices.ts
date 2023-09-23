@@ -20,6 +20,11 @@ function updateDevice(data: object, devices: Array<DeviceStatus>) {
     }
 }
 
+/**
+ * Get number of devices per status
+ * @param devices list
+ * @returns object
+ */
 function aggregateDeviceStatus(devices: Array<DeviceStatus>) {
     let status = {
         ok: 0,
@@ -45,6 +50,10 @@ function aggregateDeviceStatus(devices: Array<DeviceStatus>) {
     return status
 }
 
+/**
+ * Change device status based on time since timestamp was updated
+ * @param devices list
+ */
 function updateDevicesStatus(devices: Array<DeviceStatus>) {
     for (let device of devices) {
         if (device.timestamp) {

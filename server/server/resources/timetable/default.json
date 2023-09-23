@@ -1,6 +1,4 @@
 {
-  "definition" : {
-  },
   "days": {
     "default": [
       {"time": "07:20", "type": "gong", "location": ["all"]},

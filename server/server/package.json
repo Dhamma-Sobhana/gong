@@ -10,7 +10,7 @@
   "scripts": {
     "start": "NODE_PATH=./build node build/main.js",
     "build": "./node_modules/typescript/bin/tsc -p .",
-    "dev": "DEVICES=remote,player NODE_ENV=development nodemon src/main.ts",
+    "dev": "DEVICES=remote,player AUTOMATION=true NODE_ENV=development nodemon src/main.ts",
     "test": "jest"
   },
   "author": "",

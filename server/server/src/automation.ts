@@ -24,7 +24,7 @@ class Automation {
         this.locationId = locationId
         this.fetch(locationId)
         if (automationEnabled) {
-            this.scheduleFetch()
+            this.enable()
         }
     }
 

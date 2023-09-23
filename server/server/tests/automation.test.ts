@@ -22,7 +22,7 @@ test('Schedule playing next gong', () => {
     expect(automation.job).toBeUndefined()
     expect(callback).not.toBeCalled();
 
-    let entry = new TimeTableEntry(DateTime.fromISO('2023-09-17T12:00:00'), '12:01', 'gong', ['accommodation'])
+    let entry = new TimeTableEntry(DateTime.fromISO('2023-09-17T12:00:00'), '12:01', 'gong', ['accommodation'], 'Default')
     automation.schedule(entry)
     expect(automation.job).toBeDefined()
     expect(callback).not.toBeCalled();
@@ -43,7 +43,7 @@ test('Cancel schedule', () => {
     expect(automation.job?.nextInvocation()).toBeFalsy()
     expect(callback).not.toBeCalled();
 
-    let entry = new TimeTableEntry(DateTime.fromISO('2023-09-17T12:00:00'), '12:01', 'gong', ['accommodation'])
+    let entry = new TimeTableEntry(DateTime.fromISO('2023-09-17T12:00:00'), '12:01', 'gong', ['accommodation'], 'Default')
     automation.schedule(entry)
 
     expect(callback).not.toBeCalled();

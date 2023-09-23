@@ -63,7 +63,8 @@ function getTimeTable(courseType: string, date: DateTime, courseDay?: number): T
                         date,
                         entry["time"],
                         entry["type"],
-                        entry["location"]
+                        entry["location"],
+                        timeTable.courseType
                     )
                 );
             }

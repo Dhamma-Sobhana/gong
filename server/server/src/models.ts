@@ -109,8 +109,9 @@ class TimeTableEntry {
     time: DateTime
     type: string
     location: Array<string>
+    courseType: string
 
-    constructor(date: DateTime, time: string, type: string, location: Array<string>) {
+    constructor(date: DateTime, time: string, type: string, location: Array<string>, courseType: string) {
         this.time = date.set({
             hour: parseInt(time.substring(0, 2)),
             minute: parseInt(time.substring(3, 5)),
@@ -119,6 +120,7 @@ class TimeTableEntry {
         })
         this.type = type
         this.location = location
+        this.courseType = courseType
     }
 }
 

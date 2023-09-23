@@ -44,24 +44,20 @@ function getTimeTableJson(courseType?: string): any {
  */
 function getTimeTable(courseType: string, date: DateTime, courseDay?: number): TimeTable {
     let data = getTimeTableJson(courseType);
-    let timeTable = new TimeTable(data["definition"]["type"]);
+    let timeTable = new TimeTable(courseType);
 
-    if (data.definition.endTime) timeTable.setEndTime(data.definition.endTime);
+    if (data.definition?.endTime) timeTable.setEndTime(data.definition.endTime);
 
     if (data.days) {
-        if (timeTable.type === "static") {
-            for (let entry of data.days.all) {
-                timeTable.entries.push(
-                    new TimeTableEntry(
-                        date,
-                        entry["time"],
-                        entry["type"],
-                        entry["location"]
-                    )
-                );
-            }
-        } else if (timeTable.type === "dynamic") {
-            for (let entry of data.days[`${courseDay}`]) {
+        let index
+
+        if (`${courseDay}` in data.days)
+            index = `${courseDay}`
+        else if ('default' in data.days)
+            index = 'default'
+
+        if (index) {
+            for (let entry of data.days[index]) {
                 timeTable.entries.push(
                     new TimeTableEntry(
                         date,

@@ -1,8 +1,7 @@
 {
   "definition" : {
-    "type": "static"
   },
   "days": {
-    "all": []
+    "default": []
   }
 }

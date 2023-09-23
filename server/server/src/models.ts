@@ -88,12 +88,12 @@ class Course {
 }
 
 class TimeTable {
-    type: string
+    courseType: string
     entries: Array<TimeTableEntry> = []
     endTime?: DateTime
 
-    constructor(type: string, entries?: Array<TimeTableEntry>, endTime?: DateTime) {
-        this.type = type
+    constructor(courseType: string, entries?: Array<TimeTableEntry>, endTime?: DateTime) {
+        this.courseType = courseType
         if (entries)
             this.entries = entries
         if (endTime)

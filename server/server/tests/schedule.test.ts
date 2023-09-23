@@ -24,9 +24,9 @@ test('Time table exists', () => {
 });
 
 test('Get TimeTable Json', () => {
-    expect(getTimeTableJson('unknown').days.all.length).toBe(0);
-    expect(getTimeTableJson(undefined).days.all.length).toBe(3);
-    expect(getTimeTableJson('ServicePeriod').days.all.length).toBe(3);
+    expect(getTimeTableJson('unknown').days.default.length).toBe(0);
+    expect(getTimeTableJson(undefined).days.default.length).toBe(3);
+    expect(getTimeTableJson('ServicePeriod').days.default.length).toBe(3);
     expect(getTimeTableJson('10-Day').days[11].length).toBe(2);
 });
 
@@ -35,6 +35,8 @@ test('Get TimeTable', () => {
     expect(getTimeTable('UnknownType', date, 0).entries.length).toBe(0);
 
     let timeTable = getTimeTable('ServicePeriod', date, 1);
+
+    expect(timeTable.courseType).toBe('ServicePeriod')
 
     expect(timeTable.entries.length).toBe(3);
     let entry = timeTable.entries[0];
@@ -99,6 +101,35 @@ test('Get course day by date', () => {
     expect(result).toBe(0);
 });
 
+test('Get timetable with default day on dynamic course', () => {
+    let date = DateTime.fromISO('2023-09-06T00:00:00');
+    let course = allCourses[4]
+    expect(getCourseDayByDate(course, date)).toBe(0)
+
+    let timeTable = getTimeTable('10-Day', date, getCourseDayByDate(course, date))
+
+    expect(timeTable).toBeDefined()
+    expect(timeTable.entries.length).toBe(0)
+
+    date = DateTime.fromISO('2023-09-08T00:00:00');
+    expect(getCourseDayByDate(course, date)).toBe(2)
+
+    timeTable = getTimeTable('10-Day', date, getCourseDayByDate(course, date))
+
+    expect(timeTable).toBeDefined()
+    expect(timeTable.entries[4].time.hour).toBe(14)
+    expect(timeTable.entries[4].time.minute).toBe(15)
+
+    date = DateTime.fromISO('2023-09-10T00:00:00');
+    expect(getCourseDayByDate(course, date)).toBe(4)
+
+    timeTable = getTimeTable('10-Day', date, getCourseDayByDate(course, date))
+
+    expect(timeTable).toBeDefined()
+    expect(timeTable.entries[4].time.hour).toBe(13)
+    expect(timeTable.entries[4].time.minute).toBe(50)
+})
+
 test('Merge schedules', () => {
     let date = DateTime.fromISO('2023-09-17T12:00:00');
     let courses = getCoursesByDate(allCourses, date);
@@ -116,7 +147,7 @@ test('Merge schedules', () => {
 
     expect(result.entries.length).toBe(4);
     expect(result.entries[1].time.hour).toBe(4);
-    expect(result.entries[1].time.minute).toBe(25);
+    expect(result.entries[1].time.minute).toBe(20);
     expect(result.entries[2].time.hour).toBe(14);
     expect(result.entries[2].time.minute).toBe(20);
 });
@@ -127,10 +158,10 @@ test('Get Schedule', () => {
 
     let schedule = getSchedule(allCourses, date);
 
-    expect(schedule.type).toBe('mixed');
+    expect(schedule.courseType).toBe('mixed');
     expect(schedule.entries.length).toBe(4);
     expect(schedule.entries[1].time.hour).toBe(4);
-    expect(schedule.entries[1].time.minute).toBe(25);
+    expect(schedule.entries[1].time.minute).toBe(20);
     expect(schedule.entries[2].time.hour).toBe(14);
     expect(schedule.entries[2].time.minute).toBe(20);
 });
@@ -154,7 +185,7 @@ test('Get next gong', () => {
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
     expect(result['time'].hour).toBe(4);
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
-    expect(result['time'].minute).toBe(10);
+    expect(result['time'].minute).toBe(0);
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
     expect(result['time'].second).toBe(0);
 

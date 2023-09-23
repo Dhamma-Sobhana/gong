@@ -42,7 +42,7 @@ function getTimeTableJson(courseType?: string): any {
  * @param courseDay optional if multiday course, to find file content for that day
  * @returns a timetable with with time table entries
  */
-function getTimeTable(courseType: string, date: DateTime, courseDay?: number): TimeTable {
+function getTimeTable(courseType: string, date: DateTime, courseDay: number): TimeTable {
     let data = getTimeTableJson(courseType);
     let timeTable = new TimeTable(courseType);
 
@@ -64,7 +64,8 @@ function getTimeTable(courseType: string, date: DateTime, courseDay?: number): T
                         entry["time"],
                         entry["type"],
                         entry["location"],
-                        timeTable.courseType
+                        timeTable.courseType,
+                        courseDay
                     )
                 );
             }

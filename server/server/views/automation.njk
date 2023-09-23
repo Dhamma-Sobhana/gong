@@ -28,7 +28,7 @@
         <th>Name</th>
         <th>Type</th>
         <th>Location</th>
-        <th>Course Type</th>
+        <th>Course</th>
     </tr>
 </thead>
 {% for entry in automation.getSchedule() %}
@@ -36,7 +36,7 @@
     <td>{{ entry.time.toFormat('yyyy-MM-dd HH:mm') }}</td>
     <td>{{ entry.type }}</td>
     <td>{{ entry.location }}</td>
-    <td>{{ entry.courseType }}</td>
+    <td>{{ entry.getCourse() }}</td>
 </tr>
 {% else %}
 <tr>

@@ -7,7 +7,7 @@
 </form>
 
 <h3>Next gong</h3>
-<p>{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span></p>
+<p>{% if automation.getNextGong() %}{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span>{% else %}No gong scheduled{% endif %}</p>
 
 <script>
     function updateDiff() {
@@ -35,6 +35,10 @@
     <td>{{ entry.time.toFormat('yyyy-MM-dd HH:mm') }}</td>
     <td>{{ entry.type }}</td>
     <td>{{ entry.location }}</td>
+</tr>
+{% else %}
+<tr>
+    <td>Schedule not available</td>
 </tr>
 {% endfor %}
 </table>

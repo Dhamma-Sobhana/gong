@@ -13,6 +13,7 @@ data:
     - GONG_REPEAT: 4
     - AUTOMATION: false
     - LOCATION_ID: 
+    - SENTRY_DSN:
   defaultDeviceType: raspberrypi3
   supportedDeviceTypes:
     - raspberry-pi

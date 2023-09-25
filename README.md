@@ -217,6 +217,9 @@ Format: `nnnn`
 
 ![Automation - Dhamma Location ID](/img/location-id.jpg)
 
+## SENTRY_DSN (server)
+Optional Data Source Name for error tracking using [Sentry](https://sentry.io/).
+
 # Web interface
 A basic web interface is hosted on the server device and available to check system status and enabling or disabling system and automation.
 

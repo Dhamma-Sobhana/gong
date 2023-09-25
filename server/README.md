@@ -28,6 +28,9 @@ Find by going to [Locations, Worldwide Directory](https://www.dhamma.org/en/loca
 
 Format: `nnnn`
 
+## SENTRY_DSN (server)
+Optional Data Source Name for error tracking using [Sentry](https://sentry.io/).
+
 # Local mode development
 
 If the device is set to local mode in balena cloud, push code to it like this:

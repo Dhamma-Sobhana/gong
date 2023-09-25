@@ -1,5 +1,14 @@
+import * as Sentry from "@sentry/node";
+
 import { Server } from "./server";
 import { client } from "./mqtt";
+
+if (process.env.SENTRY_DSN) {
+    console.log('[server] Sentry error handling activated')
+    Sentry.init({
+        dsn: process.env.SENTRY_DSN
+    });
+}
 
 process.env.TZ = 'Europe/Stockholm'
 

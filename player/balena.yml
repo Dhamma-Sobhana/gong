@@ -10,7 +10,7 @@ assets:
 data:
   applicationEnvironmentVariables:
     - NAME: 
-    - ZONES: 
+    - LOCATIONS: 
     - MQTT_SERVER: 
     - AUDIO_VOLUME: 100
     - AUDIO_VOLUME_START: 50
@@ -21,4 +21,4 @@ data:
     - raspberrypi3
     - raspberrypi3-64
     - raspberrypi4-64
-version: 1.0.0
+version: 1.2.0

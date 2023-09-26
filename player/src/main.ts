@@ -12,8 +12,8 @@ const pulseServer = process.env.PULSE_SERVER || 'unix:/run/pulse/pulseaudio.sock
 const client = mqtt.connect(`mqtt://${server}`);
 const audioBlock = new BalenaAudio(pulseServer)
 
-const zones = (process.env.ZONES || 'all').split(',')
+const locations = (process.env.LOCATIONS || 'all').split(',')
 
 // Instantiate player object
-console.log(`[player] Gong player starting.\n\nName: ${name}\nZones: ${zones}\nServer: ${server}`)
-const player = new Player(client, audioBlock, name, zones);
+console.log(`[player] Gong player starting.\n\nName: ${name}\nLocations: ${locations}\nServer: ${server}`)
+const player = new Player(client, audioBlock, name, locations);

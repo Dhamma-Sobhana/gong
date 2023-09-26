@@ -1,14 +1,14 @@
 /**
-* Get the zones that was received that the player also handles
-* @param {Array} playerZones Zones the player handles
-* @param {Array} messageZones Zones in the message
-* @returns {Array} Zones in both arrays or ['all'] if it was received
+* Get the locations that was received that the player also handles
+* @param playerLocations Locations the player handles
+* @param messageLocations Locations in the message
+* @returns Locations in both arrays or ['all'] if it was received
 */
-function getZones(playerZones: Array<string>, messageZones: Array<string>) {
-    if (playerZones.includes('all') || messageZones.includes('all'))
+function getLocations(playerLocations: Array<string>, messageLocations: Array<string>):Array<string> {
+    if (playerLocations.includes('all') || messageLocations.includes('all'))
         return ['all'];
 
-    return playerZones.filter((x) => messageZones.includes(x));
+    return playerLocations.filter((x) => messageLocations.includes(x));
 }
 
 /**
@@ -24,4 +24,4 @@ function parseJson(message: string) {
     }
 }
 
-export { getZones, parseJson }
+export { getLocations, parseJson }

@@ -2,7 +2,7 @@ import play from 'play-sound'
 import { MqttClient } from 'mqtt'
 import BalenaAudio from 'balena-audio'
 
-import { getZones, parseJson } from './lib'
+import { getLocations, parseJson } from './lib'
 import { Message } from './models'
 
 const playSound = play({})
@@ -20,19 +20,19 @@ class Player {
     audioBlock: BalenaAudio
     name: string
     audio: any;
-    zones: Array<string>;
+    locations: Array<string>;
 
     /**
-     * Instantiate player with zones handled, and connect to MQTT and audio service
+     * Instantiate player with locations handled, and connect to MQTT and audio service
      * @param mqtt client
-     * @param zones handled by player
+     * @param locations handled by player
      */
-    constructor(client: MqttClient, audioBlock: BalenaAudio, name: string, zones: Array<string>) {
+    constructor(client: MqttClient, audioBlock: BalenaAudio, name: string, locations: Array<string>) {
         this.client = client
         this.audioBlock = audioBlock
         this.name = name
         this.audio = undefined
-        this.zones = zones
+        this.locations = locations
 
         this.client.on('connect', () => {
             this.mqttConnect()
@@ -83,7 +83,7 @@ class Player {
         if (topic === 'ping') {
             this.sendPong()
         } else if (topic == 'play') {
-            this.playGong(data.zones, data.repeat)
+            this.playGong(data.locations, data.repeat)
         } else if (topic == 'stop') {
             if (this.audio !== undefined) {
                 this.audio.kill()
@@ -95,14 +95,14 @@ class Player {
 
     /**
      * Play gong sound and publish played message if successful
-     * @param zones to play in
+     * @param locations to play in
      * @param repeat number of times to play
      */
-    playGong = (zones: Array<string>, repeat: number) => {
-        zones = getZones(this.zones, zones)
+    playGong = (locations: Array<string>, repeat: number) => {
+        locations = getLocations(this.locations, locations)
 
-        if (zones.length === 0) {
-            console.log('[player] Zones not handled by this device')
+        if (locations.length === 0) {
+            console.log('[player] Locations not handled by this device')
             return
         }
 
@@ -112,29 +112,29 @@ class Player {
             this.audio.kill()
         }
 
-        console.log(`[player] Playing in zones '${zones}'`)
+        console.log(`[player] Playing in locations '${locations}'`)
 
-        let message = JSON.stringify(new Message(this.name, zones))
+        let message = JSON.stringify(new Message(this.name, locations))
         this.client.publish(`playing`, message);
 
         this.audioBlock.setVolume(audioVolumeStart)
 
-        this.startPlayback(zones, repeat)
+        this.startPlayback(locations, repeat)
     }
 
     /**
      * Start playback of sound
-     * @param zones where to play
+     * @param locations where to play
      * @param repeat number of times to play
      */
-    startPlayback = (zones: Array<string>, repeat: number) => {
+    startPlayback = (locations: Array<string>, repeat: number) => {
         this.audio = playSound.play('./sound/gong-8s.mp3', (err: any) => {
             if (err && err.killed) {
                 console.log(`[player] Playback stopped by server`)
             } else if (err) {
                 console.error("[player] Error: ", err)
             } else {
-                this.playBackFinished(zones, --repeat)
+                this.playBackFinished(locations, --repeat)
             }
         })
     }
@@ -142,18 +142,18 @@ class Player {
     /**
      * Called at end of playback. Increases volume after first time played.
      * Plays again or report playback finished.
-     * @param zones where to play
+     * @param locations where to play
      * @param repeat number of times left to play
      */
-    playBackFinished = (zones: Array<string>, repeat: number) => {
+    playBackFinished = (locations: Array<string>, repeat: number) => {
         this.audioBlock.setVolume(audioVolume)
 
         // Play again
         if ((this.audio != undefined) && (repeat > 0)) {
-            return this.startPlayback(zones, repeat)
+            return this.startPlayback(locations, repeat)
         }
 
-        let message = JSON.stringify(new Message(this.name, zones))
+        let message = JSON.stringify(new Message(this.name, locations))
         this.client.publish(`played`, message);
 
         console.log(`[player] Play finished`)
@@ -163,7 +163,7 @@ class Player {
      * Respond to device status request (pong)
      */
     sendPong() {
-        let message = JSON.stringify(new Message(this.name, this.zones, 'player'))
+        let message = JSON.stringify(new Message(this.name, this.locations, 'player'))
         this.client.publish(`pong`, message);
     }
 }

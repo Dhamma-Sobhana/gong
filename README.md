@@ -94,10 +94,10 @@ Example names:
 * staff-house-player
 * dhamma-hall-player
 
-### Zone
-Which zones should be affected by a play message.
+### Location
+Which locations should be affected by a play message.
 
-Configured with device variable *ZONES* in balenaCloud dashboard.
+Configured with device variable *LOCATIONS* on a player in balenaCloud dashboard.
 
 * all - Play everywhere. This should not be used in early mornings to not disturb neighbours by playing outside or waking up staff that are sleeping.
 * student-accommodation - Speakers in student accommodation houses. Should be played every time.
@@ -113,26 +113,26 @@ Request devices to send their status by publishing a *pong* message.
 Send a message telling that the device is online. Sent when device has booted and as a response to *ping* message.
 
 - name: string - Name of the device to easily identify it.
-- zones: array of zones handled by the player. (player)
+- locations: array of locations handled by the player. (player)
 - type: string - Device type: remote, player
 
 Example data:
 
     {"name": "main-house-remote", "type": "remote"}
-    {"name": "female-house-player", "zones": ["student-accommodation"], "type": "player"}
-    {"name": "main-house-player", "zones": ["student-accommodation", "outside"], "type": "player"}
+    {"name": "female-house-player", "locations": ["student-accommodation"], "type": "player"}
+    {"name": "main-house-player", "locations": ["student-accommodation", "outside"], "type": "player"}
 
 ### play (server -> player)
 Play gong sound if player is configured to handle the zone requested.
 
-- zones: array of zones.
+- locations: array of locations.
 - repeat: number of times sound should be played.
 
 Example data:
 
-    {"zones": ["all"], repeat: 6}
-    {"zones": ["student-accommodation"], repeat: 6}
-    {"zones": ["student-accommodation", "outside"], repeat: 4}
+    {"locations": ["all"], repeat: 6}
+    {"locations": ["student-accommodation"], repeat: 6}
+    {"locations": ["student-accommodation", "outside"], repeat: 4}
 
 ### playing (player -> server)
 Report that playback has started.
@@ -147,12 +147,12 @@ Example data:
 Sent after gong has been played with this data:
 
 - name: string. The name of the device.
-- zones: array of zones player played in.
+- locations: array of locations player played in.
 
 Example data:
 
-    {"name": "female-house-player", "zones": ["student-accommodation"]}
-    {"name": "main-house-player", "zones": ["student-accommodation", "outside"]}
+    {"name": "female-house-player", "locations": ["student-accommodation"]}
+    {"name": "main-house-player", "locations": ["student-accommodation", "outside"]}
 
 ### stop (server -> player, remote)
 Stop playback and update state of remotes to show that gong is not playing anymore.
@@ -190,8 +190,10 @@ IP address or hostname of server.
 ## NAME (player, remote)
 Name of the device, used for identification.
 
-## ZONES (player)
-Comma separated list of zones the player handles.
+## LOCATIONS (player)
+Comma separate locations this player handles.
+
+Example: **student-accommodation,outside**
 
 ## MORNING_TIME (server)
 Time in format `hh:mm`.
@@ -222,10 +224,12 @@ Format: `nnnn`
 Optional Data Source Name for error tracking using [Sentry](https://sentry.io/).
 
 # Automation
-The system can fetch a centers schedule for automatic plying of gong. Locally stored time table definitions is used to transfor this data into a time table for playing gong.
+The system can fetch a centers schedule for automatic plying of gong. Locally stored time table definitions are used to transform this data into a time table for playing gong.
 
 ## Time Table defintion
 Files are stored in [`server/server/resources/timetable`](https://github.com/Dhamma-Sobhana/gong/tree/main/server/server/resources/timetable) in [JSON](https://www.json.org/json-en.html) format. File name is `<raw_course_type>.json` where *<raw_course_type>* is from the fetched schedule.
+
+See [examples](#time-table-definition-examples) further down for full examples.
 
 ### Special files
 There are two special time table definition files: `default.json` and `unknown.json`
@@ -234,17 +238,15 @@ There are two special time table definition files: `default.json` and `unknown.j
 
 *unknown.json* will be used when schedule is defined but no definition exitst for that course type. This is currently set to not play any gongs at all.
 
-### definition (optional)
-
-**endTime** (optional)
+### endTime (optional)
 
 Format: `hh:mm`
 
 What time on the last day the course finishes. If set, gong from the next course will not be scheduled before this time.
 
-**Example**: A 10 day course followed by a service period. On day 11 of a 10 day course there is morning wake up at 4:00 and 4:20 and a Service period has gong for morning group sitting at 7:20. If the 10 day course definition has *endTime* set to 09:00 the morning group sitting from the Service Period will be ignored and the next gong will be at 14:20.
+**Example**: A 10 day course followed by a service period. On day 11, the closing day, of a 10 day course morning wakeup gongs are played at 4:00 and 4:20 and a Service period has gong for morning group sitting at 7:20. If the 10 day course definition has *endTime* set to 09:00 the morning group sitting from the Service Period will be ignored and the next gong will be at 14:20.
 
-Gongs on day 11 of a 10 day course:
+Gongs on closing day of a 10 day course:
 - 04:00
 - 04:20
 - 14:20
@@ -262,28 +264,29 @@ If no key with the current course day is found, default will be used.
 "4": [...]
 ```
 
-On day 0 of a course no gongs will be played. On day 1-3 gong defined by default will be played. On day 4 definition for day 4 will be used.
+On day 0, the opening day, of a course no gongs will be played. On day 1-3 the default gongs for the course will be played. On day 4 the gong defined for day 4 will be played.
 
 ### time table entry
 
 #### time
-When gong should be played.
 
 Format: `hh:mm`
 
+What time gong should be played.
+
 #### type
-What type should be played. Currently always set to `gong`.
+What type of gong sound to be played. Currently always set to `gong`.
 
 #### location
-An array of locations where the gong shoule be played. See [Zones](#zone).
+An array of locations where the gong shoule be played. See [Location](#location).
 
 **Example**:
 ```json
 { "time": "13:00", "type": "gong", "location": ["student-accommodation", "outside"] }
 ```
 
-### Examples
-#### 10-Day.json (partial)
+### Time Table definition examples
+#### 10-Day.json
 ```json
 {
   "definition" : {
@@ -301,9 +304,20 @@ An array of locations where the gong shoule be played. See [Zones](#zone).
       { "time": "17:50", "type": "gong", "location": ["all"] }
     ],
     "4" : [
-        ...
+      { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
+      { "time": "04:20", "type": "gong", "location": ["student-accommodation"] },
+      { "time": "07:50", "type": "gong", "location": ["all"] },
+      { "time": "13:00", "type": "gong", "location": ["student-accommodation", "outside"] },
+      { "time": "13:50", "type": "gong", "location": ["all"] },
+      { "time": "17:50", "type": "gong", "location": ["all"] }
     ],
-    ...
+    "10" : [
+      { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
+      { "time": "04:20", "type": "gong", "location": ["student-accommodation"] },
+      { "time": "07:50", "type": "gong", "location": ["all"] },
+      { "time": "14:20", "type": "gong", "location": ["all"] },
+      { "time": "17:50", "type": "gong", "location": ["all"] }
+    ],
     "11" : [
       { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
       { "time": "04:20", "type": "gong", "location": ["student-accommodation"] }

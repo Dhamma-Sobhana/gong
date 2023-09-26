@@ -165,7 +165,7 @@ class Server {
                 break;
             case 'played':
                 this.gongPlaying = this.played(this.gongPlaying)
-                data.zones = undefined // To not overwrite zones in device list
+                data.locations = undefined // To not overwrite locations in device list
                 break;
             default:
                 break;

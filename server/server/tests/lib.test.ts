@@ -1,34 +1,34 @@
-import { getZones } from '../src/lib'
+import { getLocations } from '../src/lib'
 
-test('get all zones', () => {
-    let zonesHandled = ['all']
-    let zonesMessage = ['all']
+test('get all locations', () => {
+    let locationsHandled = ['all']
+    let locationsMessage = ['all']
 
-    let result = getZones(zonesHandled, zonesMessage)
+    let result = getLocations(locationsHandled, locationsMessage)
     expect(result).toStrictEqual(['all'])
 
-    zonesMessage = ['female-house']
-    result = getZones(zonesHandled, zonesMessage)
+    locationsMessage = ['female-house']
+    result = getLocations(locationsHandled, locationsMessage)
     expect(result).toStrictEqual(['all'])
 
-    zonesHandled = ['female-house']
-    zonesMessage = ['all']
-    result = getZones(zonesHandled, zonesMessage)
+    locationsHandled = ['female-house']
+    locationsMessage = ['all']
+    result = getLocations(locationsHandled, locationsMessage)
     expect(result).toStrictEqual(['all'])
 })
 
-test('get selected zones', () => {
-    let zonesHandled = ['female-house', 'male-house']
-    let zonesMessage = ['female-house', 'male-house']
+test('get selected locations', () => {
+    let locationsHandled = ['female-house', 'male-house']
+    let locationsMessage = ['female-house', 'male-house']
 
-    let result = getZones(zonesHandled, zonesMessage)
+    let result = getLocations(locationsHandled, locationsMessage)
     expect(result).toStrictEqual(['female-house', 'male-house'])
 
-    zonesMessage = ['female-house']
-    result = getZones(zonesHandled, zonesMessage)
+    locationsMessage = ['female-house']
+    result = getLocations(locationsHandled, locationsMessage)
     expect(result).toStrictEqual(['female-house'])
 
-    zonesMessage = ['outside']
-    result = getZones(zonesHandled, zonesMessage)
+    locationsMessage = ['outside']
+    result = getLocations(locationsHandled, locationsMessage)
     expect(result).toStrictEqual([])
 })

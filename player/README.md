@@ -28,10 +28,10 @@ The device name.
 
 Example: **female-house-player**
 
-## ZONES
-Array of zones this player handles.
+## LOCATIONS
+Comma separate locations this player handles.
 
-Example: **["accommodation", "outside"]**
+Example: **student-accommodation,outside**
 
 ## MQTT_SERVER
 IP or hostname of MQTT server.
@@ -65,7 +65,7 @@ To prevent static noise from speakers a relay can be used to keep the circuit op
 
 If using a device with GPIO a simple relay can be connected to this.
 
-This can also be used to handle more than one area using one device by opening circuits based on zones received.
+This can also be used to handle more than one area using one device by opening circuits based on locations received.
 
 ## DAC (digital-to-analogue converter)
 

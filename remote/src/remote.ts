@@ -185,7 +185,7 @@ class Remote {
     }
 
     sendPong() {
-        let message = JSON.stringify(new Message(name, undefined, 'remote'))
+        let message = JSON.stringify(new Message(name, 'remote'))
         this.client.publish(`pong`, message);
     }
 }

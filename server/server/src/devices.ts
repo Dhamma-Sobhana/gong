@@ -15,7 +15,7 @@ function updateDevice(data: object, devices: Array<DeviceStatus>) {
 
     for (let device of devices) {
         if (device.name == message.name) {
-            device.update(message.type, message.zones);
+            device.update(message.type, message.locations);
         }
     }
 }

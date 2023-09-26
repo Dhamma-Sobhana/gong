@@ -15,7 +15,7 @@
     <tr>
         <td>{{ device.name }}</td>
         <td>{{ device.type or '-'  }}</td>
-        <td>{{ device.zones or '-'  }}</td>
+        <td>{{ device.locations or '-'  }}</td>
         <td>{{ device.status or '-'  }}</td>
         <td>{% if device.timestamp %}{{ device.timestamp.toFormat('yyyy-MM-dd HH:mm:ss') }}{% else %}-{% endif %}</td>
     </tr>

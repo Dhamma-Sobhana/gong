@@ -46,7 +46,7 @@ test('Update device list', () => {
     let data = {
         "name": "player",
         "type": "player",
-        "zones": ["accommodation", "outside"]
+        "locations": ["accommodation", "outside"]
     }
 
     updateDevice(data, server.devices)

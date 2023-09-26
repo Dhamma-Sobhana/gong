@@ -220,6 +220,99 @@ Format: `nnnn`
 ## SENTRY_DSN (server)
 Optional Data Source Name for error tracking using [Sentry](https://sentry.io/).
 
+# Automation
+The system can fetch a centers schedule for automatic plying of gong. Locally stored time table definitions is used to transfor this data into a time table for playing gong.
+
+## Time Table defintion
+Files are stored in [`server/server/resources/timetable`](https://github.com/Dhamma-Sobhana/gong/tree/main/server/server/resources/timetable) in [JSON](https://www.json.org/json-en.html) format. File name is `<raw_course_type>.json` from the fetched schedule
+
+### definition (optional)
+
+**endTime** (optional)
+
+Format: `hh:mm`
+
+What time on the last day the course finishes. If set, gong from the next course will not scheduled before this time.
+
+**Example**: A 10 day course followed by a service period. On day 11 of a 10 day course there is morning wake up at 4:00 and 4:20 and a Service period has gong for morning group sitting at 7:20. If the 10 day course definition has *endTime* set to 09:00 the morning group sitting from the Service Period will be ignored and the next gong will be at 14:20.
+
+Gongs on day 11 of a 10 day course:
+- 04:00
+- 04:20
+- 14:20
+- 19:20
+
+### days
+An object with either `default` or course day numbers as key. Value is an array of time table entries, see below.
+
+**Example**:
+```json
+"0" : [],
+"default" : [...]
+"4": [...]
+```
+
+### time table entry
+
+#### time
+When gong should be played.
+
+Format: `hh:mm`
+
+#### type
+What type should be played. Currently always set to `gong`.
+
+#### location
+An array of locations where the gong shoule be played. See [Zones](#zone).
+
+**Example**:
+```json
+{ "time": "13:00", "type": "gong", "location": ["student-accommodation", "outside"] }
+```
+
+### Examples
+#### 10-Day.json (partial)
+```json
+{
+  "definition" : {
+    "endTime": "09:00"
+  },
+  "days" : {
+    "0" : [],
+    "default" : [
+      { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
+      { "time": "04:20", "type": "gong", "location": ["student-accommodation"] },
+      { "time": "07:50", "type": "gong", "location": ["all"] },
+      { "time": "13:00", "type": "gong", "location": ["student-accommodation", "outside"] },
+      { "time": "14:15", "type": "gong", "location": ["student-accommodation", "outside"] },
+      { "time": "14:23", "type": "gong", "location": ["all"] },
+      { "time": "17:50", "type": "gong", "location": ["all"] }
+    ],
+    "4" : [
+        ...
+    ],
+    ...
+    "11" : [
+      { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
+      { "time": "04:20", "type": "gong", "location": ["student-accommodation"] }
+    ]
+  }
+}
+```
+
+#### ServicePeriod.json
+```json
+{
+  "days": {
+    "default": [
+      {"time": "07:20", "type": "gong", "location": ["all"]},
+      {"time": "14:20", "type": "gong", "location": ["all"]},
+      {"time": "19:20", "type": "gong", "location": ["all"]}
+    ]
+  }
+}
+```
+
 # Web interface
 A basic web interface is hosted on the server device and available to check system status and enabling or disabling system and automation.
 

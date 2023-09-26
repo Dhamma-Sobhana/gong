@@ -13,6 +13,7 @@ A system for playing gong sounds in multiple locations at meditation centers. Ma
 * [Architecture](#architecture)
 * [Communication](#communication)
 * [Configuration](#configuration)
+* [Automation](#automation)
 * [Web interface](#web-interface)
 * [Development](#development)
 * [Deployment](#deployment)
@@ -224,7 +225,14 @@ Optional Data Source Name for error tracking using [Sentry](https://sentry.io/).
 The system can fetch a centers schedule for automatic plying of gong. Locally stored time table definitions is used to transfor this data into a time table for playing gong.
 
 ## Time Table defintion
-Files are stored in [`server/server/resources/timetable`](https://github.com/Dhamma-Sobhana/gong/tree/main/server/server/resources/timetable) in [JSON](https://www.json.org/json-en.html) format. File name is `<raw_course_type>.json` from the fetched schedule
+Files are stored in [`server/server/resources/timetable`](https://github.com/Dhamma-Sobhana/gong/tree/main/server/server/resources/timetable) in [JSON](https://www.json.org/json-en.html) format. File name is `<raw_course_type>.json` where *<raw_course_type>* is from the fetched schedule.
+
+### Special files
+There are two special time table definition files: `default.json` and `unknown.json`
+
+*default.json* will be used for periods when no schedule is defined, for example between courses.
+
+*unknown.json* will be used when schedule is defined but no definition exitst for that course type. This is currently set to not play any gongs at all.
 
 ### definition (optional)
 
@@ -232,7 +240,7 @@ Files are stored in [`server/server/resources/timetable`](https://github.com/Dha
 
 Format: `hh:mm`
 
-What time on the last day the course finishes. If set, gong from the next course will not scheduled before this time.
+What time on the last day the course finishes. If set, gong from the next course will not be scheduled before this time.
 
 **Example**: A 10 day course followed by a service period. On day 11 of a 10 day course there is morning wake up at 4:00 and 4:20 and a Service period has gong for morning group sitting at 7:20. If the 10 day course definition has *endTime* set to 09:00 the morning group sitting from the Service Period will be ignored and the next gong will be at 14:20.
 
@@ -245,12 +253,16 @@ Gongs on day 11 of a 10 day course:
 ### days
 An object with either `default` or course day numbers as key. Value is an array of time table entries, see below.
 
+If no key with the current course day is found, default will be used.
+
 **Example**:
 ```json
 "0" : [],
 "default" : [...]
 "4": [...]
 ```
+
+On day 0 of a course no gongs will be played. On day 1-3 gong defined by default will be played. On day 4 definition for day 4 will be used.
 
 ### time table entry
 

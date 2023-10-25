@@ -1,9 +1,19 @@
+import * as Sentry from "@sentry/node";
+
 import { randomUUID } from 'crypto'
 
 import { Gpio } from 'onoff'
 import mqtt from "mqtt"
 
 import { Remote } from './remote'
+
+if (process.env.SENTRY_DSN) {
+    console.log('[remote] Sentry error handling activated')
+    Sentry.init({
+        dsn: process.env.SENTRY_DSN,
+        environment: process.env.NODE_ENV || "production",
+    });
+}
 
 const name = process.env.NAME || randomUUID()
 const server = process.env.MQTT_SERVER || 'localhost'

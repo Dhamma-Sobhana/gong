@@ -11,10 +11,11 @@
   "scripts": {
     "start": "NODE_PATH=./build node build/main.js",
     "build": "./node_modules/typescript/bin/tsc -p .",
-    "dev": "ts-node --esm src/main.ts",
+    "dev": "NODE_ENV=developement ts-node --esm src/main.ts",
     "test": "jest"
   },
   "dependencies": {
+    "@sentry/node": "^7.70.0",
     "mqtt": "^4.3.7",
     "onoff": "~6.0.3"
   },

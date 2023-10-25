@@ -26,6 +26,7 @@ class Remote {
     pressTime: number = Date.now()
     timeout?: NodeJS.Timeout = undefined
     toggleTime: number = 0
+    error?: NodeJS.Timeout = undefined
 
     constructor(client: MqttClient, ledGpio: Gpio, buttonGpio: Gpio) {
         this.client = client
@@ -35,13 +36,27 @@ class Remote {
         this.led.writeSync(this.toggle);
         this.button.watch((err, value) => this.buttonChanged(err, value))
 
+        // Blink led until connected
+        this.errorMode()
+
         this.client.on('connect', () => {
+            this.cancelErrorMode()
             this.mqttConnect()
         })
 
         this.client.on('message', (topic: string, message: Buffer) => {
             this.mqttMessage(topic, message.toString())
+            this.resetWatchdog()
         })
+
+        this.client.on('error', err => {
+            this.errorMode()
+        })
+
+        this.client.on('reconnect', () => {
+            this.errorMode()
+        })
+
     }
 
     /**
@@ -194,6 +209,27 @@ class Remote {
         this.led.writeSync(this.toggle);
     }
 
+    /**
+     * Cancel blinking LED
+     */
+    cancelErrorMode() {
+        if (this.error !== undefined) {
+            clearInterval(this.error)
+            this.error = undefined
+        }
+
+        this.active = 0
+        this.led.writeSync(this.active)
+    }
+
+    /**
+     * Blink LED every second
+     */
+    errorMode() {
+        if (this.error == undefined) {
+            this.error = setInterval(this.toggleLed, 1000)
+        }
+    }
 }
 
 export { Remote }

@@ -63,7 +63,7 @@ class Remote {
      * @param message MQTT message, if any
      */
     mqttMessage = (topic: string, message: string) => {
-        console.debug(`[mqtt] < ${topic}: ${message}`)
+        //console.debug(`[mqtt] < ${topic}: ${message}`)
 
         // Parse message to JSON, if any
         let data = parseJson(message)
@@ -102,10 +102,10 @@ class Remote {
 
             this.timeout = setTimeout(this.alternate, this.toggleTime);
             this.led.writeSync(Gpio.HIGH);
-            console.log('[remote] Button pressed');
+            //console.log('[remote] Button pressed');
         } else { // Button released
             this.reset();
-            console.log('[remote] Button released');
+            //console.log('[remote] Button released');
             this.led.writeSync(this.active);
         }
     }

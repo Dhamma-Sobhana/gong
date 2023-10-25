@@ -6,7 +6,8 @@ import { client } from "./mqtt";
 if (process.env.SENTRY_DSN) {
     console.log('[server] Sentry error handling activated')
     Sentry.init({
-        dsn: process.env.SENTRY_DSN
+        dsn: process.env.SENTRY_DSN,
+        environment: process.env.NODE_ENV || "production",
     });
 }
 

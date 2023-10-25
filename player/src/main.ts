@@ -1,9 +1,18 @@
 import { randomUUID } from 'crypto'
 
+import * as Sentry from "@sentry/node";
 import mqtt from "mqtt"
 import BalenaAudio from 'balena-audio'
 
 import { Player } from "./player";
+
+if (process.env.SENTRY_DSN) {
+    console.log('[player] Sentry error handling activated')
+    Sentry.init({
+        dsn: process.env.SENTRY_DSN,
+        environment: process.env.NODE_ENV || "production",
+    });
+}
 
 const name = process.env.NAME || randomUUID()
 const server = process.env.MQTT_SERVER || 'localhost'

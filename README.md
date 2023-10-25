@@ -109,6 +109,8 @@ Configured with device variable *LOCATIONS* on a player in balenaCloud dashboard
 ### ping (server -> player, remote)
 Request devices to send their status by publishing a *pong* message.
 
+Published by the server once every 60 seconds.
+
 ### pong (player, remote -> server)
 Send a message telling that the device is online. Sent when device has booted and as a response to *ping* message.
 

@@ -1,7 +1,6 @@
 version: "2"
 volumes:
     mqtt-config-dir:
-    pulse:
     data:
 services:
   mqtt-config:
@@ -23,8 +22,8 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
-      #target: development # For local push
-      target: production # For deployment
+      # #target: development # For local push
+      # target: production # For deployment
     volumes:
       - 'data:/data'
     ports:

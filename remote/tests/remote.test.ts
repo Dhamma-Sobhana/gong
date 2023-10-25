@@ -47,12 +47,10 @@ beforeEach(() => {
 
 afterEach(() => {
     mockfs.restore()
-    clearTimeout(remote.timeout);
+    remote.destroy()
 })
 
 test('Player instance', () => {
-    let remote = new Remote(client, led, button)
-
     expect(remote).toBeDefined()
 
     expect(clientOnSpy.called).toBe(true)

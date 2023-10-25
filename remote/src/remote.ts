@@ -66,6 +66,10 @@ class Remote {
         this.resetWatchdog()
     }
 
+    destroy() {
+        clearInterval(this.timeout)
+        clearInterval(this.watchdog)
+        clearInterval(this.error)
     }
 
     /**
@@ -103,8 +107,12 @@ class Remote {
         }
     }
 
+    /**
+     * Send activated message to server
+     */
     sendButtonState = () => {
         let message = JSON.stringify(new Message(name))
+       
         this.client.publish('activated', message);
     }
 

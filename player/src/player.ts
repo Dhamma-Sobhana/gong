@@ -75,7 +75,7 @@ class Player {
      * @param message MQTT message, if any
      */
     mqttMessage = (topic: string, message: string) => {
-        console.debug(`[mqtt] < ${topic}: ${message}`)
+        //console.debug(`[mqtt] < ${topic}: ${message}`)
 
         // Parse message to JSON, if any
         let data = parseJson(message)

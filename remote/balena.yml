@@ -11,6 +11,7 @@ data:
   applicationEnvironmentVariables:
     - NAME: 
     - MQTT_SERVER: 
+    - SENTRY_DSN:
   defaultDeviceType: raspberrypi3
   supportedDeviceTypes:
     - raspberry-pi
@@ -18,4 +19,4 @@ data:
     - raspberrypi3
     - raspberrypi3-64
     - raspberrypi4-64
-version: 1.0.0
+version: 1.3.0

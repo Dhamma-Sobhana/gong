@@ -1,6 +1,6 @@
 {
   "name": "gong-server",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "Server for connecting remote and player for playing gong sounds",
   "main": "main.js",
   "repository": {

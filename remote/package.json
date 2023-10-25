@@ -1,7 +1,7 @@
 {
   "name": "gong-remote",
   "description": "A LED push button that controls and show status of gong playback",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "main": "build/main.js",
   "license": "MIT",
   "repository": {

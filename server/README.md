@@ -35,6 +35,6 @@ Optional Data Source Name for error tracking using [Sentry](https://sentry.io/).
 
 If the device is set to local mode in balena cloud, push code to it like this:
 
-    balena push <device_ip> --env DEVICES=<devices,list> --env LOCATION_ID=<id> --env AUTOMATION=<true/false>
+    balena push <device_ip> --env DEVICES=<devices,list> --env LOCATION_ID=<id> --env AUTOMATION=<true/false> --env NODE_ENV=development
     
-    balena push 10.0.0.70 --env DEVICES=remote,player --env LOCATION_ID=1392 --env AUTOMATION=true
+    balena push 10.0.0.70 --env DEVICES=remote,player --env LOCATION_ID=1392 --env AUTOMATION=true --env NODE_ENV=development

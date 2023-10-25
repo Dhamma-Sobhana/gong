@@ -31,6 +31,6 @@ Default: **3**
 
 If the device is set to local mode in balena cloud, push code to it like this:
 
-    balena push <device_ip> --env MQTT_SERVER=<server_ip> --env NAME=<device_name>
+    balena push <device_ip> --env MQTT_SERVER=<server_ip> --env NAME=<device_name> --env NODE_ENV=development
     
-    balena push 10.0.0.72 --env MQTT_SERVER=10.0.0.70 --env NAME=remote
+    balena push 10.0.0.72 --env MQTT_SERVER=10.0.0.70 --env NAME=remote --env NODE_ENV=development

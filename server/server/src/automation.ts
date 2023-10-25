@@ -23,7 +23,7 @@ class Automation {
     constructor(callback:Function, locationId:number|undefined, automationEnabled:boolean = false) {
         this.callback = callback
         this.locationId = locationId
-        this.fetch(locationId)
+        
         if (automationEnabled) {
             this.enable()
         }
@@ -72,7 +72,7 @@ class Automation {
      * Enable or disable automation and schedule next gong
      * @param enable optional set to false to diasable automation
      */
-    enable(enable?: boolean) {
+    async enable(enable?: boolean) {
         if (enable !== undefined && enable === false) {
             this.enabled = false
             console.log('[automation] Automation disabled')
@@ -80,6 +80,7 @@ class Automation {
         } else {
             this.enabled = true
             console.log('[automation] Automation enabled')
+            await this.fetch(this.locationId)
             this.schedule(this.getNextGong())
             this.scheduleFetch()
         }
@@ -88,7 +89,6 @@ class Automation {
     /**
      * Fetch courses from remote service, do sanity check, parse data and save result
      * @param locationId location id used in query
-     * @param fake use fake data stored locally instead of hitting remote
      */
     async fetch(locationId:number|undefined) {
         if (locationId == undefined)

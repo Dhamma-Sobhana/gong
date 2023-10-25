@@ -21,6 +21,8 @@ services:
       MQTT_SERVER: "${MQTT_SERVER}"
       NAME: "${PLAYER_NAME}"
       PULSE_SERVER: "unix:/run/pulse/pulseaudio.socket"
+    labels:
+      io.balena.features.dbus: '1'
     volumes:
       - 'pulse:/run/pulse'
     depends_on:

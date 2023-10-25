@@ -10,6 +10,8 @@ const EventEmitter = require('events').EventEmitter;
 class Client extends EventEmitter { }
 class Audio extends BalenaAudio { }
 
+let player: Player
+
 let client: MqttClient;
 let audio: BalenaAudio
 
@@ -30,9 +32,15 @@ beforeAll(() => {
     audioSetVolumeSpy = sinon.stub(audio, 'setVolume').resolves()
 });
 
-test('Player instance', async () => {
-    let player = await new Player(client, audio, "player", ["outside"])
+beforeEach(() => {
+    player = new Player(client, audio, "player", ["outside"])
+})
 
+afterEach(() => {
+    player.destroy()
+})
+
+test('Player instance', async () => {
     expect(player).toBeDefined()
 
     expect(clientOnSpy.called).toBe(true)

@@ -1,3 +1,7 @@
+import { exec } from "child_process";
+
+import * as Sentry from "@sentry/node";
+
 import { MqttClient } from 'mqtt'
 import { BinaryValue, Gpio } from 'onoff'
 
@@ -26,6 +30,7 @@ class Remote {
     pressTime: number = Date.now()
     timeout?: NodeJS.Timeout = undefined
     toggleTime: number = 0
+    watchdog?: NodeJS.Timeout
     error?: NodeJS.Timeout = undefined
 
     constructor(client: MqttClient, ledGpio: Gpio, buttonGpio: Gpio) {
@@ -56,6 +61,10 @@ class Remote {
         this.client.on('reconnect', () => {
             this.errorMode()
         })
+
+
+        this.resetWatchdog()
+    }
 
     }
 
@@ -229,6 +238,34 @@ class Remote {
         if (this.error == undefined) {
             this.error = setInterval(this.toggleLed, 1000)
         }
+    }
+
+    /**
+     * Watchdog that unless reset, will restart the device if no messages have been
+     * received 10 minutes. Will hopefully fix some network issues
+     */
+    resetWatchdog = () => {
+        clearTimeout(this.watchdog)
+        this.watchdog = setTimeout( async () => {
+            let message = "[remote] No message received in 10 minutes, resetting device"
+            console.error(message)
+            Sentry.captureMessage(message)
+            await Sentry.flush()
+            
+            exec('DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket \
+                dbus-send \
+                --system \
+                --print-reply \
+                --dest=org.freedesktop.systemd1 \
+                /org/freedesktop/systemd1 \
+                org.freedesktop.systemd1.Manager.Reboot', (err, output) => {
+                    if (err) {
+                        console.error("Failed to reboot device")
+                    } else {
+                        console.log("Device rebooting")
+                    }
+                })
+        }, 10*60*1000)
     }
 }
 

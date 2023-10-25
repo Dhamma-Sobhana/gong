@@ -176,8 +176,7 @@ class Remote {
         }
 
         // Blink led
-        this.toggleState();
-        this.led.writeSync(this.toggle);
+        this.toggleLed()
         this.updateToggleTime();
         this.timeout = setTimeout(this.alternate, this.toggleTime);
     }
@@ -186,6 +185,15 @@ class Remote {
         let message = JSON.stringify(new Message(name, 'remote'))
         this.client.publish(`pong`, message);
     }
+
+    /**
+     * Toggle LED
+     */
+    toggleLed = () => {
+        this.toggleState();
+        this.led.writeSync(this.toggle);
+    }
+
 }
 
 export { Remote }

@@ -163,16 +163,14 @@ class Remote {
 
         if (Date.now() > (this.pressTime + threashold)) {
             if (this.active) {
-                console.log('State deactivated');
-                this.active = 0;
+                console.log('[remote] State deactivated');
             } else {
-                console.log('State activated');
-                this.active = 1;
+                console.log('[remote] State activated');
             }
 
             this.sendButtonState();
 
-            this.led.writeSync(this.active);
+            this.led.writeSync(0);
             clearTimeout(this.timeout);
             return;
         }

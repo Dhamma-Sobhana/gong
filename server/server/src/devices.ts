@@ -1,6 +1,7 @@
+import * as Sentry from "@sentry/node";
+
 import { DateTime } from "luxon";
 import { Status, DeviceStatus, Message } from "./models";
-
 
 /**
  * Update device list
@@ -57,12 +58,18 @@ function aggregateDeviceStatus(devices: Array<DeviceStatus>) {
 function updateDevicesStatus(devices: Array<DeviceStatus>) {
     for (let device of devices) {
         if (device.timestamp) {
-            if ((DateTime.now() >= device.timestamp.plus({minutes: 60})))
+            if ((DateTime.now() >= device.timestamp.plus({minutes: 10}))) {
+                if (device.status !== Status.Failed)
+                    Sentry.captureMessage(`Device failed. Name: ${device.name}, Type: ${device.type}`)
+
                 device.updateStatus(Status.Failed)
-            else if ((DateTime.now() >= device.timestamp.plus({minutes: 10})))
+            }
+            else if ((DateTime.now() >= device.timestamp.plus({minutes: 2}))) {
                 device.updateStatus(Status.Warning)
-            else if ((DateTime.now() < device.timestamp.plus({minutes: 10})))
+            }
+            else {
                 device.updateStatus(Status.OK)   
+            }
         }
     }
 }

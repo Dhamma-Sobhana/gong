@@ -153,7 +153,7 @@ class Server {
      * @param message if any, in JSON format
      */
     handleMessage = (topic: string, message: string) => {
-        console.debug(`[mqtt] < ${topic}: ${message}`)
+        //console.debug(`[mqtt] < ${topic}: ${message}`)
 
         // Parse message to JSON, if any
         let data = parseJson(message)

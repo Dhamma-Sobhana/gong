@@ -37,12 +37,12 @@ test('Update status based on time', () => {
 
     expect(devices[0].status).toBe(Status.OK)
 
-    jest.setSystemTime(DateTime.now().plus({minutes: 10}).toJSDate());
+    jest.setSystemTime(DateTime.now().plus({minutes: 2}).toJSDate());
 
     updateDevicesStatus(devices)
     expect(devices[0].status).toBe(Status.Warning)
 
-    jest.setSystemTime(DateTime.now().plus({minutes: 60}).toJSDate());
+    jest.setSystemTime(DateTime.now().plus({minutes: 10}).toJSDate());
 
     updateDevicesStatus(devices)
     expect(devices[0].status).toBe(Status.Failed)

@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node";
 import { scheduleJob, Job } from 'node-schedule'
 import { DateTime } from 'luxon';
 
@@ -107,6 +108,7 @@ class Automation {
                 console.log(`[automation] Fetched schedule for ${this.courses.length} courses from disk cache`)
             } else {
                 console.log(`[automation] ERROR: Failed to fetch schedule from both remote server and disk cache`)
+                Sentry.captureMessage(`Failed to fetch courses from remote and disk cache`)
             }
         }
     }

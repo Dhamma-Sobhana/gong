@@ -1,6 +1,7 @@
 const fs = require('fs');
 import path from 'path';
 
+import * as Sentry from "@sentry/node";
 import { DateTime } from 'luxon'
 import fetch from 'node-fetch-cache';
 
@@ -90,8 +91,9 @@ async function fetchAndPersist(locationId:number) {
 
     try {
         schedule = await fetchSchedule(locationId)
-    } catch {
+    } catch (err) {
         console.log('[automation] Failed to fetch schedule')
+        Sentry.captureException(err)
     }
 
     if (('total_rows' in schedule && schedule.total_rows > 0) && (schedule.courses[0].location.id == locationId)) {

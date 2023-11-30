@@ -48,7 +48,7 @@ class Player {
             this.resetWatchdog()
         })
 
-        this.setupAudio()
+        this.audioBlock.listen()
 
         console.log('[mqtt] Connecting to MQTT server..')
 
@@ -62,9 +62,10 @@ class Player {
     /**
      * Setup connection to audio block to allow volume to be changed during runtime
      */
-    setupAudio = async () => {
-        await this.audioBlock.listen()
-        await this.audioBlock.setVolume(audioVolumeStart)
+    setVolume = async (audioVolume:number) => {
+        if (!this.audioBlock.connected)
+            await this.audioBlock.connectWithRetry()
+        await this.audioBlock.setVolume(audioVolume)
     }
 
     /**
@@ -110,7 +111,7 @@ class Player {
      * @param locations to play in
      * @param repeat number of times to play
      */
-    playGong = (locations: Array<string>, repeat: number) => {
+    playGong = async (locations: Array<string>, repeat: number) => {
         locations = getLocations(this.locations, locations)
 
         if (locations.length === 0) {
@@ -129,7 +130,7 @@ class Player {
         let message = JSON.stringify(new Message(this.name, locations))
         this.client.publish(`playing`, message);
 
-        this.audioBlock.setVolume(audioVolumeStart)
+        await this.setVolume(audioVolumeStart)
 
         this.startPlayback(locations, repeat)
     }
@@ -157,8 +158,8 @@ class Player {
      * @param locations where to play
      * @param repeat number of times left to play
      */
-    playBackFinished = (locations: Array<string>, repeat: number) => {
-        this.audioBlock.setVolume(audioVolume)
+    playBackFinished = async (locations: Array<string>, repeat: number) => {
+        await this.setVolume(audioVolume)
 
         // Play again
         if ((this.audio != undefined) && (repeat > 0)) {

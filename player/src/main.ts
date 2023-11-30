@@ -19,7 +19,7 @@ const server = process.env.MQTT_SERVER || 'localhost'
 const pulseServer = process.env.PULSE_SERVER || 'unix:/run/pulse/pulseaudio.socket'
 
 const client = mqtt.connect(`mqtt://${server}`);
-const audioBlock = new BalenaAudio(pulseServer)
+const audioBlock = new BalenaAudio(pulseServer, false, 'gong')
 
 const locations = (process.env.LOCATIONS || 'all').split(',')
 

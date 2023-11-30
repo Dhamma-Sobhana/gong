@@ -45,3 +45,7 @@ function formatTimeTillNextGong(nextGong) {
     let future = DateTime.fromISO(nextGong)
     return future.diff(now, ['hours', 'minutes', 'seconds']).toFormat("hh:mm:ss")
 }
+
+function tickSystemTime(currentTime) {
+    return DateTime.fromISO(currentTime).plus({seconds: 1})
+}

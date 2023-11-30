@@ -22,6 +22,10 @@
         <td>{% if enabled %}🟢 ON{% else %}🔴 OFF{% endif %}</td>
       </tr>
       <tr>
+        <th>System time</th>
+        <td><span id="systemTime">-</span></td>
+      </tr>
+      <tr>
         <th>Automation</th>
         <td>{% if automation.enabled %}🟢 ON{% else %}🔴 OFF{% endif %}</td>
       </tr>
@@ -45,6 +49,15 @@
       </tr>
     </tbody>
   </table>
+  <script>
+      let systemTime = "{{ system_time }}";
+      function updateSystemTime() {
+          systemTime = tickSystemTime(systemTime)
+          var elements = document.getElementById('systemTime').textContent = systemTime.toFormat('yyyy-MM-dd HH:mm:ss');
+      }
+
+      setInterval(updateSystemTime, 1000)
+  </script>
   {% if enabled %}
   <form action="/enable" method="post">
     <button type="submit" class="red">Disable</button>

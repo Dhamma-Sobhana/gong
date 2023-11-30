@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { DateTime } from "luxon";
 
 import { DeviceStatus, PlayMessage } from "./models"
 import { parseJson } from './lib'
@@ -39,7 +40,15 @@ class Server {
         })
 
         app.get('/', (req: Request, res: Response) => {
-            res.render('index.njk', { enabled: this.enabled, devices: this.devices, device_status: aggregateDeviceStatus(this.devices), playing: this.gongPlaying, log: logArray.slice(), automation: this.automation })
+            res.render('index.njk', {
+                enabled: this.enabled,
+                devices: this.devices,
+                device_status: aggregateDeviceStatus(this.devices),
+                playing: this.gongPlaying,
+                log: logArray.slice(),
+                automation: this.automation,
+                system_time: DateTime.now()
+            })
         })
 
         app.post('/enable', (req: Request, res: Response) => {
@@ -78,6 +87,7 @@ class Server {
         }, 60000)
 
         console.log(`[server] Gong server starting. Required devices: ${this.devices}`)
+        console.log(`[server] System time: ${DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss')}`)
     }
 
     /**

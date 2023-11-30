@@ -24,6 +24,8 @@ services:
       dockerfile: Dockerfile
       # #target: development # For local push
       # target: production # For deployment
+    labels:
+      io.balena.features.dbus: '1'
     volumes:
       - 'data:/data'
     ports:

@@ -1,3 +1,7 @@
+import { exec } from "child_process";
+
+import * as Sentry from "@sentry/node";
+
 import { Request, Response } from 'express';
 import { DateTime } from "luxon";
 
@@ -20,6 +24,7 @@ class Server {
     devices: Array<DeviceStatus> = []
     automation: Automation
     deviceStatusTimer: NodeJS.Timer
+    watchdog?: NodeJS.Timeout
 
     /**
      * 
@@ -37,6 +42,7 @@ class Server {
 
         client.on('message', (topic: string, message: object) => {
             this.handleMessage(topic, message.toString())
+            this.resetWatchdog()
         })
 
         app.get('/', (req: Request, res: Response) => {
@@ -88,6 +94,8 @@ class Server {
 
         console.log(`[server] Gong server starting. Required devices: ${this.devices}`)
         console.log(`[server] System time: ${DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss')}`)
+
+        this.resetWatchdog()
     }
 
     /**
@@ -183,6 +191,34 @@ class Server {
 
         // Update device list based on message
         updateDevice(data, this.devices)
+    }
+
+    /**
+     * Watchdog that unless reset, will restart the device if no messages have been
+     * received 10 minutes. Will hopefully fix some network issues
+     */
+    resetWatchdog = () => {
+        clearTimeout(this.watchdog)
+        this.watchdog = setTimeout( async () => {
+            let message = "[server] No message received in 10 minutes, resetting device"
+            console.error(message)
+            Sentry.captureMessage(message)
+            await Sentry.flush()
+            
+            exec('DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket \
+                dbus-send \
+                --system \
+                --print-reply \
+                --dest=org.freedesktop.systemd1 \
+                /org/freedesktop/systemd1 \
+                org.freedesktop.systemd1.Manager.Reboot', (err, output) => {
+                    if (err) {
+                        console.error("Failed to reboot device")
+                    } else {
+                        console.log("Device rebooting")
+                    }
+                })
+        }, 10*60*1000)
     }
 }
 

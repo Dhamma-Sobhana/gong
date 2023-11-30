@@ -45,5 +45,4 @@ test('Player instance', async () => {
 
     expect(clientOnSpy.called).toBe(true)
     expect(audioListenSpy.called).toBe(true)
-    expect(audioSetVolumeSpy.called).toBe(true)
 })

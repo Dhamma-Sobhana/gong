@@ -65,7 +65,7 @@ class Server {
 
         app.post('/activated', (req: Request, res: Response) => {
             console.log('[web] Play/Stop')
-            this.gongPlaying = this.remoteAction(this.gongPlaying, this.gongRepeat)
+            this.remoteAction(this.gongRepeat)
             res.redirect('/')
         })
 
@@ -122,15 +122,13 @@ class Server {
 
     /**
      * Handle remote button press
-     * @param gongPlaying current state
      * @param repeatGong how many times gong should be played
-     * @returns reversed state
      */
-    remoteAction(gongPlaying: boolean, repeatGong: number): boolean {
+    remoteAction(repeatGong: number) {
         if (!this.enabled)
             return false
 
-        if (gongPlaying) {
+        if (this.gongPlaying) {
             client.publish('stop')
             console.debug(`[mqtt] > stop`)
             console.log(`[server] Stop playing`)
@@ -141,28 +139,29 @@ class Server {
             console.log(`[server] Start playing`)
         }
 
-        return !gongPlaying
+        this.gongPlaying = !this.gongPlaying
     }
 
     /**
-     * Log if gong was playing
-     * @param gongPlaying current state
-     * @returns false
+     * Log if gong was playing and set playing to false
      */
-    played(gongPlaying: boolean): boolean {
-        if (gongPlaying == true)
+    played() {
+        if (this.gongPlaying == true)
             console.log(`[server] Finished playing`)
 
-        return false
+        this.gongPlaying = false
     }
 
-    playAutomatedGong(location:Array<string>) {
+    /**
+     * Called by automation. Only play if not already playing
+     * @param location where to play
+     */
+    playAutomatedGong = (location:Array<string>) => {
         if (!this.enabled)
             return
 
-        let message = JSON.stringify(new PlayMessage(location, this.gongRepeat))
-        client.publish('play', message)
-        console.debug(`[mqtt] > play: ${message}`)
+        if (!this.gongPlaying)
+            this.remoteAction(this.gongRepeat)
     }
 
     /**
@@ -178,11 +177,11 @@ class Server {
 
         switch (topic) {
             case 'activated':
-                console.log(`[remote] Playback initiated by ${data.name}`)
-                this.gongPlaying = this.remoteAction(this.gongPlaying, this.gongRepeat)
+                console.log(`[remote] Action initiated by ${data.name}`)
+                this.remoteAction(this.gongRepeat)
                 break;
             case 'played':
-                this.gongPlaying = this.played(this.gongPlaying)
+                this.played()
                 data.locations = undefined // To not overwrite locations in device list
                 break;
             default:

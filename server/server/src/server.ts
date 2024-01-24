@@ -115,6 +115,7 @@ class Server {
 
     destroy() {
         clearInterval(this.deviceStatusTimer)
+        clearInterval(this.watchdog)
         this.automation.cancel()
         client.end()
     }

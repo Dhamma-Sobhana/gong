@@ -26,18 +26,23 @@ class Player {
     audio: any;
     locations: Array<string>;
     watchdog?: NodeJS.Timeout
+    disabled: boolean = false
 
     /**
      * Instantiate player with locations handled, and connect to MQTT and audio service
      * @param mqtt client
      * @param locations handled by player
      */
-    constructor(client: MqttClient, audioBlock: BalenaAudio, name: string, locations: Array<string>) {
+    constructor(client: MqttClient, audioBlock: BalenaAudio, name: string, locations: Array<string>, disabled: boolean = false) {
         this.client = client
         this.audioBlock = audioBlock
         this.name = name
         this.audio = undefined
         this.locations = locations
+        this.disabled = disabled
+
+        if (this.disabled)
+            console.log('[player] Device disabled')
 
         this.client.on('connect', () => {
             this.mqttConnect()
@@ -95,13 +100,15 @@ class Player {
 
         if (topic === 'ping') {
             this.sendPong()
-        } else if (topic == 'play') {
-            this.playGong(data.locations, data.repeat)
-        } else if (topic == 'stop') {
-            if (this.audio !== undefined) {
-                this.audio.kill()
-                this.audio = undefined
-                console.log('[player] Stopping playback')
+        } else if (!this.disabled) {
+            if (topic == 'play') {
+                this.playGong(data.locations, data.repeat)
+            } else if (topic == 'stop') {
+                if (this.audio !== undefined) {
+                    this.audio.kill()
+                    this.audio = undefined
+                    console.log('[player] Stopping playback')
+                }
             }
         }
     }
@@ -176,8 +183,10 @@ class Player {
      * Respond to device status request (pong)
      */
     sendPong() {
-        let message = JSON.stringify(new Message(this.name, this.locations, 'player'))
-        this.client.publish(`pong`, message);
+        if (this.disabled)
+            this.client.publish(`pong`, JSON.stringify(new Message(this.name, this.locations, 'player', 'disabled')));
+        else
+            this.client.publish(`pong`, JSON.stringify(new Message(this.name, this.locations, 'player')));
     }
 
     /**

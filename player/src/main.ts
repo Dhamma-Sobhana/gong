@@ -15,6 +15,7 @@ if (process.env.SENTRY_DSN) {
 }
 
 const name = process.env.NAME || randomUUID()
+const disabled = process.env.DISABLED !== undefined ? process.env.DISABLED == 'true' : false
 const server = process.env.MQTT_SERVER || 'localhost'
 const pulseServer = process.env.PULSE_SERVER || 'unix:/run/pulse/pulseaudio.socket'
 
@@ -25,4 +26,4 @@ const locations = (process.env.LOCATIONS || 'all').split(',')
 
 // Instantiate player object
 console.log(`[player] Gong player starting.\n\nName: ${name}\nLocations: ${locations}\nServer: ${server}`)
-const player = new Player(client, audioBlock, name, locations);
+const player = new Player(client, audioBlock, name, locations, disabled);

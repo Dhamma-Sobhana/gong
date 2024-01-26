@@ -10,7 +10,7 @@ import { parseJson } from './lib'
 import { logArray } from './log'
 import { app } from './web'
 import { Automation } from './automation';
-import { aggregateDeviceStatus, updateDevice, updateDevicesStatus } from './devices';
+import { aggregateDeviceStatus, numberOfActivePlayers, updateDevice, updateDevicesStatus } from './devices';
 
 let client:any
 
@@ -134,6 +134,12 @@ class Server {
             console.debug(`[mqtt] > stop`)
             console.log(`[server] Stop playing`)
         } else {
+            // Only send play message if there are player devices online
+            if (numberOfActivePlayers(this.devices) < 1) {
+                console.log(`[server] No players are active. Action not performed`)
+                return
+            }
+
             let message = JSON.stringify(new PlayMessage(["all"], repeatGong))
             client.publish('play', message)
             console.debug(`[mqtt] > play: ${message}`)

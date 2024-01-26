@@ -1,5 +1,5 @@
 import { DeviceStatus, Status } from "../src/models"
-import { aggregateDeviceStatus, updateDevicesStatus } from '../src/devices'
+import { aggregateDeviceStatus, numberOfActivePlayers, updateDevicesStatus } from '../src/devices'
 import { DateTime } from "luxon"
 
 let devices:Array<DeviceStatus>
@@ -65,4 +65,15 @@ test('Update status based on time', () => {
     updateDevicesStatus(devices)
 
     expect(devices[0].status).toBe(Status.Disabled)
+})
+
+test('Get number of active players', () => {
+    devices[0].type = 'player'
+    devices[1].type = 'remote'
+
+    expect(numberOfActivePlayers(devices)).toBe(0)
+    
+    devices[0].status = Status.OK
+
+    expect(numberOfActivePlayers(devices)).toBe(1)
 })

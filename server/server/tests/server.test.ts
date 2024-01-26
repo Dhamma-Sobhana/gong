@@ -2,6 +2,7 @@ import { Server } from "../src/server"
 import { updateDevice } from "../src/devices"
 import { client } from "../src/mqtt"
 import { server as webServer } from "../src/web"
+import { Status } from "../src/models"
 
 let server: Server
 
@@ -24,6 +25,9 @@ test('Handle message', () => {
     expect(server.gongPlaying).toBe(false)
     expect(server.devices[0].name).toBe('remote')
     expect(server.devices[0].timestamp).toBeUndefined()
+
+    server.devices[1].type = 'player'
+    server.devices[1].status = Status.OK
 
     let data = {
         "name": "remote",
@@ -57,6 +61,9 @@ test('Update device list', () => {
 })
 
 test('Disable system', () => {
+    server.devices[1].type = 'player'
+    server.devices[1].status = Status.OK
+    
     let spy = jest.spyOn(client, 'publish')
     expect(server.enabled).toBe(true)
 

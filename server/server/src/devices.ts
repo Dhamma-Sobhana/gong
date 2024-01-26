@@ -54,6 +54,17 @@ function aggregateDeviceStatus(devices: Array<DeviceStatus>) {
     return status
 }
 
+function numberOfActivePlayers(devices: Array<DeviceStatus>):number {
+    let count = 0
+
+    for (let device of devices) {
+        if (device.type === 'player' && device.status === Status.OK)
+            count++
+    }
+
+    return count
+}
+
 /**
  * Change device status based on time since timestamp was updated
  * @param devices list
@@ -77,4 +88,4 @@ function updateDevicesStatus(devices: Array<DeviceStatus>) {
     }
 }
 
-export { updateDevice, aggregateDeviceStatus, updateDevicesStatus }
+export { updateDevice, aggregateDeviceStatus, numberOfActivePlayers, updateDevicesStatus }

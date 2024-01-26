@@ -117,10 +117,11 @@ Send a message telling that the device is online. Sent when device has booted an
 - name: string - Name of the device to easily identify it.
 - locations: array of locations handled by the player. (player)
 - type: string - Device type: remote, player
+- status: string - optional - ok, warning, failed, disabled
 
 Example data:
 
-    {"name": "main-house-remote", "type": "remote"}
+    {"name": "main-house-remote", "type": "remote", "status": "disabled"}
     {"name": "female-house-player", "locations": ["student-accommodation"], "type": "player"}
     {"name": "main-house-player", "locations": ["student-accommodation", "outside"], "type": "player"}
 
@@ -185,6 +186,11 @@ Default: `50`
 How player application and audio block communicates.
 
 Default: `unix:/run/pulse/pulseaudio.socket`
+
+## DISABLED (player, remote)
+Set to true to make one device temporarly disabled. Will make any actions to have no effect.
+
+Default: `false`
 
 ## MQTT_SERVER (player, remote)
 IP address or hostname of server.

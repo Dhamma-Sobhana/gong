@@ -1,15 +1,50 @@
 import { DateTime } from 'luxon'
 
+enum Status {
+    OK = '🟢',
+    Warning = '🟡',
+    Failed = '🔴',
+    Disabled = '⚪️'
+}
+
+function stringToStatus(strStatus: string|undefined):Status {
+    if (strStatus === undefined)
+        return Status.OK
+    
+    switch (strStatus.toLowerCase()) {
+        case 'ok':
+            return Status.OK
+        case 'warning':
+            return Status.Warning
+        case 'failed':
+            return Status.Failed
+        case 'disabled':
+            return Status.Disabled
+        default:
+            throw 'Unknown status value'
+    }
+}
+
 class Message {
     name: string = 'undefined';
     type?: string;
     locations?: Array<string>;
+    _status?: Status;
 
-    constructor(name?: string, locations?: Array<string>, type?: string) {
+    constructor(name?: string, locations?: Array<string>, type?: string, status?: string) {
         if (name !== undefined)
             this.name = name
         this.locations = locations
         this.type = type
+        this.status = status
+    }
+
+    public set status(status: string|undefined) {
+        this._status = stringToStatus(status)
+    }
+
+    public get status(): Status|undefined {
+        return this._status
     }
 
     toString() {
@@ -17,11 +52,6 @@ class Message {
     }
 }
 
-enum Status {
-    OK = '🟢',
-    Warning = '🟡',
-    Failed = '🔴'
-}
 
 class DeviceStatus {
     name: string;
@@ -34,13 +64,17 @@ class DeviceStatus {
         this.name = name
     }
 
-    update = (type?: string, locations?: Array<string>) => {
+    update = (type?: string, locations?: Array<string>, status?: Status) => {
         if (type !== undefined)
             this.type = type
         if (locations !== undefined)
             this.locations = locations
         this.timestamp = DateTime.now()
-        this.status = Status.OK
+        
+        if (status !== undefined)
+            this.status = status
+        else
+            this.status = Status.OK
     }
 
     updateStatus(status:Status) {

@@ -1,5 +1,5 @@
 import { DateTime } from "luxon"
-import { Message, PlayMessage, DeviceStatus } from "../src/models"
+import { Message, PlayMessage, DeviceStatus, Status } from "../src/models"
 
 test('Message instance', () => {
     let message = new Message()
@@ -20,6 +20,20 @@ test('Message remote', () => {
     expect(message.name).toBe('main-building')
     expect(message.type).toBe('remote')
     expect(message.locations).toBe(undefined)
+})
+
+test('Message with status', () => {
+    let message = new Message('test', ['all'], 'remote')
+    expect(message.status).toBe(Status.OK)
+
+    message = new Message('test', ['all'], 'remote', 'warning')
+    expect(message.status).toBe(Status.Warning)
+
+    message = new Message('test', ['all'], 'remote', 'failed')
+    expect(message.status).toBe(Status.Failed)
+
+    message = new Message('test', ['all'], 'remote', 'disabled')
+    expect(message.status).toBe(Status.Disabled)
 })
 
 test('Message player', () => {

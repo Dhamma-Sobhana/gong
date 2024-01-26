@@ -16,7 +16,7 @@ function updateDevice(data: object, devices: Array<DeviceStatus>) {
 
     for (let device of devices) {
         if (device.name == message.name) {
-            device.update(message.type, message.locations);
+            device.update(message.type, message.locations, message.status);
         }
     }
 }
@@ -30,7 +30,8 @@ function aggregateDeviceStatus(devices: Array<DeviceStatus>) {
     let status = {
         ok: 0,
         warning: 0,
-        failed: 0
+        failed: 0,
+        disabled: 0
     }
 
     for (let device of devices) {
@@ -44,7 +45,9 @@ function aggregateDeviceStatus(devices: Array<DeviceStatus>) {
             case Status.Failed:
                 status.failed++
                 break;
-            
+            case Status.Disabled:
+                status.disabled++
+                break;
         }
     }
 
@@ -57,7 +60,7 @@ function aggregateDeviceStatus(devices: Array<DeviceStatus>) {
  */
 function updateDevicesStatus(devices: Array<DeviceStatus>) {
     for (let device of devices) {
-        if (device.timestamp) {
+        if ((device.timestamp) && (device.status !== Status.Disabled)) {
             if ((DateTime.now() >= device.timestamp.plus({minutes: 10}))) {
                 if (device.status !== Status.Failed)
                     Sentry.captureMessage(`Device failed. Name: ${device.name}, Type: ${device.type}`)

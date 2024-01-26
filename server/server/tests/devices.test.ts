@@ -28,6 +28,15 @@ test('Aggregate device status', () => {
     expect(status.ok).toBe(1)
     expect(status.warning).toBe(0)
     expect(status.failed).toBe(1)
+
+    devices[1].updateStatus(Status.Disabled)
+
+    status = aggregateDeviceStatus(devices)
+
+    expect(status.ok).toBe(1)
+    expect(status.warning).toBe(0)
+    expect(status.failed).toBe(0)
+    expect(status.disabled).toBe(1)
 })
 
 test('Update status based on time', () => {
@@ -50,4 +59,10 @@ test('Update status based on time', () => {
     devices[0].update()
 
     expect(devices[0].status).toBe(Status.OK)
+
+    devices[0].updateStatus(Status.Disabled)
+
+    updateDevicesStatus(devices)
+
+    expect(devices[0].status).toBe(Status.Disabled)
 })

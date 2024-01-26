@@ -1,11 +1,13 @@
 class Message {
     name: string = 'undefined';
     type?: string;
+    status?: string;
 
-    constructor(name?: string, type?: string) {
+    constructor(name?: string, type?: string, status?: string) {
         if (name !== undefined)
             this.name = name
         this.type = type
+        this.status = status
     }
 
     toString() {

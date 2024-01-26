@@ -10,6 +10,7 @@ assets:
 data:
   applicationEnvironmentVariables:
     - NAME: 
+    - DISABLED: 
     - MQTT_SERVER: 
     - SENTRY_DSN:
   defaultDeviceType: raspberrypi3
@@ -19,4 +20,4 @@ data:
     - raspberrypi3
     - raspberrypi3-64
     - raspberrypi4-64
-version: 1.4.0
+version: 1.5.0

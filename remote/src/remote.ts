@@ -32,14 +32,21 @@ class Remote {
     toggleTime: number = 0
     watchdog?: NodeJS.Timeout
     error?: NodeJS.Timeout = undefined
+    disabled: boolean = false
 
-    constructor(client: MqttClient, ledGpio: Gpio, buttonGpio: Gpio) {
+    constructor(client: MqttClient, ledGpio: Gpio, buttonGpio: Gpio, disabled: boolean = false) {
         this.client = client
         this.led = ledGpio
         this.button = buttonGpio
+        this.disabled = disabled
 
         this.led.writeSync(this.toggle);
-        this.button.watch((err, value) => this.buttonChanged(err, value))
+
+        // Prevent button effect if device is disabled
+        if (this.disabled)
+            console.log('[remote] Device disabled')
+        else
+            this.button.watch((err, value) => this.buttonChanged(err, value))
 
         // Blink led until connected
         this.errorMode()
@@ -214,8 +221,10 @@ class Remote {
     }
 
     sendPong() {
-        let message = JSON.stringify(new Message(name, 'remote'))
-        this.client.publish(`pong`, message);
+        if (this.disabled)
+            this.client.publish(`pong`, JSON.stringify(new Message(name, 'remote', 'disabled')));
+        else
+            this.client.publish(`pong`, JSON.stringify(new Message(name, 'remote')));
     }
 
     /**

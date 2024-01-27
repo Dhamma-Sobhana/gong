@@ -36,6 +36,7 @@ test('Schedule playing next gong', () => {
     expect(automation.job).toBeDefined()
     expect(callback).toBeCalled();
     expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith(["accommodation"])
 })
 
 test('Cancel schedule', () => {

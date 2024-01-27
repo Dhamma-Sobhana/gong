@@ -65,7 +65,7 @@ class Server {
 
         app.post('/activated', (req: Request, res: Response) => {
             console.log('[web] Play/Stop')
-            this.remoteAction(this.gongRepeat)
+            this.remoteAction(["all"], this.gongRepeat)
             res.redirect('/')
         })
 
@@ -123,9 +123,10 @@ class Server {
 
     /**
      * Handle remote button press
+     * @param location where to play
      * @param repeatGong how many times gong should be played
      */
-    remoteAction(repeatGong: number) {
+    remoteAction(location:Array<string>, repeatGong: number) {
         if (!this.enabled)
             return false
 
@@ -140,7 +141,7 @@ class Server {
                 return
             }
 
-            let message = JSON.stringify(new PlayMessage(["all"], repeatGong))
+            let message = JSON.stringify(new PlayMessage(location, repeatGong))
             client.publish('play', message)
             console.debug(`[mqtt] > play: ${message}`)
             console.log(`[server] Start playing`)
@@ -168,7 +169,7 @@ class Server {
             return
 
         if (!this.gongPlaying)
-            this.remoteAction(this.gongRepeat)
+            this.remoteAction(location, this.gongRepeat)
     }
 
     /**
@@ -185,7 +186,7 @@ class Server {
         switch (topic) {
             case 'activated':
                 console.log(`[remote] Action initiated by ${data.name}`)
-                this.remoteAction(this.gongRepeat)
+                this.remoteAction(["all"], this.gongRepeat)
                 break;
             case 'played':
                 this.played()

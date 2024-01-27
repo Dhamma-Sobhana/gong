@@ -13,6 +13,7 @@ beforeEach(() => {
 afterEach(() => {
     webServer.close()
     server.destroy()
+    jest.clearAllMocks();
 });
 
 test('Server instance', () => {
@@ -80,4 +81,45 @@ test('Disable system', () => {
     server.handleMessage('activated', JSON.stringify({name: test}))
 
     expect(spy).toHaveBeenCalled()
+
+    expect(spy).toHaveBeenCalledWith("play", "{\"locations\":[\"all\"],\"repeat\":3}")
+})
+
+test('Play gong by remote action', () => {
+    server.devices[1].type = 'player'
+    server.devices[1].status = Status.OK
+    
+    let spy = jest.spyOn(client, 'publish')
+
+    server.handleMessage('activated', JSON.stringify({name: test}))
+
+    expect(spy).toHaveBeenCalled()
+    expect(spy).toHaveBeenCalledWith("play", "{\"locations\":[\"all\"],\"repeat\":3}")  
+})
+
+test('Play gong by automtion', () => {
+    server.devices[1].type = 'player'
+    server.devices[1].status = Status.OK
+    
+    let spy = jest.spyOn(client, 'publish')
+
+    server.playAutomatedGong(['student-accommodation'])
+
+    expect(spy).toHaveBeenCalled()
+    expect(spy).toHaveBeenCalledWith("play", "{\"locations\":[\"student-accommodation\"],\"repeat\":3}")    
+})
+
+test('Only play if players active', () => {
+    let spy = jest.spyOn(client, 'publish')
+
+    server.playAutomatedGong(['student-accommodation'])
+
+    expect(spy).not.toHaveBeenCalled()
+
+    server.devices[1].type = 'player'
+    server.devices[1].status = Status.OK
+
+    server.playAutomatedGong(['student-accommodation'])
+
+    expect(spy).toHaveBeenCalledWith("play", "{\"locations\":[\"student-accommodation\"],\"repeat\":3}")
 })

@@ -65,7 +65,7 @@ class Server {
 
         app.post('/activated', (req: Request, res: Response) => {
             console.log('[web] Play/Stop')
-            this.remoteAction(["all"], this.gongRepeat)
+            this.playGong(["all"], this.gongRepeat)
             res.redirect('/')
         })
 
@@ -122,11 +122,12 @@ class Server {
 
 
     /**
-     * Handle remote button press
+     * Play gong or stop if already playing
+     * Only executes if system is enabled and there is at least 1 player active
      * @param location where to play
      * @param repeatGong how many times gong should be played
      */
-    remoteAction(location:Array<string>, repeatGong: number) {
+    playGong(location:Array<string>, repeatGong: number) {
         if (!this.enabled)
             return false
 
@@ -169,7 +170,7 @@ class Server {
             return
 
         if (!this.gongPlaying)
-            this.remoteAction(location, this.gongRepeat)
+            this.playGong(location, this.gongRepeat)
     }
 
     /**
@@ -186,7 +187,7 @@ class Server {
         switch (topic) {
             case 'activated':
                 console.log(`[remote] Action initiated by ${data.name}`)
-                this.remoteAction(["all"], this.gongRepeat)
+                this.playGong(["all"], this.gongRepeat)
                 break;
             case 'played':
                 this.played()

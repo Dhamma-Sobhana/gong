@@ -75,3 +75,55 @@ test('Enable and disable automation', () => {
 test('Fetch courses', () => {
     expect(automation.courses).toBeTruthy()
 })
+test('Daylight saving spring', () => {    
+    // Swedish DST spring 2024: Under natten från lördag 30 mars 2024 till söndag 31 mars 2024, 02:00 -> 03:00
+    jest.setSystemTime(DateTime.fromISO('2024-03-30T22:00:00').toJSDate())
+
+    let entry = new TimeTableEntry(DateTime.fromISO('2024-03-31T04:00:00'), '04:00', 'gong', ['student-accommodation'], 'Default', 0)
+    automation.scheduleGong(entry)
+
+    expect(callback).not.toBeCalled();
+    expect(DateTime.now().toISO()).toEqual(DateTime.fromISO('2024-03-30T22:00:00+01:00').toISO())
+
+    jest.advanceTimersByTime(4 * 3600 * 1000 - 1000);
+    expect(DateTime.now().toISO()).toEqual(DateTime.fromISO('2024-03-31T01:59:59+01:00').toISO())
+
+    jest.advanceTimersByTime(1000);
+    expect(DateTime.now().toISO()).toEqual(DateTime.fromISO('2024-03-31T03:00:00+02:00').toISO())
+    expect(callback).not.toBeCalled();
+
+    jest.advanceTimersByTime(1 * 3600 * 1000 - 1000);
+    expect(callback).not.toBeCalled();
+
+    jest.advanceTimersByTime(1000);
+    expect(callback).toBeCalled();
+})
+
+
+test('Daylight saving autumn', () => {
+    // Swedish DST autumn 2024: Under natten från lördag 26 oktober 2024 till söndag 27 oktober 2024, 03:00 -> 02.00
+    jest.setSystemTime(DateTime.fromISO('2024-10-26T22:00:00').toJSDate())
+
+    let entry = new TimeTableEntry(DateTime.fromISO('2024-10-27T04:00:00'), '04:00', 'gong', ['student-accommodation'], 'Default', 0)
+    automation.scheduleGong(entry)
+
+    expect(callback).not.toBeCalled();
+    expect(DateTime.now().toISO()).toEqual(DateTime.fromISO('2024-10-26T22:00:00+02:00').toISO())
+    
+    jest.advanceTimersByTime(4 * 3600 * 1000);
+    expect(DateTime.now().toISO()).toBe(DateTime.fromISO('2024-10-27T02:00:00+02:00').toISO())
+    
+    jest.advanceTimersByTime(1 * 3600 * 1000 - 1000);
+    expect(DateTime.now().toISO()).toBe(DateTime.fromISO('2024-10-27T02:59:59+02:00').toISO())
+
+    jest.advanceTimersByTime(1000);
+    expect(DateTime.now().toISO()).toBe(DateTime.fromISO('2024-10-27T02:00:00+01:00').toISO())
+
+    expect(callback).not.toBeCalled();
+
+    jest.advanceTimersByTime(1 * 3600 * 1000);
+    expect(callback).not.toBeCalled();
+
+    jest.advanceTimersByTime(1 * 3600 * 1000);
+    expect(callback).toBeCalled();
+})

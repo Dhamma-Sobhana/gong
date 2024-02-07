@@ -35,7 +35,7 @@ class Automation {
      * @param entry to schedule
      * @returns nothing
      */
-    schedule(entry?: TimeTableEntry) {
+    scheduleGong(entry?: TimeTableEntry) {
         if (entry === undefined)
             return
         
@@ -44,7 +44,7 @@ class Automation {
         this.job = scheduleJob(entry.time.toJSDate(), () => {
             console.log(`[automation] Executing playing of gong in ${entry.location}`);
             this.callback(entry.location)
-            this.schedule(this.getNextGong())
+            this.scheduleGong(this.getNextGong())
         });
     }
 
@@ -81,7 +81,7 @@ class Automation {
             this.enabled = true
             console.log('[automation] Automation enabled')
             await this.fetch(this.locationId)
-            this.schedule(this.getNextGong())
+            this.scheduleGong(this.getNextGong())
             this.scheduleFetch()
         }
     }

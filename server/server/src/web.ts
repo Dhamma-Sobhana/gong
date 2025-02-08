@@ -1,10 +1,14 @@
 import express, { Express } from 'express';
+const bodyParser = require('body-parser')
 const nunjucks = require('nunjucks')
 const dateFilter = require('nunjucks-date')
 
 // Express.js and Nunjucks for web interface
 const app: Express = express();
 const http_port = process.env.HTTP_PORT || 8080;
+
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
 
 let njEnv = nunjucks.configure('views', {
     autoescape: true,

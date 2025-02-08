@@ -87,6 +87,24 @@ class Server {
             res.redirect('/')
         })
 
+        app.post('/automation/entry/enable', (req: Request, res: Response) => {
+            let entryDateTime = DateTime.fromISO(req.body.entry_id)
+            console.log(`[web] Automation enable entry: ${entryDateTime}`)
+
+            this.automation.schedule.setTimeTableEntryStatus(entryDateTime, true)
+            this.automation.scheduleGong(this.automation.getNextGong())
+            res.redirect('/')
+        })
+
+        app.post('/automation/entry/disable', (req: Request, res: Response) => {
+            let entryDateTime = DateTime.fromISO(req.body.entry_id)
+            console.log(`[web] Automation disable entry: ${entryDateTime}`)
+
+            this.automation.schedule.setTimeTableEntryStatus(entryDateTime, false)
+            this.automation.scheduleGong(this.automation.getNextGong())
+            res.redirect('/')
+        })
+
         this.deviceStatusTimer = setInterval(() => {
             client.publish(`ping`);
             updateDevicesStatus(this.devices)
@@ -94,6 +112,9 @@ class Server {
 
         console.log(`[server] Gong server starting. Required devices: ${this.devices}`)
         console.log(`[server] System time: ${DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss')}`)
+
+        //this.disabledEntries = readDisabledEntries()
+        //console.log(`[DEV] Disabled entries: ${this.disabledEntries.entries.length}`)
 
         this.resetWatchdog()
     }

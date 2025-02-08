@@ -5,21 +5,12 @@ import * as Sentry from "@sentry/node";
 import { DateTime } from 'luxon'
 import fetch from 'node-fetch-cache';
 
+import { getCacheFilePath } from './storage';
 import { Course } from './models'
 
 const daysBefore = 14
 const daysAfter = 15
 
-/**
- * Path to schedule cache
- * @returns file path and name
- */
-function getCacheFilePath() {
-    if (['test', 'development'].includes(process.env.NODE_ENV || ''))
-        return './schedule.json'
-    else
-        return '/data/schedule.json'
-}
 
 /**
  * Format date range for use in fetch call based on current date
@@ -43,7 +34,7 @@ async function fetchSchedule(locationId:number) {
     if (['test', 'development'].includes(process.env.NODE_ENV || '')) {
         return fakeFetchSchedule()
     }
-
+    
     let daterange = getDateRange()
 
     let body = `regions[]=location_${locationId}&daterange=${daterange}&page=1`

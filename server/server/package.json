@@ -10,8 +10,7 @@
   "scripts": {
     "start": "NODE_PATH=./build node build/main.js",
     "build": "./node_modules/typescript/bin/tsc -p .",
-    "dev": "DEVICES=remote,player AUTOMATION=true NODE_ENV=development nodemon src/main.ts",
-    "test": "jest"
+    "dev": "DEVICES=remote,player AUTOMATION=true NODE_ENV=development LOCATION_ID=1392 nodemon src/main.ts",
   },
   "author": "",
   "license": "MIT",

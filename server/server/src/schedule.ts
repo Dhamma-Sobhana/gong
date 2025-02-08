@@ -180,7 +180,7 @@ class Schedule {
         if (this.today.toISODate() !== DateTime.now().toISODate()) {
             this.updateSchedule(DateTime.now())
         }
-        console.log(this.timeTable.entries[2].time.toISO(), this.timeTable.entries[2].active)
+        
         return this.timeTable
     }
 

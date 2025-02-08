@@ -142,7 +142,6 @@ test('Merge schedules', () => {
     expect(timeTables[0].entries.length).toBe(2);
     expect(timeTables[1].entries.length).toBe(3);
 
-    //console.log(courses, timeTables)
     let result = mergeSchedules(timeTables);
 
     expect(result.entries.length).toBe(4);

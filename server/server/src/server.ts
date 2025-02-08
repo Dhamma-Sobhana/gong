@@ -113,9 +113,6 @@ class Server {
         console.log(`[server] Gong server starting. Required devices: ${this.devices}`)
         console.log(`[server] System time: ${DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss')}`)
 
-        //this.disabledEntries = readDisabledEntries()
-        //console.log(`[DEV] Disabled entries: ${this.disabledEntries.entries.length}`)
-
         this.resetWatchdog()
     }
 

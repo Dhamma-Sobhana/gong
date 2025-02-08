@@ -111,7 +111,7 @@ function getCoursesByDate(allCourses: Array<Course>, date: DateTime): Array<Cour
 }
 
 /**
- * Merge two TimeTables. If first one has endTime defined, entries from
+ * Merge two TimeTables. If of different course types and first one has endTime defined, entries from
  * seconds TimeTable will be ignored before that time.
  * @param timeTables 1 or 2 TimeTable
  * @returns a new TimeTable without overlapping entries
@@ -123,7 +123,7 @@ function mergeSchedules(timeTables: Array<TimeTable>): TimeTable {
     result.entries = timeTables[0].entries;
 
     for (let timeTableEntry of timeTables[1].entries) {
-        if (timeTables[0].endTime === undefined)
+        if (timeTables[0].endTime === undefined || timeTables[0].courseType === timeTables[1].courseType)
             result.entries.push(timeTableEntry);
         // @ts-ignore possible null
         else if (timeTableEntry.time.toISOTime() > timeTables[0].endTime.toISOTime())

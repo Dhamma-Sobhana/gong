@@ -145,6 +145,7 @@ class TimeTableEntry {
     location: Array<string>
     courseType: string
     courseDay: number
+    active: boolean = true
 
     constructor(date: DateTime, time: string, type: string, location: Array<string>, courseType: string, courseDay: number) {
         this.time = date.set({
@@ -164,5 +165,29 @@ class TimeTableEntry {
     }
 }
 
+class DisabledEntries {
+    entries: Array<DateTime> = []
 
-export { Message, Status, DeviceStatus, PlayMessage, Course, TimeTable, TimeTableEntry }
+    constructor(entries?: Array<DateTime>) {
+        if (entries)
+            this.entries = entries
+    }
+
+    update(entry: DateTime|undefined, active: boolean) {
+        if (!entry)
+            return
+
+        if (active) {
+            this.entries = this.entries.filter(e => !e.equals(entry));
+        } else if (!this.entries.some(e => e.equals(entry))) {
+            this.entries.push(entry)
+        }
+    }
+
+    cleanup() {
+        this.entries = this.entries.filter(entry => entry >= DateTime.now());
+    }
+}
+
+
+export { Message, Status, DeviceStatus, PlayMessage, Course, TimeTable, TimeTableEntry, DisabledEntries }

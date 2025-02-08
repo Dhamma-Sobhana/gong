@@ -54,6 +54,16 @@
 </tr>
 {% endfor %}
 </table>
+</form>
+</div>
+
+<h3>Courses</h3>
+<ul>
+{% for course in automation.getCourses() %}
+    <li>{{ course.start.toISODate() }} - {{ course.end.toISODate() }} {{ course.type }}</li>
+{% endfor%}
+</ul>
+
 {% else %}
 <h3>Automation: disabled</h3>
 

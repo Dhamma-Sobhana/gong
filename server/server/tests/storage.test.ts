@@ -2,6 +2,13 @@ import { DateTime } from 'luxon'
 import { DisabledEntries } from '../src/models'
 import { getCacheFilePath, getSettingsFilePath, readDisabledEntries, readSettings, writeDisabledEntries, writeSettings } from '../src/storage'
 
+const fs = require('fs');
+
+beforeEach(() => {
+    if (fs.existsSync(getSettingsFilePath()))
+        fs.unlinkSync(getSettingsFilePath());
+})
+
 test('Get cache file name', async () => {
     expect(process.env.NODE_ENV).toBe('test')
     expect(getCacheFilePath()).toBe('./schedule.json')
@@ -28,6 +35,15 @@ test('Write and read settings', async () => {
     let read:any = readSettings()
 
     expect(read).toMatchObject(write)
+})
+
+test('Create settings file if not existing', () => {
+    expect(fs.existsSync(getSettingsFilePath())).toBeFalsy()
+    let de = readDisabledEntries()
+
+    writeDisabledEntries(de)
+
+    expect(fs.existsSync(getSettingsFilePath())).toBeTruthy()
 })
 
 test('Write and read disabled gong entries', () => {

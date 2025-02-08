@@ -22,13 +22,17 @@ function getSettingsFilePath() {
     return `${getFilePath()}/settings.json`
 }
 
+/**
+ * Read settings file from disk, if any
+ * @returns json object of read file or an empty dictionary
+ */
 function readSettings() {
     if (fs.existsSync(getSettingsFilePath())) {
         console.log(`[server] Reading settings from disk, ${getSettingsFilePath()}`)
         return JSON.parse(fs.readFileSync(getSettingsFilePath()))
     }
 
-    return undefined
+    return {}
 }
 
 function writeSettings(settings:any) {

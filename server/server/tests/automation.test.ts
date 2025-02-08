@@ -73,9 +73,10 @@ test('Enable and disable automation', () => {
 })
 
 test('Fetch courses', () => {
-    expect(automation.courses).toBeTruthy()
+    expect(automation.schedule.getCourses().length).toBeGreaterThan(0)
 })
-test('Daylight saving spring', () => {    
+
+test('Daylight saving spring', () => {
     // Swedish DST spring 2024: Under natten från lördag 30 mars 2024 till söndag 31 mars 2024, 02:00 -> 03:00
     jest.setSystemTime(DateTime.fromISO('2024-03-30T22:00:00').toJSDate())
 

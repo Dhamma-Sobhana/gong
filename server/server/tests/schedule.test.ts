@@ -3,18 +3,18 @@ import path from 'path';
 
 import { DateTime } from 'luxon';
 
-import { timeTableExists, getTimeTableJson, getTimeTable, getCoursesByDate, getCourseDayByDate, getNextGong, mergeSchedules, getSchedule } from '../src/schedule';
-import { Course, TimeTable } from '../src/models';
+import { timeTableExists, getTimeTableJson, getTimeTable, getCourseDayByDate, getCoursesByDate, mergeSchedules, Schedule } from '../src/schedule';
+import { DisabledEntries, TimeTable } from '../src/models';
 import { parseSchedule } from '../src/fetch';
 
 let data:any
-let allCourses:Array<Course>
+let schedule:Schedule
 
 beforeAll(() => {
     jest.useFakeTimers()
     jest.setSystemTime(new Date(2023, 8, 15, 12))
     data = JSON.parse(fs.readFileSync(path.resolve(__dirname, './resources/schedule.json')));
-    allCourses = parseSchedule(data)
+    schedule = new Schedule(parseSchedule(data))
 })
 
 test('Time table exists', () => {
@@ -52,7 +52,7 @@ test('Get TimeTable', () => {
 
 test('Get schedule by date', () => {
     let today = DateTime.fromObject({ year: 2023, month: 9, day: 1, hour: 12 });
-    let result = getCoursesByDate(allCourses, today);
+    let result = getCoursesByDate(schedule.courses, today);
     expect(result).toBeDefined();
 
     expect(result.length).toBe(1);
@@ -60,7 +60,7 @@ test('Get schedule by date', () => {
     expect(result[0]['type']).toBe('3-DayOSC');
 
     today = DateTime.fromObject({ year: 2023, month: 9, day: 18, hour: 12 });
-    result = getCoursesByDate(allCourses, today);
+    result = getCoursesByDate(schedule.courses, today);
 
     if (result) {
         expect(result[0]['type']).toBe('ServicePeriod');
@@ -69,7 +69,7 @@ test('Get schedule by date', () => {
 
 test('Get default when no ongoing course', () => {
     let today = DateTime.fromObject({ year: 2023, month: 8, day: 29, hour: 12 });
-    let result = getCoursesByDate(allCourses, today);
+    let result = getCoursesByDate(schedule.courses, today);
 
     expect(result.length).toBe(1);
     expect(result[0].type).toBe('default');
@@ -77,7 +77,7 @@ test('Get default when no ongoing course', () => {
 
 test('Get day with multiple courses', () => {
     let today = DateTime.fromObject({ year: 2023, month: 9, day: 17, hour: 12 });
-    let result = getCoursesByDate(allCourses, today);
+    let result = getCoursesByDate(schedule.courses, today);
 
     expect(result.length).toBe(2);
     expect(result[0].type).toBe('10-Day');
@@ -86,24 +86,24 @@ test('Get day with multiple courses', () => {
 
 test('Get course day by date', () => {
     let date = DateTime.fromISO('2023-09-17T00:00:00');
-    let result = getCourseDayByDate(allCourses[4], date);
+    let result = getCourseDayByDate(schedule.courses[4], date);
 
     expect(result).toBe(11);
 
     date = DateTime.fromISO('2023-09-12T23:59:59');
-    result = getCourseDayByDate(allCourses[4], date);
+    result = getCourseDayByDate(schedule.courses[4], date);
 
     expect(result).toBe(6);
 
     date = DateTime.fromISO('2023-09-06T23:59:59');
-    result = getCourseDayByDate(allCourses[4], date);
+    result = getCourseDayByDate(schedule.courses[4], date);
 
     expect(result).toBe(0);
 });
 
 test('Get timetable with default day on dynamic course', () => {
     let date = DateTime.fromISO('2023-09-06T00:00:00');
-    let course = allCourses[4]
+    let course = schedule.courses[4]
     expect(getCourseDayByDate(course, date)).toBe(0)
 
     let timeTable = getTimeTable('10-Day', date, getCourseDayByDate(course, date))
@@ -132,7 +132,7 @@ test('Get timetable with default day on dynamic course', () => {
 
 test('Merge schedules', () => {
     let date = DateTime.fromISO('2023-09-17T12:00:00');
-    let courses = getCoursesByDate(allCourses, date);
+    let courses = getCoursesByDate(schedule.courses, date);
     expect(courses.length).toBe(2);
     let timeTables: Array<TimeTable> = [];
     for (let course of courses) {
@@ -156,30 +156,28 @@ test('Get Schedule', () => {
     let date = DateTime.fromISO('2023-09-17T12:00:00');
     jest.setSystemTime(date.toJSDate());
 
-    let schedule = getSchedule(allCourses, date);
+    let _schedule = schedule.getScheduleByDate(date);
 
-    expect(schedule.courseType).toBe('mixed');
-    expect(schedule.entries.length).toBe(4);
-    expect(schedule.entries[1].time.hour).toBe(4);
-    expect(schedule.entries[1].time.minute).toBe(20);
-    expect(schedule.entries[2].time.hour).toBe(14);
-    expect(schedule.entries[2].time.minute).toBe(20);
+    expect(_schedule.courseType).toBe('mixed');
+    expect(_schedule.entries.length).toBe(4);
+    expect(_schedule.entries[1].time.hour).toBe(4);
+    expect(_schedule.entries[1].time.minute).toBe(20);
+    expect(_schedule.entries[2].time.hour).toBe(14);
+    expect(_schedule.entries[2].time.minute).toBe(20);
 });
 
 test('Get Gong Schedule for today and tomorrow', () => {
-    let today = getSchedule(allCourses, DateTime.fromISO('2023-09-17T12:00:00'));
+    let today = schedule.getScheduleByDate(DateTime.fromISO('2023-09-17T12:00:00'));
     expect(today.entries.length).toBe(4);
 
-    let tomorrow = getSchedule(allCourses, DateTime.fromISO('2023-09-18T12:00:00'));
+    let tomorrow = schedule.getScheduleByDate(DateTime.fromISO('2023-09-18T12:00:00'));
     expect(tomorrow.entries.length).toBe(3);
 });
 
 test('Get next gong', () => {
     jest.setSystemTime(DateTime.fromISO('2023-09-17T03:00:15').toJSDate());
 
-     
-    let result = getNextGong(allCourses);
-
+    let result = schedule.getNextGong();
 
     expect(result).toBeDefined();
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
@@ -191,7 +189,7 @@ test('Get next gong', () => {
 
     jest.setSystemTime(DateTime.fromISO('2023-09-17T12:00:00').toJSDate());
 
-    result = getNextGong(allCourses)
+    result = schedule.getNextGong()
 
     // @ts-ignore
     expect(result['time'].day).toBe(17)
@@ -205,7 +203,7 @@ test('Get next gong', () => {
 
     jest.setSystemTime(DateTime.fromISO('2023-09-17T20:00:00').toJSDate());
 
-    result = getNextGong(allCourses);
+    result = schedule.getNextGong();
 
     // @ts-ignore
     expect(result['time'].day).toBe(18)
@@ -214,3 +212,42 @@ test('Get next gong', () => {
     // @ts-ignore Object is possibly 'undefined'.ts(2532)'
     expect(result['time'].minute).toBe(20);
 });
+
+
+test('Disabled entry and get next gong', () => {
+    let date = DateTime.fromISO('2023-09-17T12:00:00');
+    jest.setSystemTime(date.toJSDate());
+
+    let time_table = schedule.getSchedule();
+    expect(time_table.entries.length).toBe(7);
+
+    let entry = time_table.entries[0]
+    expect(entry.time).toEqual(DateTime.fromISO('2023-09-17T04:00:00.000+02:00'))
+
+    expect(schedule.getNextGong()?.time).toEqual(DateTime.fromISO('2023-09-17T14:20:00.000+02:00'))
+
+    schedule.setTimeTableEntryStatus(DateTime.fromISO('2023-09-17T14:20:00.000+02:00'), false)
+
+    expect(schedule.getNextGong()?.time).toEqual(DateTime.fromISO('2023-09-17T19:20:00.000+02:00'))
+})
+
+test('Restore disabled entries on start', () => {
+    let date = DateTime.fromISO('2023-09-17T12:00:00');
+    jest.setSystemTime(date.toJSDate());
+
+    schedule = new Schedule(parseSchedule(data))
+
+    expect(schedule.getNextGong()?.time).toEqual(DateTime.fromISO('2023-09-17T14:20:00.000+02:00'))
+
+    let disabledEntries = new DisabledEntries([DateTime.fromISO('2023-09-17T14:20:00.000+02:00')])
+
+    schedule = new Schedule(parseSchedule(data), disabledEntries)
+
+    expect(schedule.disabledEntries?.entries.length).toEqual(1)
+
+    expect(schedule.disabledEntries?.entries[0]).toEqual(DateTime.fromISO('2023-09-17T14:20:00.000+02:00'))
+
+    expect(schedule.disabledEntries?.entries.some(e => e.equals(DateTime.fromISO('2023-09-17T14:20:00.000+02:00')))).toBeTruthy()
+
+    expect(schedule.getNextGong()?.time).toEqual(DateTime.fromISO('2023-09-17T19:20:00.000+02:00'))
+})

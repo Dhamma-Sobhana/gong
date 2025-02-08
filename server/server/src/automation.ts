@@ -2,9 +2,10 @@ import * as Sentry from "@sentry/node";
 import { scheduleJob, Job } from 'node-schedule'
 import { DateTime } from 'luxon';
 
-import { Course, TimeTableEntry } from "./models";
+import { TimeTableEntry } from "./models";
 import { parseSchedule, fetchAndPersist, fetchFromCache } from './fetch';
-import { getNextGong, getSchedule } from './schedule';
+import { Schedule } from './schedule';
+import { readDisabledEntries } from "./storage";
 
 class Automation {
     enabled: boolean = false
@@ -13,8 +14,8 @@ class Automation {
     fetchTime: DateTime = DateTime.fromISO("01:00")
     lastFetch?: DateTime
     callback: Function
-    courses: Array<Course> = []
     locationId?: number
+    schedule: Schedule
 
     /**
      * Create an Automation to be used by server
@@ -23,7 +24,10 @@ class Automation {
     constructor(callback:Function, locationId:number|undefined, automationEnabled:boolean = false) {
         this.callback = callback
         this.locationId = locationId
-        
+        let disabledEntries = readDisabledEntries()
+        console.log(`[automation] Read ${disabledEntries?.entries.length} disabled entries from settings file`)
+        this.schedule = new Schedule([], disabledEntries)
+
         if (automationEnabled) {
             this.enable()
         }
@@ -98,14 +102,14 @@ class Automation {
         
         if (courses) {
             this.lastFetch = DateTime.now()
-            this.courses = parseSchedule(courses)
-            console.log(`[automation] Fetched schedule for ${this.courses.length} courses from remote server`)
+            this.schedule.setCourses(parseSchedule(courses))
+            console.log(`[automation] Fetched schedule for ${this.schedule.getCourses().length} courses from remote server`)
         } else {
             courses = fetchFromCache()
 
             if (courses) {
-                this.courses = parseSchedule(courses)
-                console.log(`[automation] Fetched schedule for ${this.courses.length} courses from disk cache`)
+                this.schedule.setCourses(parseSchedule(courses))
+                console.log(`[automation] Fetched schedule for ${this.schedule.getCourses().length} courses from disk cache`)
             } else {
                 console.log(`[automation] ERROR: Failed to fetch schedule from both remote server and disk cache`)
                 Sentry.captureMessage(`Failed to fetch courses from remote and disk cache`)
@@ -118,10 +122,10 @@ class Automation {
      * @returns TimeTableEntry of next gong
      */
     getNextGong() {
-        if (!this.enabled || !this.courses)
+        if (!this.enabled)
             return undefined
 
-        return getNextGong(this.courses)
+        return this.schedule.getNextGong()
     }
 
     /**
@@ -129,10 +133,28 @@ class Automation {
      * @returns array with entries
      */
     getSchedule() {
-        let schedule = getSchedule(this.courses, DateTime.now());
-        let entries = schedule.entries.concat(getSchedule(this.courses, DateTime.now().plus({days: 1})).entries)
+        let schedule = this.schedule.getSchedule()
 
-        return entries.filter(entry => entry.time >= DateTime.now())
+        return schedule.entries.filter(entry => entry.time >= DateTime.now())
+    }
+
+    getEntryByDateTime(entryDateTime:DateTime):TimeTableEntry|undefined {
+        let schedule = this.schedule.getSchedule()
+
+        return schedule.entries.find(entry => entry.time == entryDateTime)
+    }
+
+    /**
+     * Get courses from today and forward
+     * @returns array of courses
+     */
+    getCourses() {
+        let courses = this.schedule.getCourses()
+
+        if (['test', 'development'].includes(process.env.NODE_ENV || ''))
+            return courses
+
+        return courses.filter(entry => entry.end >= DateTime.now())
     }
 }
 

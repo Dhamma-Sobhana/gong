@@ -2,7 +2,8 @@ const fs = require("fs");
 import path from "path";
 import { DateTime, Interval } from "luxon";
 import { parseJson } from "./lib";
-import { Course, TimeTable, TimeTableEntry } from "./models";
+import { Course, DisabledEntries, TimeTable, TimeTableEntry } from "./models";
+import { writeDisabledEntries } from "./storage";
 
 /**
  * Check if a time table definition exits
@@ -76,9 +77,20 @@ function getTimeTable(courseType: string, date: DateTime, courseDay: number): Ti
 }
 
 /**
+ * Get course day from the current date, starting from 0
+ * @param course the check
+ * @param date to get day for
+ * @returns days since the course started
+ */
+function getCourseDayByDate(course: Course, date: DateTime) {
+    let interval = Interval.fromDateTimes(course.start, date);
+    return Math.floor(interval.length("days"));
+}
+
+/**
  * Find all courses that are active on one day. Usully returns one but can 
  * return two when one course end and another starts on the same date
- * @param allCourses array of fetched courses
+ * @param allCourses available courses
  * @param date to get courses for
  * @returns array of 1 or 2 courses
  */
@@ -96,17 +108,6 @@ function getCoursesByDate(allCourses: Array<Course>, date: DateTime): Array<Cour
     }
 
     return courses;
-}
-
-/**
- * Get course day from the current date, starting from 0
- * @param course the check
- * @param date to get day for
- * @returns days since the course started
- */
-function getCourseDayByDate(course: Course, date: DateTime) {
-    let interval = Interval.fromDateTimes(course.start, date);
-    return Math.floor(interval.length("days"));
 }
 
 /**
@@ -132,51 +133,123 @@ function mergeSchedules(timeTables: Array<TimeTable>): TimeTable {
     return result;
 }
 
-/**
- * Get schedule for the day
- * @param allCourses array of fetched courses
- * @param date to get schedule for
- * @returns a TimeTable with all entries for the day
- */
-function getSchedule(allCourses: Array<Course>, date: DateTime): TimeTable {
-    let courses = getCoursesByDate(allCourses, date);
+class Schedule {
+    courses: Array<Course>
+    timeTable: TimeTable
+    today: DateTime = DateTime.now()
+    disabledEntries?: DisabledEntries
 
-    let timeTables: Array<TimeTable> = [];
-    for (let course of courses) {
-        timeTables.push(
-            getTimeTable(course.type, date, getCourseDayByDate(course, date))
-        );
+    constructor(courses: Array<Course>, disabledEntries?: DisabledEntries|undefined) {
+        this.courses = courses
+        this.disabledEntries = disabledEntries
+        this.timeTable = this.updateSchedule(this.today)
     }
 
-    return mergeSchedules(timeTables);
-}
-
-/**
- * Get next gong for today or first gong tomorrow if time for last of the day has passed.
- * @param allCourses array of fetched courses
- * @returns TimeTableEntry for upcoming gong or undefined i none
- */
-function getNextGong(allCourses:Array<Course>): TimeTableEntry | undefined {
-    let today = getSchedule(allCourses, DateTime.now());
-    let tomorrow = getSchedule(allCourses, DateTime.now().plus({day: 1}));
-
-    for (let entry of today.entries) {
-        if (entry["time"] > DateTime.now()) return entry;
+    setCourses(courses: Array<Course>) {
+        this.courses = courses
+        this.updateSchedule(this.today)
     }
 
-    if (tomorrow.entries.length >= 0)
-        return tomorrow.entries[0];
+    getCourses() {
+        return this.courses
+    }
 
-    return undefined
+    /**
+     * Get schedule for the day
+     * @param date to get schedule for
+     * @returns a TimeTable with all entries for the day
+     */
+    getScheduleByDate(date: DateTime): TimeTable {
+        let courses = getCoursesByDate(this.courses, date);
+
+        let timeTables: Array<TimeTable> = [];
+        for (let course of courses) {
+            timeTables.push(
+                getTimeTable(course.type, date, getCourseDayByDate(course, date))
+            );
+        }
+        
+        return mergeSchedules(timeTables);
+    }
+
+    /**
+     * Update schedule if day has changed before returning todays schedule
+     * @returns a TimeTable with all entries for today
+     */
+    getSchedule():TimeTable {
+        if (this.today.toISODate() !== DateTime.now().toISODate()) {
+            this.updateSchedule(DateTime.now())
+        }
+        console.log(this.timeTable.entries[2].time.toISO(), this.timeTable.entries[2].active)
+        return this.timeTable
+    }
+
+    /**
+     * Gets schedule for provided date and day after, disabling any time table entries manually disabled
+     * @param date to create schedule for this date
+     * @returns the new time table
+     */
+    updateSchedule(date: DateTime) {
+        this.today = date
+
+        let today = this.getScheduleByDate(this.today);
+        let tomorrow = this.getScheduleByDate(this.today.plus({day: 1}));
+        
+        let timeTable = mergeSchedules([today, tomorrow])
+        
+        // Patch time table entries disabling manually disabled entries
+        for (let entry of timeTable.entries) {
+            if (this.disabledEntries?.entries.some(e => e.equals(entry.time))) {
+                entry.active = false
+            }
+        }
+       
+        this.timeTable = timeTable
+        
+        return this.timeTable
+    }
+
+    /**
+     * Get next gong for today or first gong tomorrow if time for last of the day has passed.
+     * @returns TimeTableEntry for upcoming gong or undefined i none
+     */
+    getNextGong(): TimeTableEntry | undefined {
+        if (this.today.toISODate() !== DateTime.now().toISODate()) {
+            this.updateSchedule(DateTime.now())
+        }
+
+        for (let entry of this.timeTable.entries) {
+            if (entry.active && entry["time"] > DateTime.now())
+                return entry;
+        }
+
+        return undefined
+    }
+
+    /**
+     * Change status of an time table entry and write do disk
+     * @param entryDateTime Entry to find by date time
+     * @param active new status
+     */
+    setTimeTableEntryStatus(entryDateTime:DateTime, active:boolean) {
+        this.disabledEntries?.update(entryDateTime, active)
+        writeDisabledEntries(this.disabledEntries)
+
+        for (let entry of this.timeTable.entries) {
+            if (entryDateTime.equals(entry.time)) {
+                entry.active = active
+                return
+            }
+        }
+    }
 }
 
 export {
     timeTableExists,
     getTimeTableJson,
     getTimeTable,
-    getCoursesByDate,
     getCourseDayByDate,
-    getNextGong,
+    getCoursesByDate,
     mergeSchedules,
-    getSchedule,
+    Schedule
 };

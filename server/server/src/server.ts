@@ -25,6 +25,7 @@ class Server {
     automation: Automation
     deviceStatusTimer: NodeJS.Timer
     watchdog?: NodeJS.Timeout
+    playTimeout?: NodeJS.Timeout = undefined
 
     /**
      * 
@@ -55,6 +56,11 @@ class Server {
                 automation: this.automation,
                 system_time: DateTime.now()
             })
+        })
+
+        app.get('/status', (req: Request, res: Response) => {
+            let message = new StatusMessage(this.enabled, this.automation.enabled, this.gongPlaying)
+            res.json(message)
         })
 
         app.post('/enable', (req: Request, res: Response) => {
@@ -153,6 +159,7 @@ class Server {
             client.publish('stop')
             console.debug(`[mqtt] > stop`)
             console.log(`[server] Stop playing`)
+            this.gongPlaying = false
         } else {
             // Only send play message if there are player devices online
             if (numberOfActivePlayers(this.devices) < 1) {
@@ -161,12 +168,22 @@ class Server {
             }
 
             let message = JSON.stringify(new PlayMessage(location, repeatGong))
+
+            // If no player reports playback started within 5 seconds after message sent,
+            // send stop to inform remotes
+            clearTimeout(this.playTimeout)
+            this.playTimeout = setTimeout( async () => {
+                console.log(`[server] No player reported starting playback`)
+                client.publish('stop')
+                this.gongPlaying = false
+            }, 5000);
+            
             client.publish('play', message)
             console.debug(`[mqtt] > play: ${message}`)
             console.log(`[server] Start playing`)
-        }
 
-        this.gongPlaying = !this.gongPlaying
+            this.gongPlaying = true
+        }
     }
 
     /**
@@ -209,7 +226,14 @@ class Server {
                 data.state = this.gongPlaying ? State.Deactivated : State.Activated
                 this.playGong(["all"], this.gongRepeat)
                 break;
+            case 'playing':
+                console.log(`[player] '${data.name}' started playing`)
+                data.locations = undefined
+                data.state = State.Playing
+                clearTimeout(this.playTimeout)
+                break;
             case 'played':
+                console.log(`[player] '${data.name}' finished playing`)
                 this.played()
                 data.state = State.Played
                 data.locations = undefined // To not overwrite locations in device list

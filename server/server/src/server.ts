@@ -5,7 +5,7 @@ import * as Sentry from "@sentry/node";
 import { Request, Response } from 'express';
 import { DateTime } from "luxon";
 
-import { DeviceStatus, PlayMessage } from "./models"
+import { DeviceStatus, PlayMessage, State, StatusMessage } from "./models"
 import { parseJson } from './lib'
 import { logArray } from './log'
 import { app } from './web'
@@ -204,11 +204,14 @@ class Server {
 
         switch (topic) {
             case 'activated':
+                // TODO: Depending on time action initiated, play in different locations
                 console.log(`[remote] Action initiated by ${data.name}`)
+                data.state = this.gongPlaying ? State.Deactivated : State.Activated
                 this.playGong(["all"], this.gongRepeat)
                 break;
             case 'played':
                 this.played()
+                data.state = State.Played
                 data.locations = undefined // To not overwrite locations in device list
                 break;
             default:

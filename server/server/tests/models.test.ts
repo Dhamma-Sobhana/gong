@@ -1,5 +1,5 @@
 import { DateTime } from "luxon"
-import { Message, PlayMessage, DeviceStatus, Status } from "../src/models"
+import { Message, PlayMessage, DeviceStatus, Status, State } from "../src/models"
 
 test('Message instance', () => {
     let message = new Message()
@@ -89,4 +89,7 @@ test('DeviceStatus update', () => {
 
     expect(status.type).toBe('player')
     expect(status.locations).toStrictEqual(["accommodation", "outside"])
+
+    status.update('player', undefined, undefined, State.Playing)
+    expect(status.state).toEqual(State.Playing)
 })

@@ -1,7 +1,7 @@
 import * as Sentry from "@sentry/node";
 
 import { DateTime } from "luxon";
-import { Status, DeviceStatus, Message } from "./models";
+import { Status, DeviceStatus, Message, State } from "./models";
 
 /**
  * Update device list
@@ -16,7 +16,7 @@ function updateDevice(data: object, devices: Array<DeviceStatus>) {
 
     for (let device of devices) {
         if (device.name == message.name) {
-            device.update(message.type, message.locations, message.status);
+            device.update(message.type, message.locations, message.status, message.state);
         }
     }
 }
@@ -85,6 +85,8 @@ function updateDevicesStatus(devices: Array<DeviceStatus>) {
                 device.updateStatus(Status.OK)   
             }
         }
+        if (device.state !== State.Playing)
+            device.state = State.Waiting
     }
 }
 

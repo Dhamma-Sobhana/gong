@@ -7,6 +7,15 @@ enum Status {
     Disabled = '⚪️'
 }
 
+enum State {
+    Unknown = 'Unknown',
+    Playing = 'Playing',
+    Played = 'Played',
+    Activated = 'Activated',
+    Deactivated = 'Deactivated',
+    Waiting = 'Waiting'
+}
+
 function stringToStatus(strStatus: string|undefined):Status {
     if (strStatus === undefined)
         return Status.OK
@@ -30,13 +39,15 @@ class Message {
     type?: string;
     locations?: Array<string>;
     _status?: Status;
+    state?: State;
 
-    constructor(name?: string, locations?: Array<string>, type?: string, status?: string) {
+    constructor(name?: string, locations?: Array<string>, type?: string, status?: string, state?: State) {
         if (name !== undefined)
             this.name = name
         this.locations = locations
         this.type = type
         this.status = status
+        this.state = state
     }
 
     public set status(status: string|undefined) {
@@ -52,6 +63,18 @@ class Message {
     }
 }
 
+class StatusMessage {
+    enabled: boolean = false
+    automation: boolean = false
+    playing: boolean = false
+
+    constructor(enabled:boolean, automation:boolean, playing:boolean) {
+        this.enabled = enabled
+        this.automation = automation
+        this.playing = playing
+    }
+}
+
 
 class DeviceStatus {
     name: string;
@@ -59,12 +82,13 @@ class DeviceStatus {
     locations?: Array<string>;
     timestamp?: DateTime
     status: Status = Status.Failed
+    state: State = State.Unknown
 
     constructor(name: string) {
         this.name = name
     }
 
-    update = (type?: string, locations?: Array<string>, status?: Status) => {
+    update = (type?: string, locations?: Array<string>, status?: Status, state?: State) => {
         if (type !== undefined)
             this.type = type
         if (locations !== undefined)
@@ -75,6 +99,9 @@ class DeviceStatus {
             this.status = status
         else
             this.status = Status.OK
+
+        if (state !== undefined)
+            this.state = state
     }
 
     updateStatus(status:Status) {
@@ -190,4 +217,4 @@ class DisabledEntries {
 }
 
 
-export { Message, Status, DeviceStatus, PlayMessage, Course, TimeTable, TimeTableEntry, DisabledEntries }
+export { Message, StatusMessage, Status, State, DeviceStatus, PlayMessage, Course, TimeTable, TimeTableEntry, DisabledEntries }

@@ -107,11 +107,11 @@ class Remote {
             this.sendPong()
         } else if (topic === 'stop' || topic === 'played') {
             this.active = 0;
-            this.led.writeSync(this.active);
         } else if (topic === 'play') {
             this.active = 1;
-            this.led.writeSync(this.active);
         }
+
+        this.led.writeSync(this.active);
     }
 
     /**

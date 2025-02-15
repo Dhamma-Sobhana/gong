@@ -98,7 +98,8 @@ function getCoursesByDate(allCourses: Array<Course>, date: DateTime): Array<Cour
     let courses: Array<Course> = [];
     
     for (let course of allCourses) {
-        if (course["start"] <= date && course["end"] >= date) courses.push(course);
+        if (course["start"] <= date && course["end"] >= date)
+            courses.push(course);
     }
 
     if (courses.length === 0) {
@@ -111,22 +112,29 @@ function getCoursesByDate(allCourses: Array<Course>, date: DateTime): Array<Cour
 }
 
 /**
- * Merge two TimeTables. If of different course types and first one has endTime defined, entries from
+ * Merge two TimeTables. If first one has endTime defined, entries from
  * seconds TimeTable will be ignored before that time.
  * @param timeTables 1 or 2 TimeTable
+ * @param filterByEndTime set to false to ignore filtering by endTime
  * @returns a new TimeTable without overlapping entries
  */
-function mergeSchedules(timeTables: Array<TimeTable>): TimeTable {
-    if (timeTables.length == 1) return timeTables[0];
+function mergeSchedules(timeTables: Array<TimeTable>, filterByEndTime: boolean = true): TimeTable {
+    if (timeTables.length == 1)
+        return timeTables[0];
 
     let result = new TimeTable("mixed");
+
+    // If first course does not include end time or endTime is ignored, include all
+    if (timeTables[0].endTime === undefined || !filterByEndTime) {
+        result.entries = timeTables[0].entries.concat(timeTables[1].entries)
+        return result
+    }
+
     result.entries = timeTables[0].entries;
 
     for (let timeTableEntry of timeTables[1].entries) {
-        if (timeTables[0].endTime === undefined || timeTables[0].courseType === timeTables[1].courseType)
-            result.entries.push(timeTableEntry);
         // @ts-ignore possible null
-        else if (timeTableEntry.time.toISOTime() > timeTables[0].endTime.toISOTime())
+        if (timeTableEntry.time.toISOTime() > timeTables[0].endTime.toISOTime())
             result.entries.push(timeTableEntry);
     }
 
@@ -195,7 +203,7 @@ class Schedule {
         let today = this.getScheduleByDate(this.today);
         let tomorrow = this.getScheduleByDate(this.today.plus({day: 1}));
         
-        let timeTable = mergeSchedules([today, tomorrow])
+        let timeTable = mergeSchedules([today, tomorrow], false)
         
         // Patch time table entries disabling manually disabled entries
         for (let entry of timeTable.entries) {

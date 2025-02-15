@@ -4,7 +4,7 @@ import path from 'path';
 import { DateTime } from 'luxon';
 
 import { timeTableExists, getTimeTableJson, getTimeTable, getCourseDayByDate, getCoursesByDate, mergeSchedules, Schedule } from '../src/schedule';
-import { DisabledEntries, TimeTable } from '../src/models';
+import { Course, DisabledEntries, TimeTable } from '../src/models';
 import { parseSchedule } from '../src/fetch';
 
 let data:any
@@ -165,6 +165,18 @@ test('Get Schedule', () => {
     expect(_schedule.entries[2].time.minute).toBe(20);
 });
 
+test('Get schedule between 10 day course and unknown period', () => {
+    let tenDay = new Course('10-Day', '2025-02-04', '2025-02-15', DateTime.fromISO("09:00"))
+    let unknown = new Course('OSProgram', '2025-02-15', '2025-02-16')
+    
+    let sched = new Schedule([tenDay, unknown])
+
+    let today = sched.getScheduleByDate(DateTime.fromISO('2025-02-15T12:00:00'));
+    expect(today.entries.length).toBe(2)
+    expect(today.entries[0].time.hour).toBe(4)
+    expect(today.entries[0].time.minute).toBe(0)
+})
+
 test('Get Gong Schedule for today and tomorrow', () => {
     let today = schedule.getScheduleByDate(DateTime.fromISO('2023-09-17T12:00:00'));
     expect(today.entries.length).toBe(4);
@@ -172,6 +184,32 @@ test('Get Gong Schedule for today and tomorrow', () => {
     let tomorrow = schedule.getScheduleByDate(DateTime.fromISO('2023-09-18T12:00:00'));
     expect(tomorrow.entries.length).toBe(3);
 });
+
+test('Get Gong Schedule for today and tomorrow for end of 10 day course', () => {
+    //let date = DateTime.fromISO('2025-02-14T12:00:00');
+    //jest.setSystemTime(date.toJSDate());
+    jest.setSystemTime(new Date(2025, 1, 14, 12))
+
+    // Day 10: 5
+    // Day 11: 2 + 3 - 1 First gong of service period removed due to being before end-time of 10 day course
+    let tenDay = new Course('10-Day', '2025-02-04', '2025-02-15', DateTime.fromISO("09:00")) 
+    let servicePeriod = new Course('ServicePeriod', '2025-02-15', '2025-02-16')
+
+    let sched = new Schedule([tenDay, servicePeriod])
+    let schedule = sched.getSchedule()
+
+    expect(schedule.entries.length).toBe(9)
+    expect(schedule.entries[0].time.hour).toBe(4)
+    expect(schedule.entries[0].time.minute).toBe(0)
+
+    expect(schedule.entries[6].time.hour).toBe(4)
+    expect(schedule.entries[6].time.minute).toBe(20)
+
+    expect(schedule.entries[7].time.hour).toBe(14)
+    expect(schedule.entries[7].time.minute).toBe(20)
+})
+
+
 
 test('Get next gong', () => {
     jest.setSystemTime(DateTime.fromISO('2023-09-17T03:00:15').toJSDate());

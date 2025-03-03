@@ -77,9 +77,10 @@ class Player {
      * Subscribe to topics and send alive message
      */
     mqttConnect = () => {
-        console.log('[mqtt] Connected! Listening for topics:', topics.join(', '))
+        let mqtt_topics = topics.concat([`test/${this.name}`])
+        console.log('[mqtt] Connected! Listening for topics:', mqtt_topics.join(', '))
 
-        for (let topic of topics) {
+        for (let topic of mqtt_topics) {
             this.client.subscribe(topic)
         }
 
@@ -100,16 +101,15 @@ class Player {
 
         if (topic === 'ping') {
             this.sendPong()
-        } else if (!this.disabled) {
-            if (topic == 'play') {
-                this.playGong(data.locations, data.repeat)
-            } else if (topic == 'stop') {
-                if (this.audio !== undefined) {
-                    this.audio.kill()
-                    this.audio = undefined
-                    console.log('[player] Stopping playback')
-                }
-            }
+        } else if (topic === `test/${this.name}`) {
+            console.log('[player] Test playback started')
+            this.playGong(data.type, ['all'], 1000)
+        } else if (topic == 'stop' && this.audio !== undefined) {
+            this.audio.kill()
+            this.audio = undefined
+            console.log('[player] Stopping playback')
+        } else if (topic == 'play' && !this.disabled) {
+            this.playGong(data.type, data.locations, data.repeat)
         }
     }
 
@@ -199,7 +199,7 @@ class Player {
     resetWatchdog = () => {
         clearTimeout(this.watchdog)
         this.watchdog = setTimeout( async () => {
-            let message = "[player] No message received in 10 minutes, resetting device"
+            let message = `[player] (${this.name}) No message received in 10 minutes, resetting device`
             console.error(message)
             Sentry.captureMessage(message)
             await Sentry.flush()

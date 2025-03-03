@@ -1,0 +1,47 @@
+<h2>Test</h2>
+
+<h3>Test device</h3>
+<h4>Gong</h4>
+<form action="/test/device/play" method="post">
+    <input type="hidden" name="type" value="gong"/>
+    {% for device in devices %}
+    {% if device.type == "player" %}
+    <button type="submit" name="device" class="blue" value="{{device.name}}">{{device.name}}</button>
+    {% endif %}
+    {% endfor %}
+</form>
+
+<h4>Beep</h4>
+<form action="/test/device/play" method="post">
+    <input type="hidden" name="type" value="beep"/>
+    {% for device in devices %}
+    {% if device.type == "player" %}
+    <button type="submit" name="device" class="blue" value="{{device.name}}">{{device.name}}</button>
+    {% endif %}
+    {% endfor %}
+</form>
+
+<h4>Silence</h4>
+<form action="/test/device/play" method="post">
+    <input type="hidden" name="type" value="silence"/>
+    {% for device in devices %}
+    {% if device.type == "player" %}
+    <button type="submit" name="device" class="blue" value="{{device.name}}">{{device.name}}</button>
+    {% endif %}
+    {% endfor %}
+</form>
+
+<h4>LED</h4>
+<form action="/test/device/play" method="post">
+    <input type="hidden" name="type" value="silence"/>
+    {% for device in devices %}
+    {% if device.type == "remote" %}
+    <button type="submit" name="device" class="blue" value="{{device.name}}">{{device.name}}</button>
+    {% endif %}
+    {% endfor %}
+</form>
+
+<form action="/test/stop" method="post">
+    <button type="submit" class="red">STOP ALL</button>
+</form>
+    

@@ -83,8 +83,10 @@ class Remote {
      * Subscribe to topics and send alive message
      */
     mqttConnect = () => {
-        console.log('[remote] Connected! Listening for topics:', topics.join(', '))
-        for (let topic of topics) {
+        let mqtt_topics = topics.concat([`test/${name}`])
+        console.log('[mqtt] Connected! Listening for topics:', mqtt_topics.join(', '))
+
+        for (let topic of mqtt_topics) {
             this.client.subscribe(topic)
         }
 
@@ -105,6 +107,9 @@ class Remote {
 
         if (topic === 'ping') {
             this.sendPong()
+        } else if (topic === `test/${name}`) {
+            console.log('[test] Light LED')
+            this.active = 1;
         } else if (topic === 'stop' || topic === 'played') {
             this.active = 0;
         } else if (topic === 'play') {
@@ -264,7 +269,7 @@ class Remote {
     resetWatchdog = () => {
         clearTimeout(this.watchdog)
         this.watchdog = setTimeout( async () => {
-            let message = "[remote] No message received in 10 minutes, resetting device"
+            let message = `[remote] (${name}) No message received in 10 minutes, resetting device`
             console.error(message)
             Sentry.captureMessage(message)
             await Sentry.flush()

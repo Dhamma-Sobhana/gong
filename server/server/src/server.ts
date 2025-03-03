@@ -111,6 +111,22 @@ class Server {
             res.redirect('/')
         })
 
+        app.post('/test/stop', (req: Request, res: Response) => {
+            console.log(`[web][test]: Stop`)
+            this.stop()
+            res.redirect('/')
+        })
+
+        app.post('/test/device/play', (req: Request, res: Response) => {
+            let device = req.body.device
+            let type = req.body.type
+            let message = JSON.stringify(new PlayMessage(type, ['all'], 1000))
+
+            console.log(`[web][test]: Test '${type}' on '${device}'`)
+            client.publish(`test/${device}`, message)
+            res.redirect('/')
+        })
+
         this.deviceStatusTimer = setInterval(() => {
             client.publish(`ping`);
             updateDevicesStatus(this.devices)
@@ -156,10 +172,7 @@ class Server {
             return false
 
         if (this.gongPlaying) {
-            client.publish('stop')
-            console.debug(`[mqtt] > stop`)
-            console.log(`[server] Stop playing`)
-            this.gongPlaying = false
+            this.stop()
         } else {
             // Only send play message if there are player devices online
             if (numberOfActivePlayers(this.devices) < 1) {
@@ -184,6 +197,13 @@ class Server {
 
             this.gongPlaying = true
         }
+    }
+
+    stop() {
+        client.publish('stop')
+        console.debug(`[mqtt] > stop`)
+        console.log(`[server] Stop playing`)
+        this.gongPlaying = false
     }
 
     /**

@@ -24,4 +24,15 @@ function parseJson(message: string) {
     }
 }
 
-export { getLocations, parseJson }
+const sound_base = './sound'
+
+function typeStringToFileName(type: string):string {
+    if (type === 'silence')
+        return `${sound_base}/silence-8s.mp3`
+    else if (type === 'beep')
+        return `${sound_base}/beep.mp3`
+    else
+        return `${sound_base}/gong-8s.mp3`
+}
+
+export { getLocations, parseJson, typeStringToFileName }

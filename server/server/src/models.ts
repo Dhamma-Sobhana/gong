@@ -117,10 +117,14 @@ class DeviceStatus {
 }
 
 class PlayMessage {
+    type: string = 'gong'
     locations?: Array<string> = ["all"];
     repeat: number = 4
 
-    constructor(locations?: Array<string>, repeat?: number) {
+    constructor(type?: string, locations?: Array<string>, repeat?: number) {
+        if (type !== undefined)
+            this.type = type
+        
         if (locations !== undefined)
             this.locations = locations
 

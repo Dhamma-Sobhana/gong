@@ -56,7 +56,7 @@ test('PlayMessage instance', () => {
     expect(message.locations).toStrictEqual(["all"])
     expect(message.repeat).toBe(4)
 
-    message = new PlayMessage(["accommodation"], 1)
+    message = new PlayMessage('gong', ["accommodation"], 1)
 
     expect(message.locations).toStrictEqual(["accommodation"])
     expect(message.repeat).toBe(1)

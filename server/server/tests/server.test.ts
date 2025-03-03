@@ -82,7 +82,7 @@ test('Disable system', () => {
 
     expect(spy).toHaveBeenCalled()
 
-    expect(spy).toHaveBeenCalledWith("play", "{\"locations\":[\"all\"],\"repeat\":3}")
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"all\"],\"repeat\":3}")
 })
 
 test('Play gong by remote action', () => {
@@ -94,7 +94,7 @@ test('Play gong by remote action', () => {
     server.handleMessage('activated', JSON.stringify({name: test}))
 
     expect(spy).toHaveBeenCalled()
-    expect(spy).toHaveBeenCalledWith("play", "{\"locations\":[\"all\"],\"repeat\":3}")  
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"all\"],\"repeat\":3}")  
 })
 
 test('Play gong by automtion', () => {
@@ -106,7 +106,7 @@ test('Play gong by automtion', () => {
     server.playAutomatedGong(['student-accommodation'])
 
     expect(spy).toHaveBeenCalled()
-    expect(spy).toHaveBeenCalledWith("play", "{\"locations\":[\"student-accommodation\"],\"repeat\":3}")    
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"student-accommodation\"],\"repeat\":3}")    
 })
 
 test('Only play if players active', () => {
@@ -121,5 +121,5 @@ test('Only play if players active', () => {
 
     server.playAutomatedGong(['student-accommodation'])
 
-    expect(spy).toHaveBeenCalledWith("play", "{\"locations\":[\"student-accommodation\"],\"repeat\":3}")
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"student-accommodation\"],\"repeat\":3}")
 })

@@ -167,7 +167,7 @@ class Server {
                 return
             }
 
-            let message = JSON.stringify(new PlayMessage(location, repeatGong))
+            let message = JSON.stringify(new PlayMessage('gong', location, repeatGong))
 
             // If no player reports playback started within 5 seconds after message sent,
             // send stop to inform remotes

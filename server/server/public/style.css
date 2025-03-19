@@ -49,3 +49,6 @@ tr.disabled {
     text-decoration: line-through;
 }
 
+td button {
+    width: 100%;
+}

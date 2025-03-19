@@ -4,8 +4,6 @@
 
 {% block content %}
   <h1>Gong</h1>
-  
-  {% include 'test.njk' %}
 
   <h2>System status</h2>
   <table id="device-status">
@@ -78,5 +76,6 @@
   {% include 'devices.njk' %}
   <hr>
   {% include 'log.njk' %}
-  {# {% include 'debug.njk'%} #}
+  <hr>
+  {% include 'test.njk' %}
 {% endblock %}

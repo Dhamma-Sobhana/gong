@@ -44,3 +44,8 @@ button {
     overflow-x: auto;
     white-space: nowrap;
 }
+
+tr.disabled {
+    text-decoration: line-through;
+}
+

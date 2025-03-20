@@ -18,8 +18,9 @@ if (process.env.SENTRY_DSN) {
 const name = process.env.NAME || randomUUID()
 const disabled = process.env.DISABLED !== undefined ? process.env.DISABLED == 'true' : false
 const server = process.env.MQTT_SERVER || 'localhost'
-const ledPin = process.env.LED_PIN !== undefined ? parseInt(process.env.LED_PIN) : 3
-const buttonPin = process.env.BUTTON_PIN !== undefined ? parseInt(process.env.BUTTON_PIN) : 2
+const baseGpioAddress = process.env.GPIO_BASE_ADDRESS !== undefined ? parseInt(process.env.GPIO_BASE_ADDRESS) : 512
+const ledPin = process.env.LED_PIN !== undefined ? baseGpioAddress + parseInt(process.env.LED_PIN) : baseGpioAddress + 3
+const buttonPin = process.env.BUTTON_PIN !== undefined ? baseGpioAddress + parseInt(process.env.BUTTON_PIN) : baseGpioAddress + 2
 const ledGpio = new Gpio(ledPin, 'out');
 const buttonGpio = new Gpio(buttonPin, 'in', 'both');
 

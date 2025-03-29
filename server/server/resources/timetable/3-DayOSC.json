@@ -8,8 +8,8 @@
       { "time": "12:50", "type": "gong", "location": ["all"] }
     ],
     "default" : [
-      { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
-      { "time": "04:20", "type": "gong", "location": ["student-accommodation"] },
+      { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
+      { "time": "04:20", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
       { "time": "07:48", "type": "gong", "location": ["all"] },
       { "time": "13:00", "type": "gong", "location": ["student-accommodation", "outside"] },
       { "time": "14:15", "type": "gong", "location": ["student-accommodation", "outside"] },
@@ -17,8 +17,8 @@
       { "time": "17:48", "type": "gong", "location": ["all"] }
     ],
     "3" : [
-      { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
-      { "time": "04:20", "type": "gong", "location": ["student-accommodation"] },
+      { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
+      { "time": "04:20", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
       { "time": "07:48", "type": "gong", "location": ["all"] },
       { "time": "13:00", "type": "gong", "location": ["student-accommodation", "outside"] },
       { "time": "14:15", "type": "gong", "location": ["student-accommodation", "outside"] },
@@ -27,8 +27,8 @@
       { "time": "20:25", "type": "gong", "location": ["all"] }
     ],
     "4" : [
-      { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
-      { "time": "04:20", "type": "gong", "location": ["student-accommodation"] },
+      { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
+      { "time": "04:20", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
       { "time": "08:50", "type": "gong", "location": ["all"] }
     ]
   }

@@ -1,5 +1,12 @@
 {
+  "definition" : {
+    "endTime": "19:20"
+  },
   "days": {
+    "0": [
+      { "time": "13:50", "type": "gong", "location": ["all"] },
+      { "time": "17:50", "type": "gong", "location": ["all"] }
+    ],
     "default": [
       { "time": "07:20", "type": "gong", "location": ["all"] },
       { "time": "14:20", "type": "gong", "location": ["all"] },

@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+import { DateTime, Interval } from 'luxon'
 
 enum Status {
     OK = '🟢',
@@ -145,6 +145,10 @@ class Course {
         this.end = DateTime.fromISO(end).set({hour: 23, minute: 59, second: 59})
         if (endTime)
             this.endTime = endTime
+    }
+
+    length() {
+        return Interval.fromDateTimes(this.start, this.end).length("days")
     }
 
     toString() {

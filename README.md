@@ -128,14 +128,15 @@ Example data:
 ### play (server -> player)
 Play gong sound if player is configured to handle the zone requested.
 
+- type: string referring to sound type on player, usually 'gong'.
 - locations: array of locations.
 - repeat: number of times sound should be played.
 
 Example data:
 
-    {"locations": ["all"], repeat: 6}
-    {"locations": ["student-accommodation"], repeat: 6}
-    {"locations": ["student-accommodation", "outside"], repeat: 4}
+    { "type": "gong", "locations": ["all"], "repeat": 6 }
+    { "type": "gong", "locations": ["student-accommodation"], "repeat": 6 }
+    { "type": "gong", "locations": ["student-accommodation", "outside"], "repeat": 4 }
 
 ### playing (player -> server)
 Report that playback has started.
@@ -212,7 +213,7 @@ If server recieves an *activated* message from a remote before this time, only p
 Comma separated list of devices that should be online. Used to check status of devices.
 
 ## GONG_REPEAT (server)
-How many times a gong should be played in a row.
+How many times a gong should be played in a row by default. Time table entries can override this value.
 
 ## AUTOMATION (server)
 If automatic fetching and parsing of courses from dhamma.org site should be used.
@@ -288,9 +289,17 @@ What type of gong sound to be played. Currently always set to `gong`.
 #### location
 An array of locations where the gong shoule be played. See [Location](#location).
 
-**Example**:
+#### repeat (optional)
+How many times a gong should be played. If no value is defined the GONG_REPEAT value will be used.
+
+**Example 1**:
 ```json
 { "time": "13:00", "type": "gong", "location": ["student-accommodation", "outside"] }
+```
+
+**Example 2**:
+```json
+{ "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 }
 ```
 
 ### Time Table definition examples
@@ -298,37 +307,42 @@ An array of locations where the gong shoule be played. See [Location](#location)
 ```json
 {
   "definition" : {
-    "endTime": "09:00"
+    "endTime": "08:50"
   },
   "days" : {
-    "0" : [],
+    "0" : [
+      { "time": "07:20", "type": "gong", "location": ["all"] },
+      { "time": "12:50", "type": "gong", "location": ["all"] }
+    ],
     "default" : [
-      { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
-      { "time": "04:20", "type": "gong", "location": ["student-accommodation"] },
-      { "time": "07:50", "type": "gong", "location": ["all"] },
-      { "time": "13:00", "type": "gong", "location": ["student-accommodation", "outside"] },
+      { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
+      { "time": "04:20", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
+      { "time": "07:48", "type": "gong", "location": ["all"] },
+      { "time": "12:50", "type": "gong", "location": ["student-accommodation", "outside"] },
       { "time": "14:15", "type": "gong", "location": ["student-accommodation", "outside"] },
       { "time": "14:23", "type": "gong", "location": ["all"] },
-      { "time": "17:50", "type": "gong", "location": ["all"] }
+      { "time": "17:48", "type": "gong", "location": ["all"] }
     ],
     "4" : [
-      { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
-      { "time": "04:20", "type": "gong", "location": ["student-accommodation"] },
-      { "time": "07:50", "type": "gong", "location": ["all"] },
-      { "time": "13:00", "type": "gong", "location": ["student-accommodation", "outside"] },
+      { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
+      { "time": "04:20", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
+      { "time": "07:48", "type": "gong", "location": ["all"] },
+      { "time": "12:50", "type": "gong", "location": ["student-accommodation", "outside"] },
       { "time": "13:50", "type": "gong", "location": ["all"] },
-      { "time": "17:50", "type": "gong", "location": ["all"] }
+      { "time": "17:48", "type": "gong", "location": ["all"] }
     ],
     "10" : [
-      { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
-      { "time": "04:20", "type": "gong", "location": ["student-accommodation"] },
-      { "time": "07:50", "type": "gong", "location": ["all"] },
+      { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
+      { "time": "04:20", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
+      { "time": "07:48", "type": "gong", "location": ["all"] },
       { "time": "14:20", "type": "gong", "location": ["all"] },
-      { "time": "17:50", "type": "gong", "location": ["all"] }
+      { "time": "15:55", "type": "gong", "location": ["all"] },
+      { "time": "17:48", "type": "gong", "location": ["all"] }
     ],
     "11" : [
-      { "time": "04:00", "type": "gong", "location": ["student-accommodation"] },
-      { "time": "04:20", "type": "gong", "location": ["student-accommodation"] }
+      { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
+      { "time": "04:20", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
+      { "time": "08:50", "type": "gong", "location": ["all"] }
     ]
   }
 }
@@ -339,9 +353,9 @@ An array of locations where the gong shoule be played. See [Location](#location)
 {
   "days": {
     "default": [
-      {"time": "07:20", "type": "gong", "location": ["all"]},
-      {"time": "14:20", "type": "gong", "location": ["all"]},
-      {"time": "19:20", "type": "gong", "location": ["all"]}
+      { "time": "07:20", "type": "gong", "location": ["all"] },
+      { "time": "14:20", "type": "gong", "location": ["all"] },
+      { "time": "19:20", "type": "gong", "location": ["all"] }
     ]
   }
 }

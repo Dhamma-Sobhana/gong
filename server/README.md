@@ -14,7 +14,7 @@ If server recieves an *activated* message from a remote before this time, only p
 Comma separated list of devices that should be online. Used to check status of devices.
 
 ## GONG_REPEAT (server)
-How many times a gong should be played in a row.
+How many times a gong should be played in a row by default. Time table entries can override this value.
 
 ## AUTOMATION (server)
 If automatic fetching and parsing of courses from dhamma.org site should be used.

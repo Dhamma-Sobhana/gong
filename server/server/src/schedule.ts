@@ -140,8 +140,8 @@ function filterCoursesByPriority(allCourses: Array<Course>, date: DateTime): Arr
             courses.push(allCourses[1])
         }
     } else if (allCourses.length == 2) {
-        // Course ending on this day
-        if (allCourses[0].start.startOf('day') < date.startOf('day') && allCourses[0].end.startOf('day').toISODate() == date.startOf('day').toISODate())
+        // If one course ends today, return both
+        if (allCourses[0].end.startOf('day').toISODate() == date.startOf('day').toISODate() || allCourses[1].end.startOf('day').toISODate() == date.startOf('day').toISODate())
             courses = allCourses
         else {
             // Service period with course during

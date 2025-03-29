@@ -92,7 +92,7 @@ function getCourseDayByDate(course: Course, date: DateTime) {
  * return two when one course end and another starts on the same date
  * @param allCourses available courses
  * @param date to get courses for
- * @returns array of 1 or 2 courses
+ * @returns array of 1-3 courses
  */
 function getCoursesByDate(allCourses: Array<Course>, date: DateTime): Array<Course> {
     let courses: Array<Course> = [];
@@ -110,6 +110,52 @@ function getCoursesByDate(allCourses: Array<Course>, date: DateTime): Array<Cour
 
     return courses;
 }
+
+/**
+ * If more then one course on the same day, include priorited courses.
+ * If three courses, course inlcude the one ending on the date and the shortest of two other two.
+ * Else if two courses and one is ending on the date, include both.
+ * Else return the shortest course.
+ * @param allCourses array of courses
+ * @param date data to get courses for
+ * @returns array of filtered courses
+ */
+function filterCoursesByPriority(allCourses: Array<Course>, date: DateTime): Array<Course> {
+    if (allCourses.length <= 1)
+        return allCourses
+
+    let courses: Array<Course> = [];
+    allCourses.sort((a, b) => a.start.toMillis() - b.start.toMillis());
+
+    if (allCourses.length == 3) {
+        // Ongoing course ending on this day
+        let first = allCourses.shift()
+        if (first !== undefined)
+            courses.push(first)
+
+        // Keep the shortest course starting on this date
+        if (allCourses[0].length() < allCourses[1].length()) {
+            courses.push(allCourses[0])
+        } else {
+            courses.push(allCourses[1])
+        }
+    } else if (allCourses.length == 2) {
+        // Course ending on this day
+        if (allCourses[0].start.startOf('day') < date.startOf('day') && allCourses[0].end.startOf('day').toISODate() == date.startOf('day').toISODate())
+            courses = allCourses
+        else {
+            // Service period with course during
+            if (allCourses[0].length() < allCourses[1].length()) {
+                courses.push(allCourses[0])
+            } else {
+                courses.push(allCourses[1])
+            }
+        }
+    }
+    
+    return courses;
+}
+
 
 /**
  * Merge two TimeTables. If first one has endTime defined, entries from
@@ -169,6 +215,7 @@ class Schedule {
      */
     getScheduleByDate(date: DateTime): TimeTable {
         let courses = getCoursesByDate(this.courses, date);
+        courses = filterCoursesByPriority(courses, date)
 
         let timeTables: Array<TimeTable> = [];
         for (let course of courses) {
@@ -182,7 +229,7 @@ class Schedule {
 
     /**
      * Update schedule if day has changed before returning todays schedule
-     * @returns a TimeTable with all entries for today
+     * @returns a TimeTable with all entries for today and tomorrow
      */
     getSchedule():TimeTable {
         if (this.today.toISODate() !== DateTime.now().toISODate()) {
@@ -258,6 +305,7 @@ export {
     getTimeTable,
     getCourseDayByDate,
     getCoursesByDate,
+    filterCoursesByPriority,
     mergeSchedules,
     Schedule
 };

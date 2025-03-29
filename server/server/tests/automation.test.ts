@@ -6,7 +6,7 @@ import { TimeTableEntry } from '../src/models'
 jest.useFakeTimers()
 const locationId = 1392
 const callback = jest.fn();
-let automation = new Automation(callback, locationId, false)
+let automation = new Automation(callback, locationId, false, 4)
 
 beforeEach(() => {
     jest.setSystemTime(DateTime.fromISO('2023-09-17T12:00:00').toJSDate())

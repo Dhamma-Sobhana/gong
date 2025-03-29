@@ -43,7 +43,7 @@ function getTimeTableJson(courseType?: string): any {
  * @param courseDay optional if multiday course, to find file content for that day
  * @returns a timetable with with time table entries
  */
-function getTimeTable(courseType: string, date: DateTime, courseDay: number): TimeTable {
+function getTimeTable(courseType: string, date: DateTime, courseDay: number, repeat: number): TimeTable {
     let data = getTimeTableJson(courseType);
     let timeTable = new TimeTable(courseType);
 
@@ -66,7 +66,8 @@ function getTimeTable(courseType: string, date: DateTime, courseDay: number): Ti
                         entry["type"],
                         entry["location"],
                         timeTable.courseType,
-                        courseDay
+                        courseDay,
+                        entry["repeat"] ?? repeat
                     )
                 );
             }
@@ -195,10 +196,12 @@ class Schedule {
     courses: Array<Course>
     timeTable: TimeTable
     today: DateTime = DateTime.now()
+    repeat: number
     disabledEntries?: DisabledEntries
 
-    constructor(courses: Array<Course>, disabledEntries?: DisabledEntries|undefined) {
+    constructor(courses: Array<Course>, repeat: number, disabledEntries?: DisabledEntries|undefined) {
         this.courses = courses
+        this.repeat = repeat
         this.disabledEntries = disabledEntries
         this.timeTable = this.updateSchedule(this.today)
     }
@@ -224,7 +227,7 @@ class Schedule {
         let timeTables: Array<TimeTable> = [];
         for (let course of courses) {
             timeTables.push(
-                getTimeTable(course.type, date, getCourseDayByDate(course, date))
+                getTimeTable(course.type, date, getCourseDayByDate(course, date), this.repeat)
             );
         }
         

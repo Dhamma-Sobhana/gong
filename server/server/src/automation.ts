@@ -16,17 +16,19 @@ class Automation {
     callback: Function
     locationId?: number
     schedule: Schedule
+    repeat: number
 
     /**
      * Create an Automation to be used by server
      * @param callback function to be called when schedule executes
      */
-    constructor(callback:Function, locationId:number|undefined, automationEnabled:boolean = false) {
+    constructor(callback:Function, locationId:number|undefined, automationEnabled:boolean = false, repeat:number) {
         this.callback = callback
         this.locationId = locationId
         let disabledEntries = readDisabledEntries()
         console.log(`[automation] Read ${disabledEntries?.entries.length} disabled entries from settings file`)
-        this.schedule = new Schedule([], disabledEntries)
+        this.repeat = repeat
+        this.schedule = new Schedule([], this.repeat, disabledEntries)
 
         if (automationEnabled) {
             this.enable()

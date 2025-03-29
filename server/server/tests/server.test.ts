@@ -103,23 +103,23 @@ test('Play gong by automtion', () => {
     
     let spy = jest.spyOn(client, 'publish')
 
-    server.playAutomatedGong(['student-accommodation'])
+    server.playAutomatedGong(['student-accommodation'], 4)
 
     expect(spy).toHaveBeenCalled()
-    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"student-accommodation\"],\"repeat\":3}")    
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"student-accommodation\"],\"repeat\":4}")    
 })
 
 test('Only play if players active', () => {
     let spy = jest.spyOn(client, 'publish')
 
-    server.playAutomatedGong(['student-accommodation'])
+    server.playAutomatedGong(['student-accommodation'], 3)
 
     expect(spy).not.toHaveBeenCalled()
 
     server.devices[1].type = 'player'
     server.devices[1].status = Status.OK
 
-    server.playAutomatedGong(['student-accommodation'])
+    server.playAutomatedGong(['student-accommodation'], 4)
 
-    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"student-accommodation\"],\"repeat\":3}")
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"student-accommodation\"],\"repeat\":4}")
 })

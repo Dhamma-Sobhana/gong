@@ -180,9 +180,10 @@ class TimeTableEntry {
     location: Array<string>
     courseType: string
     courseDay: number
+    repeat: number = -1
     active: boolean = true
 
-    constructor(date: DateTime, time: string, type: string, location: Array<string>, courseType: string, courseDay: number) {
+    constructor(date: DateTime, time: string, type: string, location: Array<string>, courseType: string, courseDay: number, repeat?: number) {
         this.time = date.set({
             hour: parseInt(time.substring(0, 2)),
             minute: parseInt(time.substring(3, 5)),
@@ -193,6 +194,8 @@ class TimeTableEntry {
         this.location = location
         this.courseType = courseType
         this.courseDay = courseDay
+        if (repeat !== undefined)
+            this.repeat = repeat
     }
 
     getCourse() {

@@ -10,11 +10,13 @@ import { parseSchedule } from '../src/fetch';
 let data:any
 let schedule:Schedule
 
+const REPEAT_COUNT = 4
+
 beforeAll(() => {
     jest.useFakeTimers()
     jest.setSystemTime(new Date(2023, 8, 15, 12))
     data = JSON.parse(fs.readFileSync(path.resolve(__dirname, './resources/schedule.json')));
-    schedule = new Schedule(parseSchedule(data))
+    schedule = new Schedule(parseSchedule(data), REPEAT_COUNT)
 })
 
 test('Time table exists', () => {
@@ -32,9 +34,9 @@ test('Get TimeTable Json', () => {
 
 test('Get TimeTable', () => {
     let date = DateTime.fromISO('2023-09-15');
-    expect(getTimeTable('UnknownType', date, 0).entries.length).toBe(0);
+    expect(getTimeTable('UnknownType', date, 0, REPEAT_COUNT).entries.length).toBe(0);
 
-    let timeTable = getTimeTable('ServicePeriod', date, 1);
+    let timeTable = getTimeTable('ServicePeriod', date, 1, REPEAT_COUNT);
 
     expect(timeTable.courseType).toBe('ServicePeriod')
 
@@ -47,7 +49,7 @@ test('Get TimeTable', () => {
     expect(entry.type).toBe('gong');
     expect(entry.location).toStrictEqual(['all']);
 
-    expect(getTimeTable('10-Day', date, 11).entries.length).toBe(3);
+    expect(getTimeTable('10-Day', date, 11, REPEAT_COUNT).entries.length).toBe(3);
 });
 
 test('Get schedule by date', () => {
@@ -106,7 +108,7 @@ test('Get timetable with default day on dynamic course', () => {
     let course = schedule.courses[4]
     expect(getCourseDayByDate(course, date)).toBe(0)
 
-    let timeTable = getTimeTable('10-Day', date, getCourseDayByDate(course, date))
+    let timeTable = getTimeTable('10-Day', date, getCourseDayByDate(course, date), REPEAT_COUNT)
 
     expect(timeTable).toBeDefined()
     expect(timeTable.entries.length).toBe(2)
@@ -114,7 +116,7 @@ test('Get timetable with default day on dynamic course', () => {
     date = DateTime.fromISO('2023-09-08T00:00:00');
     expect(getCourseDayByDate(course, date)).toBe(2)
 
-    timeTable = getTimeTable('10-Day', date, getCourseDayByDate(course, date))
+    timeTable = getTimeTable('10-Day', date, getCourseDayByDate(course, date), REPEAT_COUNT)
 
     expect(timeTable).toBeDefined()
     expect(timeTable.entries[4].time.hour).toBe(14)
@@ -123,7 +125,7 @@ test('Get timetable with default day on dynamic course', () => {
     date = DateTime.fromISO('2023-09-10T00:00:00');
     expect(getCourseDayByDate(course, date)).toBe(4)
 
-    timeTable = getTimeTable('10-Day', date, getCourseDayByDate(course, date))
+    timeTable = getTimeTable('10-Day', date, getCourseDayByDate(course, date), REPEAT_COUNT)
 
     expect(timeTable).toBeDefined()
     expect(timeTable.entries[4].time.hour).toBe(13)
@@ -136,7 +138,7 @@ test('Merge schedules', () => {
     expect(courses.length).toBe(2);
     let timeTables: Array<TimeTable> = [];
     for (let course of courses) {
-        timeTables.push(getTimeTable(course.type, date, getCourseDayByDate(course, date)));
+        timeTables.push(getTimeTable(course.type, date, getCourseDayByDate(course, date), REPEAT_COUNT));
     }
     expect(timeTables.length).toBe(2);
     expect(timeTables[0].entries.length).toBe(3);
@@ -173,7 +175,7 @@ test('Get schedule between 10 day course and Trust Weekend', () => {
     let tenDay = new Course('10-Day', '2025-02-04', '2025-02-15', DateTime.fromISO("09:00"))
     let trust = new Course('OSProgram', '2025-02-15', '2025-02-16')
     
-    let sched = new Schedule([tenDay, trust])
+    let sched = new Schedule([tenDay, trust], REPEAT_COUNT)
 
     let today = sched.getScheduleByDate(DateTime.fromISO('2025-02-15T12:00:00'));
 
@@ -189,7 +191,7 @@ test('Get schedule between 10 day course and unknown period', () => {
     let tenDay = new Course('10-Day', '2025-02-04', '2025-02-15', DateTime.fromISO("09:00"))
     let unknown = new Course('Child', '2025-02-15', '2025-02-16')
     
-    let sched = new Schedule([tenDay, unknown])
+    let sched = new Schedule([tenDay, unknown], REPEAT_COUNT)
 
     let today = sched.getScheduleByDate(DateTime.fromISO('2025-02-15T12:00:00'));
     expect(today.entries.length).toBe(3)
@@ -215,7 +217,7 @@ test('Get Gong Schedule for today and tomorrow for end of 10 day course', () => 
     let tenDay = new Course('10-Day', '2025-02-04', '2025-02-15', DateTime.fromISO("09:00")) 
     let servicePeriod = new Course('ServicePeriod', '2025-02-15', '2025-02-16')
 
-    let sched = new Schedule([tenDay, servicePeriod])
+    let sched = new Schedule([tenDay, servicePeriod], REPEAT_COUNT)
     let schedule = sched.getSchedule()
 
     expect(schedule.entries.length).toBe(11)
@@ -292,13 +294,13 @@ test('Restore disabled entries on start', () => {
     let date = DateTime.fromISO('2023-09-17T12:00:00');
     jest.setSystemTime(date.toJSDate());
 
-    schedule = new Schedule(parseSchedule(data))
+    schedule = new Schedule(parseSchedule(data), REPEAT_COUNT)
 
     expect(schedule.getNextGong()?.time).toEqual(DateTime.fromISO('2023-09-17T14:20:00.000+02:00'))
 
     let disabledEntries = new DisabledEntries([DateTime.fromISO('2023-09-17T14:20:00.000+02:00')])
 
-    schedule = new Schedule(parseSchedule(data), disabledEntries)
+    schedule = new Schedule(parseSchedule(data), REPEAT_COUNT, disabledEntries)
 
     expect(schedule.disabledEntries?.entries.length).toEqual(1)
 
@@ -327,7 +329,7 @@ test('Handle course happening during service period', () => {
     let servicePeriod = new Course('ServicePeriod', '2025-03-16', '2025-03-26')
     let child = new Course('Child', '2025-03-21', '2025-03-23')
 
-    let sched = new Schedule([servicePeriod, child])
+    let sched = new Schedule([servicePeriod, child], REPEAT_COUNT)
 
     let by_date = sched.getScheduleByDate(DateTime.fromISO('2025-03-20T12:00:00'))
     expect(by_date.entries.length).toBe(3)
@@ -358,7 +360,7 @@ test('Unknown course ends during service period', () => {
     let servicePeriod = new Course('ServicePeriod', '2025-03-16', '2025-03-26')
     let notDefined = new Course('NotDefined', '2025-03-21', '2025-03-23')
 
-    let sched = new Schedule([servicePeriod, notDefined])
+    let sched = new Schedule([servicePeriod, notDefined], REPEAT_COUNT)
 
     let by_date = sched.getScheduleByDate(DateTime.fromISO('2025-03-20T12:00:00'))
     expect(by_date.entries.length).toBe(3)
@@ -378,7 +380,7 @@ test('10 day course ends, Service Period and Trust Meeting starting', () => {
     let trust = new Course('OSProgram', '2025-02-15', '2025-02-16')
     let servicePeriod = new Course('ServicePeriod', '2025-02-15', '2025-02-20')
 
-    let sched = new Schedule([tenDay, trust, servicePeriod])
+    let sched = new Schedule([tenDay, trust, servicePeriod], REPEAT_COUNT)
 
     let schedule = sched.getScheduleByDate(DateTime.fromISO('2025-02-15T12:00:00'))
     
@@ -408,7 +410,7 @@ test('10 day course ends, Service Period and Trust Meeting starting, reverse ord
     let trust = new Course('OSProgram', '2025-02-15', '2025-02-16')
     let servicePeriod = new Course('ServicePeriod', '2025-02-15', '2025-02-20')
 
-    let sched = new Schedule([tenDay, servicePeriod, trust])
+    let sched = new Schedule([tenDay, servicePeriod, trust], REPEAT_COUNT)
 
     let schedule = sched.getScheduleByDate(DateTime.fromISO('2025-02-15T12:00:00'))
     
@@ -427,7 +429,7 @@ test('Service Period ends and 10 day course starts', () => {
     let servicePeriod = new Course('ServicePeriod', '2025-03-30', '2025-04-01')
     let tenDay = new Course('10-Day', '2025-04-01', '2025-04-12', DateTime.fromISO("09:00"))
 
-    let sched = new Schedule([servicePeriod, tenDay])
+    let sched = new Schedule([servicePeriod, tenDay], REPEAT_COUNT)
 
     let schedule = sched.getScheduleByDate(DateTime.fromISO('2025-04-01T12:00:00'))
     
@@ -447,4 +449,40 @@ test('Sort courses by length', () => {
     allCourses.sort((a, b) => Interval.fromDateTimes(a.start, a.end).length("days") - Interval.fromDateTimes(b.start, b.end).length("days"));
 
     expect(allCourses[0].type).toBe('OSProgram')
+})
+
+test('Custom repeat for morning gong', () => {
+    let course = new Course('10-Day', '2025-02-04', '2025-02-15', DateTime.fromISO("09:00"))
+    let sched = new Schedule([course], 4)
+
+    let schedule = sched.getScheduleByDate(DateTime.fromISO('2025-02-10T12:00:00'))
+    expect(schedule.entries[0].time.hour).toBe(4)
+    expect(schedule.entries[0].time.minute).toBe(0)
+    expect(schedule.entries[0].repeat).toBe(8)
+
+    expect(schedule.entries[2].time.hour).toBe(7)
+    expect(schedule.entries[2].time.minute).toBe(48)
+    expect(schedule.entries[2].repeat).toBe(4)
+
+    course = new Course('Satipatthana', '2025-02-04', '2025-02-15', DateTime.fromISO("09:00"))
+    sched = new Schedule([course], 6)
+
+    schedule = sched.getScheduleByDate(DateTime.fromISO('2025-02-05T12:00:00'))
+
+    expect(schedule.entries[0].time.hour).toBe(4)
+    expect(schedule.entries[0].time.minute).toBe(0)
+    expect(schedule.entries[0].repeat).toBe(8)
+
+    expect(schedule.entries[2].time.hour).toBe(7)
+    expect(schedule.entries[2].time.minute).toBe(48)
+    expect(schedule.entries[2].repeat).toBe(6)
+
+    course = new Course('3-DayOSC', '2025-02-04', '2025-02-07', DateTime.fromISO("09:00"))
+    sched = new Schedule([course], 4)
+
+    schedule = sched.getScheduleByDate(DateTime.fromISO('2025-02-05T12:00:00'))
+
+    expect(schedule.entries[0].time.hour).toBe(4)
+    expect(schedule.entries[0].time.minute).toBe(0)
+    expect(schedule.entries[0].repeat).toBe(8)
 })

@@ -89,7 +89,7 @@ function getCourseDayByDate(course: Course, date: DateTime) {
 
 /**
  * Find all courses that are active on one day. Usully returns one but can 
- * return two when one course end and another starts on the same date
+ * return two or three when one course end and one or two start on the same day.
  * @param allCourses available courses
  * @param date to get courses for
  * @returns array of 1-3 courses
@@ -169,9 +169,13 @@ function mergeSchedules(timeTables: Array<TimeTable>, filterByEndTime: boolean =
         return timeTables[0];
 
     let result = new TimeTable("mixed");
-
     // If first course does not include end time or endTime is ignored, include all
     if (timeTables[0].endTime === undefined || !filterByEndTime) {
+        // Include all entries from first time table that are before the first entry of the second time table
+        if (timeTables[1].entries.length > 0) {
+            timeTables[0].entries = timeTables[0].entries.filter(e => e.time < timeTables[1].entries[0].time)
+        }
+
         result.entries = timeTables[0].entries.concat(timeTables[1].entries)
         return result
     }

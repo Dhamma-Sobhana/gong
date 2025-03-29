@@ -323,7 +323,6 @@ test('Filter courses happening on the same day, based on starting day and length
 test('Handle course happening during service period', () => {
     //let date = DateTime.fromISO('2025-02-14T12:00:00');
     //jest.setSystemTime(date.toJSDate());
-    
 
     let servicePeriod = new Course('ServicePeriod', '2025-03-16', '2025-03-26')
     let child = new Course('Child', '2025-03-21', '2025-03-23')
@@ -353,6 +352,24 @@ test('Handle course happening during service period', () => {
     // expect(schedule.entries[0].time.hour).toBe(4)
     // expect(schedule.entries[0].time.minute).toBe(20)
 })
+
+
+test('Unknown course ends during service period', () => {
+    let servicePeriod = new Course('ServicePeriod', '2025-03-16', '2025-03-26')
+    let notDefined = new Course('NotDefined', '2025-03-21', '2025-03-23')
+
+    let sched = new Schedule([servicePeriod, notDefined])
+
+    let by_date = sched.getScheduleByDate(DateTime.fromISO('2025-03-20T12:00:00'))
+    expect(by_date.entries.length).toBe(3)
+
+    by_date = sched.getScheduleByDate(DateTime.fromISO('2025-03-21T12:00:00'))
+    expect(by_date.entries.length).toBe(0)
+
+    by_date = sched.getScheduleByDate(DateTime.fromISO('2025-03-23T12:00:00'))
+    expect(by_date.entries.length).toBe(3)
+})
+
 
 test('10 day course ends, Service Period and Trust Meeting starting', () => {
     jest.setSystemTime(DateTime.fromISO('2025-03-20T12:00:00').toJSDate())
@@ -384,7 +401,6 @@ test('10 day course ends, Service Period and Trust Meeting starting', () => {
     expect(schedule.entries[2].time.minute).toBe(20)
 })
 
-
 test('10 day course ends, Service Period and Trust Meeting starting, reverse order', () => {
     jest.setSystemTime(DateTime.fromISO('2025-03-20T12:00:00').toJSDate())
 
@@ -407,6 +423,20 @@ test('10 day course ends, Service Period and Trust Meeting starting, reverse ord
     expect(sched.getScheduleByDate(DateTime.fromISO('2025-02-16T12:00:00')).entries.length).toBe(3)
 })
 
+test('Service Period ends and 10 day course starts', () => {
+    let servicePeriod = new Course('ServicePeriod', '2025-03-30', '2025-04-01')
+    let tenDay = new Course('10-Day', '2025-04-01', '2025-04-12', DateTime.fromISO("09:00"))
+
+    let sched = new Schedule([servicePeriod, tenDay])
+
+    let schedule = sched.getScheduleByDate(DateTime.fromISO('2025-04-01T12:00:00'))
+    
+    expect(schedule.entries.length).toBe(2)
+    expect(schedule.entries[0].time.hour).toBe(7)
+    expect(schedule.entries[0].time.minute).toBe(20)
+    expect(schedule.entries[1].time.hour).toBe(12)
+    expect(schedule.entries[1].time.minute).toBe(50)
+})
 
 test('Sort courses by length', () => {
     let trust = new Course('OSProgram', '2025-02-15', '2025-02-16')

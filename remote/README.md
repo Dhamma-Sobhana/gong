@@ -25,12 +25,12 @@ Default: **2**
 ### LED_PIN
 GPIO pin the LED is connected to.
 
+Default: **3**
+
 ### GPIO_BASE_ADDRESS
 To handle GPIO addresses not starting from 0 in newer OS for Raspberry Pi. Added to the button and LED pin when accessing GPIO port.
 
 Default: **512**
-
-Default: **3**
 
 ## Local mode development
 

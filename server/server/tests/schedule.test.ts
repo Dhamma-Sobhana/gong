@@ -440,6 +440,22 @@ test('Service Period ends and 10 day course starts', () => {
     expect(schedule.entries[1].time.minute).toBe(50)
 })
 
+test('Open house schedule', () => {
+    let threeDay = new Course('3-DayOSC', '2025-09-10', '2025-09-14', DateTime.fromISO("09:00"))
+    let openHouse = new Course('OpenHouse', '2025-09-14', '2025-09-14')
+    let servicePeriod = new Course('ServicePeriod', '2025-09-14', '2025-09-19')
+
+    let sched = new Schedule([threeDay, openHouse, servicePeriod], REPEAT_COUNT)
+
+    let schedule = sched.getScheduleByDate(DateTime.fromISO('2025-09-14T12:00:00'))
+
+    expect(schedule.entries.length).toBe(4)
+    expect(schedule.entries[2].time.hour).toBe(8)
+    expect(schedule.entries[2].time.minute).toBe(50)
+    expect(schedule.entries[3].time.hour).toBe(19)
+    expect(schedule.entries[3].time.minute).toBe(20)
+})
+
 test('Sort courses by length', () => {
     let trust = new Course('OSProgram', '2025-02-15', '2025-02-16')
     let servicePeriod = new Course('ServicePeriod', '2025-02-15', '2025-02-20')
@@ -486,3 +502,4 @@ test('Custom repeat for morning gong', () => {
     expect(schedule.entries[0].time.minute).toBe(0)
     expect(schedule.entries[0].repeat).toBe(8)
 })
+

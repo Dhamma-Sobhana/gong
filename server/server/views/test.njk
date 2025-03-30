@@ -1,47 +1,54 @@
 <h2>Test</h2>
 
-<h3>Test device</h3>
-<h4>Gong</h4>
-<form action="/test/device/play" method="post">
-    <input type="hidden" name="type" value="gong"/>
-    {% for device in devices %}
-    {% if device.type == "player" %}
-    <button type="submit" name="device" class="blue" value="{{device.name}}">{{device.name}}</button>
-    {% endif %}
-    {% endfor %}
+<h3>Test player</h3>
+
+<form action="/test/device/play" method="post" class="test">
+    <label for="device">Device</label>
+    <select id="device" name="device" value="-1">
+        <option value="none">--</option>
+        {% for device in devices %}
+        {% if device.type == "player" %}
+        <option value="{{device.name}}">{{device.name}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+
+    <br>
+
+    <label for="type">Type</label>
+    <select id="type" name="type">
+        <option value="gong">Gong</option>
+        <option value="beep">Beep</option>
+        <option value="silence">Silence</option>
+    </select>
+
+    <br>
+    <button type="submit" class="blue">Play</button>
 </form>
 
-<h4>Beep</h4>
-<form action="/test/device/play" method="post">
-    <input type="hidden" name="type" value="beep"/>
-    {% for device in devices %}
-    {% if device.type == "player" %}
-    <button type="submit" name="device" class="blue" value="{{device.name}}">{{device.name}}</button>
-    {% endif %}
-    {% endfor %}
-</form>
 
-<h4>Silence</h4>
-<form action="/test/device/play" method="post">
+<h3>Test remote</h3>
+
+<form action="/test/device/play" method="post" class="test">
     <input type="hidden" name="type" value="silence"/>
-    {% for device in devices %}
-    {% if device.type == "player" %}
-    <button type="submit" name="device" class="blue" value="{{device.name}}">{{device.name}}</button>
-    {% endif %}
-    {% endfor %}
+
+    <label for="device">Device</label>
+    <select id="device" name="device">
+        <option value="none">--</option>
+        {% for device in devices %}
+        {% if device.type == "remote" %}
+        <option value="{{device.name}}">{{device.name}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+
+    <br>
+
+    <button type="submit" class="blue">Toggle LED</button>
 </form>
 
-<h4>LED</h4>
-<form action="/test/device/play" method="post">
-    <input type="hidden" name="type" value="silence"/>
-    {% for device in devices %}
-    {% if device.type == "remote" %}
-    <button type="submit" name="device" class="blue" value="{{device.name}}">{{device.name}}</button>
-    {% endif %}
-    {% endfor %}
-</form>
+<h3>Stop test</h3>
 
 <form action="/test/stop" method="post">
     <button type="submit" class="red">STOP ALL</button>
 </form>
-    

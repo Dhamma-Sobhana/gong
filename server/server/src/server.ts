@@ -120,6 +120,10 @@ class Server {
         app.post('/test/device/play', (req: Request, res: Response) => {
             let device = req.body.device
             let type = req.body.type
+
+            if (device === undefined || device == "none")
+                return res.redirect('/')
+
             let message = JSON.stringify(new PlayMessage(type, ['all'], 1000))
 
             console.log(`[web][test]: Test '${type}' on '${device}'`)

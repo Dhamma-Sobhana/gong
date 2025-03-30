@@ -11,7 +11,7 @@ services:
       - 'mqtt-config-dir:/mosquitto/config'
     restart: "no"
   mqtt:
-    image: eclipse-mosquitto:2
+    image: arm32v6/eclipse-mosquitto:2
     volumes:
       - 'mqtt-config-dir:/mosquitto/config'
     ports:
@@ -19,18 +19,24 @@ services:
       - 9001:9001
     depends_on:
       - mqtt-config
+      # condition: service_completed_successfully
   server:
     build:
       context: ./server/server
-      target: production
-    command: node build/server.js
+      target: development
+    environment:
+      MQTT_SERVER: "mqtt"
+      DEVICES: "dev-player,dev-remote"
     volumes:
       - 'data:/data'
+    command: npm run dev-device
     ports:
       - 80:8080
   audio:
     image: bh.cr/balenalabs/audio-rpi # where <arch> is one of rpi, armv7hf, aarch64 or amd64
     privileged: true
+    labels:
+      io.balena.features.dbus: 1 # For bluetooth support but prevents some error messages
     volumes:
       - 'pulse:/run/pulse'
     environment:
@@ -40,17 +46,21 @@ services:
       context: ./player
       target: development
     environment:
-      MQTT_SERVER: "${MQTT_SERVER}"
-      NAME: "${PLAYER_NAME}"
+      MQTT_SERVER: "mqtt"
+      NAME: "dev-player"
+      LOCATIONS: "outside"
       PULSE_SERVER: "unix:/run/pulse/pulseaudio.socket"
     volumes:
       - 'pulse:/run/pulse'
+    depends_on:
+      - audio
+    command: npm run start
   remote:
     build:
       context: ./remote
     environment:
-      MQTT_SERVER: "${MQTT_SERVER}"
-      NAME: "${REMOTE_NAME}"
+      MQTT_SERVER: "mqtt"
+      NAME: "dev-remote"
     labels:
       io.balena.features.sysfs: '1'
     command: npm run start

@@ -376,9 +376,13 @@ For running the project using docker on the developement machine:
 
     docker-compose -f docker-compose.development.yml up --build
 
-For running all services on a single device in local mode using belanaCloud:
+For running all services on a single device in local mode using *balenaCloud*:
 
-    balena push <device_ip> --env MQTT_SERVER=<server_ip> --env NAME=<device_name>
+    balena push <device_ip>
+
+Or to run all services on a single device deployed to **gong/development** on *balenaCloud*:
+
+    balena push gong/development
 
 # Deployment
 

@@ -30,7 +30,8 @@
       { "time": "07:48", "type": "gong", "location": ["all"] },
       { "time": "14:20", "type": "gong", "location": ["all"] },
       { "time": "15:55", "type": "gong", "location": ["all"] },
-      { "time": "17:48", "type": "gong", "location": ["all"] }
+      { "time": "17:48", "type": "gong", "location": ["all"] },
+      { "time": "19:10", "type": "gong", "location": ["student-accommodation", "outside"] }
     ],
     "11" : [
       { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },

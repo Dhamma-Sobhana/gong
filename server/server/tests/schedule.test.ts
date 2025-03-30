@@ -220,15 +220,18 @@ test('Get Gong Schedule for today and tomorrow for end of 10 day course', () => 
     let sched = new Schedule([tenDay, servicePeriod], REPEAT_COUNT)
     let schedule = sched.getSchedule()
 
-    expect(schedule.entries.length).toBe(11)
+    expect(schedule.entries.length).toBe(12)
     expect(schedule.entries[0].time.hour).toBe(4)
     expect(schedule.entries[0].time.minute).toBe(0)
 
-    expect(schedule.entries[7].time.hour).toBe(4)
-    expect(schedule.entries[7].time.minute).toBe(20)
+    expect(schedule.entries[6].time.hour).toBe(19)
+    expect(schedule.entries[6].time.minute).toBe(10)
 
-    expect(schedule.entries[9].time.hour).toBe(14)
-    expect(schedule.entries[9].time.minute).toBe(20)
+    expect(schedule.entries[8].time.hour).toBe(4)
+    expect(schedule.entries[8].time.minute).toBe(20)
+
+    expect(schedule.entries[10].time.hour).toBe(14)
+    expect(schedule.entries[10].time.minute).toBe(20)
 })
 
 

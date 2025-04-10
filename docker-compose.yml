@@ -7,7 +7,9 @@ services:
   mqtt-config:
     build:
       context: ./server/mqtt-config
-      dockerfile: dev.Dockerfile
+      dockerfile: Dockerfile
+    environment:
+      MQTT_PASSWORD: "mqtt"
     volumes:
       - 'mqtt-config-dir:/mosquitto/config'
     restart: "no"

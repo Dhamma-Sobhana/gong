@@ -1,5 +1,7 @@
-FROM busybox
+FROM alpine:3.21
+
+WORKDIR /tmp
 
 COPY . .
 
-CMD sh copy.sh
+CMD sh setup.sh

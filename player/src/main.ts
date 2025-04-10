@@ -16,10 +16,14 @@ if (process.env.SENTRY_DSN) {
 
 const name = process.env.NAME || randomUUID()
 const disabled = process.env.DISABLED !== undefined ? process.env.DISABLED == 'true' : false
-const server = process.env.MQTT_SERVER || 'localhost'
+const server = process.env.MQTT_SERVER || 'mqtt'
 const pulseServer = process.env.PULSE_SERVER || 'unix:/run/pulse/pulseaudio.socket'
 
-const client = mqtt.connect(`mqtt://${server}`);
+const client = mqtt.connect(`mqtt://${server}`, {
+    'username': 'mqtt',
+    'password': `${process.env.MQTT_PASSWORD}`,
+})
+
 const audioBlock = new BalenaAudio(pulseServer, false, 'gong')
 
 const locations = (process.env.LOCATIONS || 'all').split(',')

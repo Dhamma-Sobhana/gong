@@ -7,6 +7,7 @@ services:
   mqtt-config:
     build:
       context: ./server/mqtt-config
+      dockerfile: dev.Dockerfile
     volumes:
       - 'mqtt-config-dir:/mosquitto/config'
     restart: "no"
@@ -26,6 +27,7 @@ services:
       target: development
     environment:
       MQTT_SERVER: "mqtt"
+      MQTT_PASSWORD: "mqtt"
       DEVICES: "dev-player,dev-remote"
     volumes:
       - 'data:/data'
@@ -47,6 +49,7 @@ services:
       target: development
     environment:
       MQTT_SERVER: "mqtt"
+      MQTT_PASSWORD: "mqtt"
       NAME: "dev-player"
       LOCATIONS: "outside"
       PULSE_SERVER: "unix:/run/pulse/pulseaudio.socket"
@@ -60,6 +63,7 @@ services:
       context: ./remote
     environment:
       MQTT_SERVER: "mqtt"
+      MQTT_PASSWORD: "mqtt"
       NAME: "dev-remote"
     labels:
       io.balena.features.sysfs: '1'

@@ -1,6 +1,9 @@
 const mqtt = require('mqtt')
 const mqtt_server = process.env.MQTT_SERVER || 'mqtt'
-const client = mqtt.connect(`mqtt://${mqtt_server}`)
+const client = mqtt.connect(`mqtt://${mqtt_server}`, {
+  'username': 'mqtt',
+  'password': `${process.env.MQTT_PASSWORD}`,
+})
 const topics = ["pong", "activated", "playing", "played"]
 
 console.log('[mqtt] Connecting to MQTT server..')

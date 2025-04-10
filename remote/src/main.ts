@@ -17,14 +17,17 @@ if (process.env.SENTRY_DSN) {
 
 const name = process.env.NAME || randomUUID()
 const disabled = process.env.DISABLED !== undefined ? process.env.DISABLED == 'true' : false
-const server = process.env.MQTT_SERVER || 'localhost'
+const server = process.env.MQTT_SERVER || 'mqtt'
 const baseGpioAddress = process.env.GPIO_BASE_ADDRESS !== undefined ? parseInt(process.env.GPIO_BASE_ADDRESS) : 512
 const ledPin = process.env.LED_PIN !== undefined ? baseGpioAddress + parseInt(process.env.LED_PIN) : baseGpioAddress + 3
 const buttonPin = process.env.BUTTON_PIN !== undefined ? baseGpioAddress + parseInt(process.env.BUTTON_PIN) : baseGpioAddress + 2
 const ledGpio = new Gpio(ledPin, 'out');
 const buttonGpio = new Gpio(buttonPin, 'in', 'both');
 
-const client = mqtt.connect(`mqtt://${server}`);
+const client = mqtt.connect(`mqtt://${server}`, {
+    'username': 'mqtt',
+    'password': `${process.env.MQTT_PASSWORD}`,
+})
 
 console.log(`[remote] Gong remote starting.\n\nName: ${name}\nServer: ${server}`)
 const button = new Remote(client, ledGpio, buttonGpio, disabled);

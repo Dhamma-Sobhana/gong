@@ -196,6 +196,9 @@ Default: `false`
 ## MQTT_SERVER (player, remote)
 IP address or hostname of server.
 
+## MQTT_PASSWORD (server, player, remote)
+Password for user _mqtt_ to connect to MQTT server.
+
 ## NAME (player, remote)
 Name of the device, used for identification.
 

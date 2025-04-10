@@ -2,4 +2,4 @@ FROM busybox
 
 COPY . .
 
-CMD sh copy.sh
+CMD sh dev.copy.sh

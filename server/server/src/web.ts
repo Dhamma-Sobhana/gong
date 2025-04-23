@@ -98,6 +98,20 @@ function setupWebRoutes(server:Server, client:any) {
         res.redirect('/')
     })
 
+    app.get('/automation/schedule', (req: Request, res: Response) => {
+        let courses = server.automation.getCourses()
+        let start = courses[0].start
+        let end = courses[courses.length - 1].end
+        
+        let schedule = server.automation.schedule.getScheduleByDatePeriod(start, end)
+        
+        res.render('schedule.njk', {
+            schedule: schedule?.entries || [],
+            start: start,
+            end: end,
+        })
+    })
+
     app.post('/test/stop', (req: Request, res: Response) => {
         console.log(`[web][test]: Stop`)
         server.stop()

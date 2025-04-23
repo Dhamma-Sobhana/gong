@@ -1,0 +1,80 @@
+{% extends 'base.njk' %}
+
+{% set title = 'Gong Schedule' %}
+
+{% block content %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    tr.date_change {
+        border-top: 2px solid darkgrey;
+    }
+
+    .overflow-scroll {
+        overflow-x: auto;
+    }
+
+    a {
+        font-size: 20px;
+    }
+
+    button {
+        margin: 10px 0;
+    }
+
+    @media print {    
+        .no-print, .no-print * {
+            display: none !important;
+        }
+    }
+</style>
+
+<a href="/" class="no-print">Go back</a>
+
+<br>
+
+<button class="no-print" onClick="window.print()">Print schedule</button>
+
+<h1>Gong Schedule</h1>
+<h2>From {{ start.toISODate() }} to {{ end.toISODate() }}</h2>
+
+<div class="overflow-scroll">
+<form method="post">
+<table>
+<thead>
+    <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Location</th>
+        <th>Course</th>
+    </tr>
+</thead>
+{% for entry in schedule %}
+<tr class="{% if last_date != entry.time.toISODate() %}date_change{% endif %}">
+    <td>{{ entry.time.toFormat('yyyy-MM-dd') }}</td>
+    <td>{{ entry.time.toFormat('HH:mm') }}</td>
+    <td>{{ entry.location }}</td>
+    <td>{{ entry.getCourse() }}</td>
+</tr>
+{% set last_date = entry.time.toISODate() %}
+{% else %}
+<tr>
+    <td>Schedule not available</td>
+</tr>
+{% endfor %}
+</table>
+</form>
+</div>
+
+<a href="/" class="no-print">Go back</a>
+{% endblock %}

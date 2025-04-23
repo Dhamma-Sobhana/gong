@@ -235,6 +235,39 @@ class Schedule {
     }
 
     /**
+     * Get schedule for a period of days
+     * @param start to get schedule for
+     * @param end to get schedule for
+     * @returns a TimeTable with all entries for the period
+     */
+    getScheduleByDatePeriod(start: DateTime, end: DateTime): TimeTable|undefined {
+        let timeTable:TimeTable|undefined = undefined;
+
+        let date = start
+
+        while (date <= end) {
+            let timeTables: Array<TimeTable> = [];
+            let courses = getCoursesByDate(this.courses, date);
+            courses = filterCoursesByPriority(courses, date)
+
+            for (let course of courses) {
+                timeTables.push(
+                    getTimeTable(course.type, date, getCourseDayByDate(course, date), this.repeat)
+                );
+            }
+            
+            if (timeTable === undefined)
+                timeTable = mergeSchedules(timeTables);
+            else
+                timeTable.entries.push(...mergeSchedules(timeTables).entries)
+
+            date = date.plus({ days: 1 })
+        }
+
+        return timeTable
+    }
+
+    /**
      * Update schedule if day has changed before returning todays schedule
      * @returns a TimeTable with all entries for today and tomorrow
      */

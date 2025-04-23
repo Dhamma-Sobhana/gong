@@ -1,5 +1,6 @@
 import { DateTime } from "luxon"
 import { Message, PlayMessage, DeviceStatus, Status, State } from "../src/models"
+import { readManualEntries } from "../src/storage"
 
 test('Message instance', () => {
     let message = new Message()
@@ -92,4 +93,14 @@ test('DeviceStatus update', () => {
 
     status.update('player', undefined, undefined, State.Playing)
     expect(status.state).toEqual(State.Playing)
+})
+
+test('Read manual configuration from file', () => {
+    let manual = readManualEntries()
+    
+    expect(manual.length).toBe(2)
+    expect(manual[0].from.toFormat('HH:mm')).toBe("03:45")
+    expect(manual[0].to.toFormat('HH:mm')).toBe("06:15")
+    expect(manual[0].locations).toEqual(["student-accommodation"])
+    expect(manual[0].repeat).toBe(8)
 })

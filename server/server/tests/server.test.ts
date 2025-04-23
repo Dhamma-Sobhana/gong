@@ -3,6 +3,7 @@ import { updateDevice } from "../src/devices"
 import { client, handleMessage } from "../src/mqtt"
 import { server as webServer } from "../src/web"
 import { Status } from "../src/models"
+import { DateTime } from "luxon"
 
 let server: Server
 
@@ -96,6 +97,62 @@ test('Play gong by remote action', () => {
     expect(spy).toHaveBeenCalled()
     expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"all\"],\"repeat\":3}")  
 })
+
+
+test('Play gong by remote action, location controlled by configuration', () => {
+    server.devices[1].type = 'player'
+    server.devices[1].status = Status.OK
+    
+    let spy = jest.spyOn(server, 'playGong')
+
+    jest.useFakeTimers()
+    let date = DateTime.fromISO('2025-04-23T03:00:00');
+    jest.setSystemTime(date.toJSDate());
+
+    handleMessage('activated', JSON.stringify({name: test}), server)
+
+    expect(spy).not.toHaveBeenCalled()
+    spy.mockClear()
+
+    jest.setSystemTime(DateTime.fromISO('2025-04-23T03:55:00').toJSDate());
+
+    handleMessage('activated', JSON.stringify({name: test}), server)
+
+    expect(spy).toHaveBeenCalled()
+    expect(spy).toHaveBeenCalledWith(["student-accommodation"], 8)
+    spy.mockClear()
+
+    jest.setSystemTime(DateTime.fromISO('2025-04-23T06:25:00').toJSDate());
+
+    handleMessage('activated', JSON.stringify({name: test}), server)
+
+    expect(spy).toHaveBeenCalled()
+    expect(spy).toHaveBeenCalledWith(["all"], 3)
+    spy.mockClear()
+
+    jest.setSystemTime(DateTime.fromISO('2025-04-23T11:00:00').toJSDate());
+
+    handleMessage('activated', JSON.stringify({name: test}), server)
+
+    expect(spy).toHaveBeenCalled()
+    expect(spy).toHaveBeenCalledWith(["all"], 3)
+    spy.mockClear()
+
+    jest.setSystemTime(DateTime.fromISO('2025-04-23T22:00:00').toJSDate());
+
+    handleMessage('activated', JSON.stringify({name: test}), server)
+
+    expect(spy).not.toHaveBeenCalled()
+    spy.mockClear()
+
+    jest.setSystemTime(DateTime.fromISO('2025-04-24T00:00:00').toJSDate());
+
+    handleMessage('activated', JSON.stringify({name: test}), server)
+
+    expect(spy).not.toHaveBeenCalled()
+    spy.mockClear()
+})
+
 
 test('Play gong by automtion', () => {
     server.devices[1].type = 'player'

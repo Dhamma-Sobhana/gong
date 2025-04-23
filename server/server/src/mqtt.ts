@@ -1,6 +1,6 @@
 import { Server } from "./server"
 import { State } from "./models"
-import { parseJson } from "./lib"
+import { getManualEntry, parseJson } from "./lib"
 import { updateDevice } from "./devices"
 
 const mqtt = require('mqtt')
@@ -39,10 +39,17 @@ function handleMessage(topic: string, message: string, server:Server) {
 
   switch (topic) {
       case 'activated':
-          // TODO: Depending on time action initiated, play in different locations
-          console.log(`[remote] Action initiated by ${data.name}`)
+          console.log(`[remote] Action initiated by '${data.name}'`)
           data.state = server.gongPlaying ? State.Deactivated : State.Activated
-          server.playGong(["all"], server.gongRepeat)
+
+          let manualEntry = getManualEntry()
+
+          if (manualEntry.locations.length > 0) {
+            server.playGong(manualEntry.locations, manualEntry.repeat || server.gongRepeat)
+            console.log(`[server] Gong will be played in ${manualEntry.locations.join(', ')}`)
+          } else
+            console.log(`[server] Will not play anywhere due to time of day`)
+          
           break;
       case 'playing':
           console.log(`[player] '${data.name}' started playing`)

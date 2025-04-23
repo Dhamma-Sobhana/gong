@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
-import { DisabledEntries } from "./models";
+import { DisabledEntries, ManualEntry } from "./models";
+import path from "path";
 
 const fs = require('fs');
 
@@ -21,6 +22,21 @@ function getCacheFilePath() {
 function getSettingsFilePath() {
     return `${getFilePath()}/settings.json`
 }
+
+function getManualFilePath() {
+    return path.resolve(__dirname, `../resources/manual.json`)
+}
+
+function readManualEntries():Array<ManualEntry> {
+    let jsonManual = JSON.parse(fs.readFileSync(getManualFilePath()))
+
+    let manual = jsonManual.map((entry: { from: string, to: string, locations: Array<string>, repeat: number }) =>
+        new ManualEntry(entry.from, entry.to, entry.locations, entry.repeat)
+    )
+
+    return manual
+}
+
 
 /**
  * Read settings file from disk, if any
@@ -65,6 +81,7 @@ export {
     getCacheFilePath,
     getSettingsFilePath,
     readSettings,
+    readManualEntries,
     writeSettings,
     readDisabledEntries,
     writeDisabledEntries

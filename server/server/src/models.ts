@@ -227,5 +227,19 @@ class DisabledEntries {
     }
 }
 
+class ManualEntry {
+    from: DateTime
+    to: DateTime
+    locations: Array<string>
+    repeat: number
 
-export { Message, StatusMessage, Status, State, DeviceStatus, PlayMessage, Course, TimeTable, TimeTableEntry, DisabledEntries }
+    constructor(from: string, to: string, locations: Array<string>, repeat: number) {
+        this.from = DateTime.fromFormat(from, 'HH:mm')
+        this.to = DateTime.fromFormat(to, 'HH:mm')
+        this.locations = locations
+        this.repeat = repeat
+    }
+}
+
+
+export { Message, StatusMessage, Status, State, DeviceStatus, PlayMessage, Course, TimeTable, TimeTableEntry, DisabledEntries, ManualEntry }

@@ -2,15 +2,13 @@ import { exec } from "child_process";
 
 import * as Sentry from "@sentry/node";
 
-import { Request, Response } from 'express';
 import { DateTime } from "luxon";
 
-import { DeviceStatus, PlayMessage, State, StatusMessage } from "./models"
-import { parseJson } from './lib'
-import { logArray } from './log'
-import { app } from './web'
+import { DeviceStatus, PlayMessage } from "./models"
 import { Automation } from './automation';
-import { aggregateDeviceStatus, numberOfActivePlayers, updateDevice, updateDevicesStatus } from './devices';
+import { numberOfActivePlayers, updateDevicesStatus } from './devices';
+import { setupWebRoutes } from './web'
+import { handleMessage as handleMqttMessage } from "./mqtt";
 
 let client:any
 
@@ -42,94 +40,11 @@ class Server {
         }
 
         client.on('message', (topic: string, message: object) => {
-            this.handleMessage(topic, message.toString())
+            handleMqttMessage(topic, message.toString(), this)
             this.resetWatchdog()
         })
 
-        app.get('/', (req: Request, res: Response) => {
-            res.render('index.njk', {
-                enabled: this.enabled,
-                devices: this.devices,
-                device_status: aggregateDeviceStatus(this.devices),
-                playing: this.gongPlaying,
-                log: logArray.slice(),
-                automation: this.automation,
-                system_time: DateTime.now()
-            })
-        })
-
-        app.get('/status', (req: Request, res: Response) => {
-            let message = new StatusMessage(this.enabled, this.automation.enabled, this.gongPlaying)
-            res.json(message)
-        })
-
-        app.post('/enable', (req: Request, res: Response) => {
-            console.log('[web] Enable/Disable')
-            this.enable(!this.enabled)
-            res.redirect('/')
-        })
-
-        app.post('/activated', (req: Request, res: Response) => {
-            console.log('[web] Play/Stop')
-            this.playGong(["all"], this.gongRepeat)
-            res.redirect('/')
-        })
-
-        app.post('/ping', (req: Request, res: Response) => {
-            console.log('[web] Refresh')
-            client.publish(`ping`);
-            res.redirect('/')
-        })
-
-        app.post('/automation/enable', (req: Request, res: Response) => {
-            console.log('[web] Automation enabled')
-            this.automation.enable()
-            res.redirect('/')
-        })
-
-        app.post('/automation/disable', (req: Request, res: Response) => {
-            console.log('[web] Automation disabled')
-            this.automation.enable(false)
-            res.redirect('/')
-        })
-
-        app.post('/automation/entry/enable', (req: Request, res: Response) => {
-            let entryDateTime = DateTime.fromISO(req.body.entry_id)
-            console.log(`[web] Automation enable entry: ${entryDateTime}`)
-
-            this.automation.schedule.setTimeTableEntryStatus(entryDateTime, true)
-            this.automation.scheduleGong(this.automation.getNextGong())
-            res.redirect('/')
-        })
-
-        app.post('/automation/entry/disable', (req: Request, res: Response) => {
-            let entryDateTime = DateTime.fromISO(req.body.entry_id)
-            console.log(`[web] Automation disable entry: ${entryDateTime}`)
-
-            this.automation.schedule.setTimeTableEntryStatus(entryDateTime, false)
-            this.automation.scheduleGong(this.automation.getNextGong())
-            res.redirect('/')
-        })
-
-        app.post('/test/stop', (req: Request, res: Response) => {
-            console.log(`[web][test]: Stop`)
-            this.stop()
-            res.redirect('/')
-        })
-
-        app.post('/test/device/play', (req: Request, res: Response) => {
-            let device = req.body.device
-            let type = req.body.type
-
-            if (device === undefined || device == "none")
-                return res.redirect('/')
-
-            let message = JSON.stringify(new PlayMessage(type, ['all'], 1000))
-
-            console.log(`[web][test]: Test '${type}' on '${device}'`)
-            client.publish(`test/${device}`, message)
-            res.redirect('/')
-        })
+        setupWebRoutes(this, client)
 
         this.deviceStatusTimer = setInterval(() => {
             client.publish(`ping`);
@@ -230,44 +145,6 @@ class Server {
 
         if (!this.gongPlaying)
             this.playGong(location, repeat)
-    }
-
-    /**
-     * Handle subscribed messages received
-     * @param topic MQTT topic
-     * @param message if any, in JSON format
-     */
-    handleMessage = (topic: string, message: string) => {
-        //console.debug(`[mqtt] < ${topic}: ${message}`)
-
-        // Parse message to JSON, if any
-        let data = parseJson(message)
-
-        switch (topic) {
-            case 'activated':
-                // TODO: Depending on time action initiated, play in different locations
-                console.log(`[remote] Action initiated by ${data.name}`)
-                data.state = this.gongPlaying ? State.Deactivated : State.Activated
-                this.playGong(["all"], this.gongRepeat)
-                break;
-            case 'playing':
-                console.log(`[player] '${data.name}' started playing`)
-                data.locations = undefined
-                data.state = State.Playing
-                clearTimeout(this.playTimeout)
-                break;
-            case 'played':
-                console.log(`[player] '${data.name}' finished playing`)
-                this.played()
-                data.state = State.Played
-                data.locations = undefined // To not overwrite locations in device list
-                break;
-            default:
-                break;
-        }
-
-        // Update device list based on message
-        updateDevice(data, this.devices)
     }
 
     /**

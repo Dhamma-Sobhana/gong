@@ -1,6 +1,6 @@
 import { Server } from "../src/server"
 import { updateDevice } from "../src/devices"
-import { client } from "../src/mqtt"
+import { client, handleMessage } from "../src/mqtt"
 import { server as webServer } from "../src/web"
 import { Status } from "../src/models"
 
@@ -35,7 +35,7 @@ test('Handle message', () => {
         "type": "remote"
     }
 
-    server.handleMessage('activated', JSON.stringify(data))
+    handleMessage('activated', JSON.stringify(data), server)
 
     expect(server.gongPlaying).toBe(true)
     expect(server.devices[0].type).toBe('remote')
@@ -72,13 +72,13 @@ test('Disable system', () => {
 
     expect(server.enabled).toBe(false)
 
-    server.handleMessage('activated', JSON.stringify({name: test}))
+    handleMessage('activated', JSON.stringify({name: test}), server)
 
     expect(spy).not.toHaveBeenCalled()
 
     server.enable()
 
-    server.handleMessage('activated', JSON.stringify({name: test}))
+    handleMessage('activated', JSON.stringify({name: test}), server)
 
     expect(spy).toHaveBeenCalled()
 
@@ -91,7 +91,7 @@ test('Play gong by remote action', () => {
     
     let spy = jest.spyOn(client, 'publish')
 
-    server.handleMessage('activated', JSON.stringify({name: test}))
+    handleMessage('activated', JSON.stringify({name: test}), server)
 
     expect(spy).toHaveBeenCalled()
     expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"all\"],\"repeat\":3}")  

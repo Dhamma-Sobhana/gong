@@ -4,39 +4,39 @@
   },
   "days" : {
     "0" : [
-      { "time": "07:20", "type": "gong", "location": ["all"] },
-      { "time": "12:50", "type": "gong", "location": ["all"] }
+      { "time": "07:20", "type": "gong", "locations": ["all"] },
+      { "time": "12:50", "type": "gong", "locations": ["all"] }
     ],
     "default" : [
-      { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
-      { "time": "04:20", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
-      { "time": "07:48", "type": "gong", "location": ["all"] },
-      { "time": "12:50", "type": "gong", "location": ["student-accommodation", "outside"] },
-      { "time": "14:15", "type": "gong", "location": ["student-accommodation", "outside"] },
-      { "time": "14:23", "type": "gong", "location": ["all"] },
-      { "time": "17:48", "type": "gong", "location": ["all"] }
+      { "time": "04:00", "type": "gong", "locations": ["student-accommodation"], "repeat": 8 },
+      { "time": "04:20", "type": "gong", "locations": ["student-accommodation"], "repeat": 8 },
+      { "time": "07:48", "type": "gong", "locations": ["all"] },
+      { "time": "12:50", "type": "gong", "locations": ["student-accommodation", "outside"] },
+      { "time": "14:15", "type": "gong", "locations": ["student-accommodation", "outside"] },
+      { "time": "14:23", "type": "gong", "locations": ["all"] },
+      { "time": "17:48", "type": "gong", "locations": ["all"] }
     ],
     "4" : [
-      { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
-      { "time": "04:20", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
-      { "time": "07:48", "type": "gong", "location": ["all"] },
-      { "time": "12:50", "type": "gong", "location": ["student-accommodation", "outside"] },
-      { "time": "13:50", "type": "gong", "location": ["all"] },
-      { "time": "17:48", "type": "gong", "location": ["all"] }
+      { "time": "04:00", "type": "gong", "locations": ["student-accommodation"], "repeat": 8 },
+      { "time": "04:20", "type": "gong", "locations": ["student-accommodation"], "repeat": 8 },
+      { "time": "07:48", "type": "gong", "locations": ["all"] },
+      { "time": "12:50", "type": "gong", "locations": ["student-accommodation", "outside"] },
+      { "time": "13:50", "type": "gong", "locations": ["all"] },
+      { "time": "17:48", "type": "gong", "locations": ["all"] }
     ],
     "10" : [
-      { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
-      { "time": "04:20", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
-      { "time": "07:48", "type": "gong", "location": ["all"] },
-      { "time": "14:20", "type": "gong", "location": ["all"] },
-      { "time": "15:55", "type": "gong", "location": ["all"] },
-      { "time": "17:48", "type": "gong", "location": ["all"] },
-      { "time": "19:10", "type": "gong", "location": ["student-accommodation", "outside"] }
+      { "time": "04:00", "type": "gong", "locations": ["student-accommodation"], "repeat": 8 },
+      { "time": "04:20", "type": "gong", "locations": ["student-accommodation"], "repeat": 8 },
+      { "time": "07:48", "type": "gong", "locations": ["all"] },
+      { "time": "14:20", "type": "gong", "locations": ["all"] },
+      { "time": "15:55", "type": "gong", "locations": ["all"] },
+      { "time": "17:48", "type": "gong", "locations": ["all"] },
+      { "time": "19:10", "type": "gong", "locations": ["student-accommodation", "outside"] }
     ],
     "11" : [
-      { "time": "04:00", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
-      { "time": "04:20", "type": "gong", "location": ["student-accommodation"], "repeat": 8 },
-      { "time": "08:50", "type": "gong", "location": ["all"] }
+      { "time": "04:00", "type": "gong", "locations": ["student-accommodation"], "repeat": 8 },
+      { "time": "04:20", "type": "gong", "locations": ["student-accommodation"], "repeat": 8 },
+      { "time": "08:50", "type": "gong", "locations": ["all"] }
     ]
   }
 }

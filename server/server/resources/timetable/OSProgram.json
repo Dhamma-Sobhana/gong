@@ -1,8 +1,8 @@
 {
   "days": {
     "0": [
-      { "time": "13:50", "type": "gong", "location": ["all"] },
-      { "time": "17:50", "type": "gong", "location": ["all"] }
+      { "time": "13:50", "type": "gong", "locations": ["all"] },
+      { "time": "17:50", "type": "gong", "locations": ["all"] }
     ]
   }
 }

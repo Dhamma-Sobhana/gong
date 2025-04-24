@@ -64,7 +64,7 @@ function getTimeTable(courseType: string, date: DateTime, courseDay: number, rep
                         date,
                         entry["time"],
                         entry["type"],
-                        entry["location"],
+                        entry["locations"],
                         timeTable.courseType,
                         courseDay,
                         entry["repeat"] ?? repeat

@@ -38,7 +38,7 @@
 <tr class="{% if not entry.active %}disabled{% endif %}">
     <td>{{ entry.time.toFormat('yyyy-MM-dd HH:mm') }}</td>
     <td>{{ entry.type }}</td>
-    <td>{{ entry.location }}</td>
+    <td>{{ entry.locations }}</td>
     <td>{{ entry.getCourse() }}</td>
     <td>
         {% if entry.active %}

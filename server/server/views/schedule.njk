@@ -63,7 +63,7 @@
 <tr class="{% if last_date != entry.time.toISODate() %}date_change{% endif %}">
     <td>{{ entry.time.toFormat('yyyy-MM-dd') }}</td>
     <td>{{ entry.time.toFormat('HH:mm') }}</td>
-    <td>{{ entry.location }}</td>
+    <td>{{ entry.locations }}</td>
     <td>{{ entry.getCourse() }}</td>
 </tr>
 {% set last_date = entry.time.toISODate() %}

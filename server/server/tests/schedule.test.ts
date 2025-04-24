@@ -47,7 +47,7 @@ test('Get TimeTable', () => {
     expect(entry.time.minute).toBe(20);
     expect(entry.time.second).toBe(0);
     expect(entry.type).toBe('gong');
-    expect(entry.location).toStrictEqual(['all']);
+    expect(entry.locations).toStrictEqual(['all']);
 
     expect(getTimeTable('10-Day', date, 11, REPEAT_COUNT).entries.length).toBe(3);
 });

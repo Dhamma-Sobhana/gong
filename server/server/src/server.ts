@@ -75,6 +75,7 @@ class Server {
     destroy() {
         clearInterval(this.deviceStatusTimer)
         clearInterval(this.watchdog)
+        clearTimeout(this.playTimeout)
         this.automation.cancel()
         client.end()
     }

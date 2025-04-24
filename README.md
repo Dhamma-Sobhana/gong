@@ -14,6 +14,7 @@ A system for playing gong sounds in multiple locations at meditation centers. Ma
 * [Communication](#communication)
 * [Configuration](#configuration)
 * [Automation](#automation)
+* [Manual execution](#manual-execution)
 * [Web interface](#web-interface)
 * [Development](#development)
 * [Deployment](#deployment)
@@ -363,6 +364,49 @@ How many times a gong should be played. If no value is defined the GONG_REPEAT v
   }
 }
 ```
+
+# Manual execution
+Playing of gong can be manually initiated by pressing the button on a *remote* device. Where the gong is played depending on what time of day the button is pressed is managed with configuration file [`server/server/resources/manual.json`](https://github.com/Dhamma-Sobhana/gong/tree/main/server/server/resources/manual.json).
+
+## File defintion
+
+### from
+
+Format: `hh:mm`
+
+From what time the configuration is starts.
+
+### to
+
+Format: `hh:mm`
+
+Up to what time the configuration lasts.
+
+### locations
+An array of locations where the gong shoule be played. See [Location](#location).
+
+### repeat (optional)
+How many times a gong should be played. If no value is defined the *GONG_REPEAT* value will be used.
+
+## Example
+```json
+[
+    {"from": "03:45", "to": "06:15", "locations": ["student-accommodation"], "repeat": 8},
+    {"from": "06:15", "to": "22:00", "locations": ["all"]}
+]
+```
+
+### Secenario 1: Executed at *03:44*.
+Gong is not played anywhere as no period is handling that time.
+
+### Secenario 2: Executed at *04:00*.
+Gong is played only in *student-accommodation*, repeated 8 times.
+
+### Secenario 3: Executed at *07:48*.
+Gong is played everywhere, repeated according to server configuration.
+
+### Secenario 4: Executed at *22:00*.
+Gong is not played anywhere as no period is handling that time.
 
 # Web interface
 A basic web interface is hosted on the server device and available to check system status and enabling or disabling system and automation.

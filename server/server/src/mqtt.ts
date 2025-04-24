@@ -1,7 +1,7 @@
 import { Server } from "./server"
 import { State } from "./models"
 import { getManualEntry, parseJson } from "./lib"
-import { updateDevice } from "./devices"
+import { updateDeviceLists } from "./devices"
 
 const mqtt = require('mqtt')
 const mqtt_server = process.env.MQTT_SERVER || 'mqtt'
@@ -67,8 +67,7 @@ function handleMessage(topic: string, message: string, server:Server) {
           break;
   }
 
-  // Update device list based on message
-  updateDevice(data, server.devices)
+  updateDeviceLists(data, server.devices, server.unknownDevices)
 }
 
 export { client, handleMessage }

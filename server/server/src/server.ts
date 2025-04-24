@@ -20,6 +20,7 @@ class Server {
     gongPlaying: boolean = false
     gongRepeat: number = 4
     devices: Array<DeviceStatus> = []
+    unknownDevices: Array<DeviceStatus> = []
     automation: Automation
     deviceStatusTimer: NodeJS.Timer
     watchdog?: NodeJS.Timeout

@@ -37,6 +37,7 @@ function setupWebRoutes(server:Server, client:any) {
         res.render('index.njk', {
             enabled: server.enabled,
             devices: server.devices,
+            unknown_devices: server.unknownDevices,
             device_status: aggregateDeviceStatus(server.devices),
             playing: server.gongPlaying,
             log: logArray.slice(),

@@ -3,22 +3,49 @@ import * as Sentry from "@sentry/node";
 import { DateTime } from "luxon";
 import { Status, DeviceStatus, Message, State } from "./models";
 
+function updateDeviceLists(data: any, devices: Array<DeviceStatus>, unknown_devices: Array<DeviceStatus>) {
+    // Update device list based on message
+    let deviceUpdated = updateDevice(data, devices)
+
+    // Unknown device, add to list of unknown devices
+    if (!deviceUpdated) {
+        // Try to update if in unknown devices
+        if (!updateDevice(data, unknown_devices)) {
+            // Otherwise add it
+            let device = new DeviceStatus(data.name)
+            device.update(data.type, data.locations, data.status, data.state)
+            unknown_devices.push(device)
+        }
+    }
+    // Update status of unknown devices
+    updateDevicesStatus(unknown_devices)
+    // Remove unknown devices that have not been seen for some time
+    for (let device of unknown_devices) {
+        if (device.status === Status.Warning)
+            unknown_devices.splice(unknown_devices.indexOf(device), 1)
+    }
+}
+
 /**
  * Update device list
  * @param data object received
  * @param devices list of devices
+ * @return if device was found and updated
  */
-function updateDevice(data: object, devices: Array<DeviceStatus>) {
+function updateDevice(data: object, devices: Array<DeviceStatus>):boolean {
     let message = Object.assign(new Message(), data);
 
     if (message.name === undefined)
-        return;
+        return false;
 
     for (let device of devices) {
         if (device.name == message.name) {
             device.update(message.type, message.locations, message.status, message.state);
+            return true
         }
     }
+
+    return false
 }
 
 /**
@@ -90,4 +117,4 @@ function updateDevicesStatus(devices: Array<DeviceStatus>) {
     }
 }
 
-export { updateDevice, aggregateDeviceStatus, numberOfActivePlayers, updateDevicesStatus }
+export { updateDeviceLists, updateDevice, aggregateDeviceStatus, numberOfActivePlayers, updateDevicesStatus }

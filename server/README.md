@@ -5,11 +5,6 @@ Logic for playing gong and monitoring of gong devices.
 # Environment variables
 See README in root for detailed explaination.
 
-## MORNING_TIME (server)
-Time in format `hh:mm`.
-
-If server recieves an *activated* message from a remote before this time, only play in zone **student-accommodation**.
-
 ## DEVICES (server)
 Comma separated list of devices that should be online. Used to check status of devices.
 

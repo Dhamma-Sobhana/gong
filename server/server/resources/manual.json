@@ -1,4 +1,4 @@
 [
-    {"from": "03:45", "to": "06:15", "locations": ["student-accommodation"], "repeat": 8},
-    {"from": "06:15", "to": "22:00", "locations": ["all"]}
+    { "from": "03:45", "to": "06:15", "locations": ["student-accommodation"], "repeat": 8 },
+    { "from": "06:15", "to": "22:00", "locations": ["all"] }
 ]

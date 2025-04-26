@@ -1,7 +1,7 @@
 import { getSdk } from 'balena-sdk';
 
 const server_device_id = process.env.BALENA_DEVICE_UUID || process.env.SERVER_DEVICE_ID || ''
-const token = process.env.API_KEY_BALENA || ''
+const token = process.env.BALENA_API_KEY || process.env.API_TOKEN || ''
 
 const balena = getSdk({
     debug: true

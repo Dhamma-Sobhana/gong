@@ -194,7 +194,7 @@ How player application and audio block communicates.
 
 Default: `unix:/run/pulse/pulseaudio.socket`
 
-## DISABLED (player, remote)
+## DISABLED (server, player, remote)
 Set to true to make one device temporarly disabled. Will make any actions to have no effect.
 
 Default: `false`

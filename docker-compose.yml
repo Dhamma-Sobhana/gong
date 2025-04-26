@@ -20,8 +20,8 @@ services:
     ports:
       - 1883:1883
       - 9001:9001
-    depends_on:
-      - mqtt-config
+    # depends_on:
+    #   - mqtt-config
       # condition: service_completed_successfully
   server:
     build:

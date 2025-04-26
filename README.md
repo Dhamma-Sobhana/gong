@@ -41,7 +41,7 @@ Has a button connected on [GPIO](https://projects.raspberrypi.org/en/projects/ph
 
 ## Code
 
-Code will be written in nodejs using TypeScript. Some existing code is for now just JavaScript.
+Code running on node written in TypeScript.
 
 ## Containers
 
@@ -79,8 +79,8 @@ MQTT message broker is used for communication between the different devices. If 
 
 Upon first run of the server MQTT configuration is generated based on the *MQTT_PASSWORD* configured on the server. MQTT is allowing anonymous readon-only connections but to write the device must connect using username ***mqtt** and the configured password.
 
-[!IMPORTANT]
-As the MQTT configuration is written on the first boot of the server, it might be needed to manually restart the MQTT server to have it read the configuration.
+> [!IMPORTANT]
+> As the MQTT configuration is written on the first boot of the server, it might be needed to manually restart the MQTT server to have it read the configuration.
 
 ## Data
 

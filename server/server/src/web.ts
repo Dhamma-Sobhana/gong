@@ -9,6 +9,7 @@ import { aggregateDeviceStatus } from './devices';
 import { Server } from './server';
 import { logArray } from './log'
 import { PlayMessage, StatusMessage } from './models';
+import { balenaUpdateEnvironmentVariable } from './balena';
 
 // Express.js and Nunjucks for web interface
 const app: Express = express();

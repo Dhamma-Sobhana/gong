@@ -37,6 +37,7 @@ function setupWebRoutes(server:Server, client:any) {
     app.get('/', (req: Request, res: Response) => {
         res.render('index.njk', {
             enabled: server.enabled,
+            mqtt_connected: client.connected,
             devices: server.devices,
             unknown_devices: server.unknownDevices,
             device_status: aggregateDeviceStatus(server.devices),
@@ -55,6 +56,8 @@ function setupWebRoutes(server:Server, client:any) {
     app.post('/enable', (req: Request, res: Response) => {
         console.log('[web] Enable/Disable')
         server.enable(!server.enabled)
+        
+        balenaUpdateEnvironmentVariable('DISABLED', (!server.enabled).toString())
         res.redirect('/')
     })
 
@@ -70,33 +73,31 @@ function setupWebRoutes(server:Server, client:any) {
         res.redirect('/')
     })
 
-    app.post('/automation/enable', (req: Request, res: Response) => {
-        console.log('[web] Automation enabled')
-        server.automation.enable()
+    app.post(['/automation/enable', '/automation/disable'], (req: Request, res: Response) => {
+        if (req.path.endsWith('/enable')) {
+            console.log(`[web] Automation enabled`)
+            server.automation.enable()
+        } else {
+            console.log('[web] Automation disabled')
+            server.automation.enable(false)
+        }
+
+        balenaUpdateEnvironmentVariable('AUTOMATION', server.automation.enabled.toString())
+
         res.redirect('/')
     })
 
-    app.post('/automation/disable', (req: Request, res: Response) => {
-        console.log('[web] Automation disabled')
-        server.automation.enable(false)
-        res.redirect('/')
-    })
-
-    app.post('/automation/entry/enable', (req: Request, res: Response) => {
+    app.post(['/automation/entry/enable', '/automation/entry/disable'], (req: Request, res: Response) => {
         let entryDateTime = DateTime.fromISO(req.body.entry_id)
-        console.log(`[web] Automation enable entry: ${entryDateTime}`)
+
+        if (req.path.endsWith('/enable'))
+            console.log(`[web] Automation enable entry: ${entryDateTime}`)
+        else
+            console.log(`[web] Automation disable entry: ${entryDateTime}`)
 
         server.automation.schedule.setTimeTableEntryStatus(entryDateTime, true)
         server.automation.scheduleGong(server.automation.getNextGong())
-        res.redirect('/')
-    })
 
-    app.post('/automation/entry/disable', (req: Request, res: Response) => {
-        let entryDateTime = DateTime.fromISO(req.body.entry_id)
-        console.log(`[web] Automation disable entry: ${entryDateTime}`)
-
-        server.automation.schedule.setTimeTableEntryStatus(entryDateTime, false)
-        server.automation.scheduleGong(server.automation.getNextGong())
         res.redirect('/')
     })
 

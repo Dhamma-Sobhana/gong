@@ -14,13 +14,17 @@
           {% if device_status.failed %}🔴 {{ device_status.failed }} device(s) offline
           {% elif device_status.warning %}🟡 {{ device_status.warning }} device(s) possibly offline
           {% else %}
-          🟢 all devices online
+          🟢 All devices online
           {% endif %}
           </td>
       </tr>
       <tr>
         <th>System</th>
         <td>{% if enabled %}🟢 ON{% else %}🔴 OFF{% endif %}</td>
+      </tr>
+      <tr>
+        <th>MQTT</th>
+        <td>{% if mqtt_connected %}🟢 Connected{% else %}🔴 Disconnected{% endif %}</td>
       </tr>
       <tr>
         <th>System time</th>

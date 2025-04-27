@@ -411,6 +411,9 @@ Gong is not played anywhere as no period is handling that time.
 # Web interface
 A basic web interface is hosted on the server device and available to check system status and enabling or disabling system and automation.
 
+> [!IMPORTANT]
+> When disabling or enabling system or automation, the updated configuration will be pushed to balenaCloud which will restart the server container. This might cause the web ui to not be available for a short time.
+
 |![Web - System status](/img/system-status.jpg)|![Web - Automation](/img/automation.jpg)|
 |:-:|:-:|
 |Overview of system status telling which parts are anabled and if all devices are online.|Allows automation to be turned on or off. Shows upcoming schedule for today and tomorrow and when next gong will be played.|

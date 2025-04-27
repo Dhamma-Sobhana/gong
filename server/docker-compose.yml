@@ -26,6 +26,7 @@ services:
       # target: production # For deployment
     labels:
       io.balena.features.dbus: '1'
+      io.balena.features.balena-api: '1'
     volumes:
       - 'data:/data'
     ports:

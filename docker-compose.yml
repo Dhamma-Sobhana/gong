@@ -31,6 +31,8 @@ services:
       MQTT_SERVER: "mqtt"
       MQTT_PASSWORD: "mqtt"
       DEVICES: "dev-player,dev-remote"
+    labels:
+      io.balena.features.balena-api: '1'
     volumes:
       - 'data:/data'
     command: npm run dev-device
@@ -63,6 +65,7 @@ services:
   remote:
     build:
       context: ./remote
+      # target: development
     environment:
       MQTT_SERVER: "mqtt"
       MQTT_PASSWORD: "mqtt"

@@ -236,9 +236,6 @@ Format: `nnnn`
 ## SENTRY_DSN (server)
 Optional Data Source Name for error tracking using [Sentry](https://sentry.io/).
 
-## API_KEY_BALENA (server)
-Allow server to update environment variables in balenaCloud. Generate a new key from [balenaCloud - Api Keys](https://dashboard.balena-cloud.com/preferences/access-tokens).
-
 # Automation
 The system can fetch a centers schedule for automatic plying of gong. Locally stored time table definitions are used to transform this data into a time table for playing gong.
 

@@ -4,7 +4,7 @@ const server_device_id = process.env.BALENA_DEVICE_UUID || process.env.SERVER_DE
 const token = process.env.BALENA_API_KEY || process.env.API_TOKEN || ''
 
 const balena = getSdk({
-    debug: true
+    debug: false
 });
 
 async function balenaUpdateEnvironmentVariable(key: string, value: string) {

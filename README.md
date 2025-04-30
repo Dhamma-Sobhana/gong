@@ -2,31 +2,22 @@
 
 A system for playing gong sounds in multiple locations at meditation centers. Running on multiple Raspberry Pis, managed using [balenaCloud](https://www.balena.io/cloud). Can play gong manually by pressing a button or automatically by fetching course schedule from dhamma.org.
 
-![Build](https://github.com/Dhamma-Sobhana/gong/actions/workflows/server.node.js.yml/badge.svg)
-
-![Open Issues](https://img.shields.io/github/issues/Dhamma-Sobhana/gong?style=flat&label=Issues)
-
-![GitHub Release](https://img.shields.io/github/v/release/Dhamma-Sobhana/gong?label=Latest%20Release)
+![Build](https://github.com/Dhamma-Sobhana/gong/actions/workflows/server.node.js.yml/badge.svg) ![Open Issues](https://img.shields.io/github/issues/Dhamma-Sobhana/gong?style=flat&label=Issues) ![GitHub Release](https://img.shields.io/github/v/release/Dhamma-Sobhana/gong?label=Latest%20Release)
 
 # Media
 
-[![How to add a device](https://img.youtube.com/vi/TO895aauBFo/default.jpg)](https://youtu.be/TO895aauBFo)
+**Video: How to add a device**
 
-**System status on wall mounted tablet**
+[![Video: How to add a device](/img/video-setup.jpeg)](https://youtu.be/TO895aauBFo)
 
-![Wall mounted tablet](/img/tablet-wall.jpeg)
+|System status on wall mounted tablet|Amplifier and Raspberry Pi player|
+| --- | --- |
+|![Wall mounted tablet](/img/tablet-wall.jpeg)|![Amplifier and Pi](/img/amplifier.jpeg)|
 
-**Amplifier and Raspberry Pi player**
 
-![Amplifier and Pi](/img/amplifier.jpeg)
-
-**Raspberry Pis with DAC HATs**
-
-![Raspberry Pis](/img/raspberry-pis.jpeg)
-
-**Button for manually plaing gong**
-
-![Remote](/img/remote.jpeg)
+|Button for manually plaing gong|Raspberry Pis with DAC HATs|
+| --- | --- |
+![Remote](/img/remote.jpeg)|![Raspberry Pis](/img/raspberry-pis.jpeg)|
 
 # Contact
 

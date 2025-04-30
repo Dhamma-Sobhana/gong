@@ -416,13 +416,13 @@ A web interface is hosted on the server device and is available to check system 
 
 Gives at a glance view of the overall system performance. Shows next gong coming up and if all parts of the system are working correctly.
 
-[Overview](/img/overview.jpeg)
+![Overview](/img/overview.jpeg)
 
 ## Schedule
 
 Shows upcoming schedule for today and tomorrow and upcoming courses. Link to print full upcoming schedule.
 
-[Schedule](/img/schedule.jpeg)
+![Schedule](/img/schedule.jpeg)
 
 ## Devices
 
@@ -430,13 +430,13 @@ List all devices that should be online for system to be fully functional and whe
 
 If unknonwn devices are connected they are listed here as well.
 
-[Devices](/img/devices.jpeg)
+![Devices](/img/devices.jpeg)
 
 ## System Status
 
 Gives more detailed information about the status of different parts of the system. Shows the last activity logged on the server. 
 
-[System status](/img/system-status.jpeg)
+![System status](/img/system-status.jpeg)
 
 ## Settings
 
@@ -445,7 +445,7 @@ Allow system and automation to be turned on and off.
 > [!IMPORTANT]
 > When disabling or enabling system or automation, the updated configuration will be pushed to balenaCloud which will restart the server container. This might cause the web ui to not be available for a short time.
 
-[settings](/img/settings.jpeg)
+![Settings](/img/settings.jpeg)
 
 # Development
 

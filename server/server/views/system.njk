@@ -65,6 +65,16 @@
               }
 
               setInterval(updateSystemTime, 1000)
+
+              function updateDiff() {
+                  let nextGongDiff = formatTimeTillNextGong('{{ automation.getNextGong().time }}');
+                  var elements = document.querySelectorAll('.nextGongDiff');
+                  for (let element of elements) {
+                      element.textContent = nextGongDiff;
+                  }
+              }
+
+              setInterval(updateDiff, 1000)
           </script>
         </div>
         {# <div>

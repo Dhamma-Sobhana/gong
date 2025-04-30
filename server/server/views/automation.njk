@@ -1,27 +1,15 @@
-<h2>Automation</h2>
+{% extends 'base.njk' %}
+
+{% set title = 'Gong - Schedule' %}
+
+{% block content %}
+
+<section>
+    <div>
+
+<h1>Gong Schedule</h1>
 
 {% if automation.enabled %}
-<h3>Automation: enabled</h3>
-<form action="/automation/disable" method="post">
-    <button type="submit" class="red">Disable</button>
-</form>
-
-<h3>Next gong</h3>
-<p>{% if automation.getNextGong() %}{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span>{% else %}No gong scheduled{% endif %}</p>
-
-<script>
-    function updateDiff() {
-        let nextGongDiff = formatTimeTillNextGong('{{ automation.getNextGong().time }}');
-        var elements = document.querySelectorAll('.nextGongDiff');
-        for (let element of elements) {
-            element.textContent = nextGongDiff;
-        }
-    }
-
-    setInterval(updateDiff, 1000)
-</script>
-
-<h3>Schedule</h3>
 <div class="overflow-scroll">
 <form method="post">
 <table>
@@ -57,19 +45,18 @@
 </form>
 </div>
 
-<a href="/automation/schedule">Show full gong schedule</a>
+<a href="/automation/schedule" class="button">Show full gong schedule</a>
 
 <h3>Courses</h3>
-<ul>
+<ul class="courses">
 {% for course in automation.getCourses() %}
-    <li>{{ course.start.toISODate() }} - {{ course.end.toISODate() }} {{ course.type }}</li>
+    <li>{{ course.start.toISODate() }} - {{ course.end.toISODate() }} - {{ course.type }}</li>
 {% endfor%}
 </ul>
 
 {% else %}
 <h3>Automation: disabled</h3>
-
-<form action="/automation/enable" method="post">
-    <button type="submit" class="green">Enable</button>
-</form>
 {% endif %}
+</div>
+</section>
+{% endblock %}

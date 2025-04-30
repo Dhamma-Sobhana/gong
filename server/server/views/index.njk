@@ -3,57 +3,54 @@
 {% set title = 'Gong' %}
 
 {% block content %}
-  <h1>Gong</h1>
-
-  <h2>System status</h2>
-  <table id="device-status">
-    <tbody>
-      <tr>
-        <th>Overall status</th>
-        <td>
-          {% if device_status.failed %}🔴 {{ device_status.failed }} device(s) offline
-          {% elif device_status.warning %}🟡 {{ device_status.warning }} device(s) possibly offline
-          {% else %}
-          🟢 All devices online
-          {% endif %}
-          </td>
-      </tr>
-      <tr>
-        <th>System</th>
-        <td>{% if enabled %}🟢 ON{% else %}🔴 OFF{% endif %}</td>
-      </tr>
-      <tr>
-        <th>MQTT</th>
-        <td>{% if mqtt_connected %}🟢 Connected{% else %}🔴 Disconnected{% endif %}</td>
-      </tr>
-      <tr>
-        <th>System time</th>
-        <td><span id="systemTime">-</span></td>
-      </tr>
-      <tr>
-        <th>Automation</th>
-        <td>{% if automation.enabled %}🟢 ON{% else %}🔴 OFF{% endif %}</td>
-      </tr>
+  <section class="main">
+    <div class="gong">
       {% if enabled and automation.enabled %}
-      <tr>
-        <th>Last fetch</th>
-        <td>{% if automation.lastFetch %}🟢 {{ automation.lastFetch.toFormat('yyyy-MM-dd HH:mm') }}{% else %}🔴 not fetched{% endif %}</th>
-      </tr>
-      <tr>
-        <th>Next gong</th>
-        <td>{% if automation.getNextGong() %}{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span>{% else %}🔴 no gong scheduled{% endif %}</td>
-      </tr>
+      <h1>Next Gong</h1>
+      <h2 class="time">{{ automation.getNextGong().time.toFormat('HH:mm') }}</h2>
+      <h3>in <span class="nextGongDiff">-</span></h3>
+      <dl>
+        <dt>Schedule:</dt>
+        <dd>{{ automation.getNextGong().courseType }}</dd>
+        <dt>Day:</dt>
+        <dd>{{ automation.getNextGong().courseDay }}</dd>
+        <dt>Locations:</dt>
+        <dd>{{ automation.getNextGong().locations }}</dd>
+      </dl>
+      
+      {% else %}
+        {% if enabled %}
+        <h2>Manual Gong</h2>
+        <p>Automation is disabled. Play gong by using button.</p>
+        {% else %}
+        <h2>System disabled</h2>
+        <p>System is disabled. No gong will be played.</p>
+        {% endif %}
       {% endif %}
-      <tr>
-        <th>Devices</th>
-        <td>{{ device_status.ok }} online, {{ device_status.warning }} warning, {{ device_status.failed }} offline, {{ device_status.disabled }} disabled</td>
-      </tr>
-      <tr>
-        <th>Playing</th>
-        <td>{{ playing }}</td>
-      </tr>
-    </tbody>
-  </table>
+    </div>
+    <div class="status">
+      <div class="overall">
+        <h1>Status</h1>
+        <div class="status-big">
+          {% if status.overall === '🟢' %}
+          <img src="/images/ok.png" alt="OK" />
+          {% elif status.overall === '🟡'%}
+          <img src="/images/warning.png" alt="Warning" />
+          {% else %}
+          <img src="/images/error.png" alt="Error" />
+          {% endif %}
+          </div>
+        {% if status.overall !== '🟢' %}
+        <pre>{{ status.reason }}</pre>
+        {% endif %}
+      </div>
+      <div class="time">
+        <h2>System time:</h2>
+        <h3><span id="systemTime">-</span></h3>
+      </div>
+    </div>
+  </section>
+  
   <script>
       let systemTime = "{{ system_time }}";
       function updateSystemTime() {
@@ -62,24 +59,15 @@
       }
 
       setInterval(updateSystemTime, 1000)
+
+      function updateDiff() {
+          let nextGongDiff = formatTimeTillNextGong('{{ automation.getNextGong().time }}');
+          var elements = document.querySelectorAll('.nextGongDiff');
+          for (let element of elements) {
+              element.textContent = nextGongDiff;
+          }
+      }
+
+      setInterval(updateDiff, 1000)
   </script>
-  {% if enabled %}
-  <form action="/enable" method="post">
-    <button type="submit" class="red">Disable</button>
-  </form>
-  {% else %}
-  <form action="/enable" method="post">
-    <button type="submit" class="green">Enable</button>
-  </form>
-  {% endif %}
-  <hr>
-  {% if enabled %}
-  {% include 'automation.njk' %}
-  <hr>
-  {% endif %}
-  {% include 'devices.njk' %}
-  <hr>
-  {% include 'log.njk' %}
-  <hr>
-  {% include 'test.njk' %}
 {% endblock %}

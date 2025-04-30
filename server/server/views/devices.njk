@@ -1,4 +1,12 @@
-<h2>Devices</h2>
+{% extends 'base.njk' %}
+
+{% set title = 'Gong - Devices' %}
+
+{% block content %}
+
+<section>
+    <div>
+<h1>Devices</h1>
 <div class="overflow-scroll">
 <table>
 <thead>
@@ -17,7 +25,7 @@
         <td>{{ device.name }}</td>
         <td>{{ device.type or '-'  }}</td>
         <td>{{ device.locations or '-'  }}</td>
-        <td>{{ device.status or '-'  }}</td>
+        <td>{{ device.status|statusToImg|safe or '-'  }}</td>
         <td>{{ device.state or '-'  }}</td>
         <td>{% if device.timestamp %}{{ device.timestamp.toFormat('yyyy-MM-dd HH:mm:ss') }}{% else %}-{% endif %}</td>
     </tr>
@@ -36,7 +44,6 @@
         <th>Name</th>
         <th>Type</th>
         <th>Location</th>
-        <th>Status</th>
         <th>State</th>
         <th>Last&nbsp;seen</th>
     </tr>
@@ -47,7 +54,6 @@
         <td>{{ device.name }}</td>
         <td>{{ device.type or '-'  }}</td>
         <td>{{ device.locations or '-'  }}</td>
-        <td>{{ device.status or '-'  }}</td>
         <td>{{ device.state or '-'  }}</td>
         <td>{% if device.timestamp %}{{ device.timestamp.toFormat('yyyy-MM-dd HH:mm:ss') }}{% else %}-{% endif %}</td>
     </tr>
@@ -60,3 +66,6 @@
 <form action="/ping" method="post">
     <button type="submit" class="blue">Refresh</button>
 </form>
+</div>
+</section>
+{% endblock %}

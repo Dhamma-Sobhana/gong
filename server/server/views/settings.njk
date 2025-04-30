@@ -1,0 +1,46 @@
+{% extends 'base.njk' %}
+
+{% set title = 'Gong - Settings' %}
+
+{% block content %}
+  <section class="main">
+    <div class="settings">
+      <h1>Settings</h1>
+
+      <div class="columns">
+        <div>
+      {% if enabled %}
+      <h3>System: enabled</h3>
+      <form action="/enable" method="post">
+        <button type="submit" class="red">Disable</button>
+      </form>
+      {% else %}
+      <h3>System: disabled  </h3>
+      <form action="/enable" method="post">
+        <button type="submit" class="green">Enable</button>
+      </form>
+      {% endif %}
+      </div>
+      <div>
+
+      {% if automation.enabled %}
+      <h3>Automation: enabled</h3>
+      <form action="/automation/disable" method="post">
+          <button type="submit" class="red">Disable</button>
+      </form>
+      {% else %}
+      <h3>Automation: disabled</h3>
+
+      <form action="/automation/enable" method="post">
+          <button type="submit" class="green">Enable</button>
+      </form>
+      {% endif %}
+
+      </div>
+      </div>
+
+      <hr>
+      {% include 'test.njk' %}
+    </div> 
+  </section>
+{% endblock %}

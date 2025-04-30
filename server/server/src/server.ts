@@ -4,9 +4,9 @@ import * as Sentry from "@sentry/node";
 
 import { DateTime } from "luxon";
 
-import { DeviceStatus, PlayMessage } from "./models"
+import { DeviceStatus, PlayMessage, Status } from "./models"
 import { Automation } from './automation';
-import { numberOfActivePlayers, updateDevicesStatus } from './devices';
+import { aggregateDeviceStatus, numberOfActivePlayers, updateDevicesStatus } from './devices';
 import { setupWebRoutes } from './web'
 import { handleMessage as handleMqttMessage } from "./mqtt";
 
@@ -57,6 +57,41 @@ class Server {
         console.log(`[server] System time: ${DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss')}`)
 
         this.resetWatchdog()
+    }
+
+    systemStatus() {
+        let device_status = aggregateDeviceStatus(this.devices)
+
+        if (!this.enabled) {
+            return {
+                overall: Status.Warning,
+                reason: 'System disabled'
+            }
+        } else if (!client.connected) {
+            return {
+                overall: Status.Failed,
+                reason: 'MQTT server not connected'
+            }
+        } else if (device_status.failed > 0) {
+            return {
+                overall: Status.Failed,
+                reason: `${device_status.failed} device(s) offline`
+            }
+        } else if (device_status.warning > 0) {
+            return {
+                overall: Status.Warning,
+                reason: `${device_status.failed} device(s) possibly offline`
+            }
+        } else if (this.automation.lastFetch == undefined) {
+            return {
+                overall: Status.Warning,
+                reason: 'Course schedule not fetched'
+            }
+        }
+
+        return {
+            overall: Status.OK
+        }
     }
 
     /**

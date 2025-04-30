@@ -18,6 +18,7 @@ A system for playing gong sounds in multiple locations at meditation centers. Ma
 * [Web interface](#web-interface)
 * [Development](#development)
 * [Deployment](#deployment)
+* [Attribution](#attribution)
 
 # Device types
 
@@ -409,16 +410,42 @@ Gong is played everywhere, repeated according to server configuration.
 Gong is not played anywhere as no period is handling that time.
 
 # Web interface
-A basic web interface is hosted on the server device and available to check system status and enabling or disabling system and automation.
+A web interface is hosted on the server device and is available to check system status and enabling or disabling system and automation. This interface is customized to be shown on a wall mounted tablet in landscape mode to give an overall system performance view at a glance.
+
+## Overview
+
+Gives at a glance view of the overall system performance. Shows next gong coming up and if all parts of the system are working correctly.
+
+[Overview](/img/overview.jpeg)
+
+## Schedule
+
+Shows upcoming schedule for today and tomorrow and upcoming courses. Link to print full upcoming schedule.
+
+[Schedule](/img/schedule.jpeg)
+
+## Devices
+
+List all devices that should be online for system to be fully functional and when they last was in contact with the server.
+
+If unknonwn devices are connected they are listed here as well.
+
+[Devices](/img/devices.jpeg)
+
+## System Status
+
+Gives more detailed information about the status of different parts of the system. Shows the last activity logged on the server. 
+
+[System status](/img/system-status.jpeg)
+
+## Settings
+
+Allow system and automation to be turned on and off.
 
 > [!IMPORTANT]
 > When disabling or enabling system or automation, the updated configuration will be pushed to balenaCloud which will restart the server container. This might cause the web ui to not be available for a short time.
 
-|![Web - System status](/img/system-status.jpg)|![Web - Automation](/img/automation.jpg)|
-|:-:|:-:|
-|Overview of system status telling which parts are anabled and if all devices are online.|Allows automation to be turned on or off. Shows upcoming schedule for today and tomorrow and when next gong will be played.|
-|![Web - Devices](/img/devices.jpg)|![Web - Log](/img/log.jpg)|
-|List all devices that should be online for system to be fully functional and when they last was in contact with the server.|Shows the last activity logged on the server.|
+[settings](/img/settings.jpeg)
 
 # Development
 
@@ -452,3 +479,14 @@ Deployment to *balenaCloud* and devices is done from subfolders for each device 
 
     cd remote
     balena push gong/remote
+
+
+# Attribution
+
+Status icons:
+
+<a href="https://www.freepik.com/icon/alert_15483855">Generic Others by pocike</a>
+
+Application icon:
+
+<a href="https://www.flaticon.com/free-icons/gong">Gong icon by Pixel perfect</a>

@@ -1,0 +1,79 @@
+{% extends 'base.njk' %}
+
+{% set title = 'Gong - System' %}
+
+{% block content %}
+  <section class="main">
+    <div class="settings">
+      <h1>System status</h1>
+
+      <div class="columns">
+        <div>
+          <table id="device-status">
+            <tbody>
+              <tr>
+                <th>Overall status</th>
+                <td>
+                  {% if device_status.failed %}{{'🔴'|statusToImg|safe}} {{ device_status.failed }} device(s) offline
+                  {% elif device_status.warning %}{{'🟡'|statusToImg|safe}} {{ device_status.warning }} device(s) possibly offline
+                  {% else %}
+                  {{ '🟢'|statusToImg|safe }} All devices online
+                  {% endif %}
+                  </td>
+              </tr>
+              <tr>
+                <th>System</th>
+                <td>{% if enabled %}{{ enabled|booleanToImg|safe }} ON{% else %}{{ enabled|booleanToImg|safe }} OFF{% endif %}</td>
+              </tr>
+              <tr>
+                <th>MQTT</th>
+                <td>{% if mqtt_connected %}{{ mqtt_connected|booleanToImg|safe }} Connected{% else %}{{ mqtt_connected|booleanToImg|safe }} Disconnected{% endif %}</td>
+              </tr>
+              <tr>
+                <th>System time</th>
+                <td><span id="systemTime">-</span></td>
+              </tr>
+              <tr>
+                <th>Automation</th>
+                <td>{% if automation.enabled %}{{ '🟢'|booleanToImg|safe }} ON{% else %}{{ '🔴'|booleanToImg|safe }} OFF{% endif %}</td>
+              </tr>
+              {% if enabled and automation.enabled %}
+              <tr>
+                <th>Last fetch</th>
+                <td>{% if automation.lastFetch %}{{ '🟢'|booleanToImg|safe }} {{ automation.lastFetch.toFormat('yyyy-MM-dd HH:mm') }}{% else %}{{ '🔴'|booleanToImg|safe }} not fetched{% endif %}</th>
+              </tr>
+              <tr>
+                <th>Next gong</th>
+                <td>{% if automation.getNextGong() %}{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span>{% else %}{{ '🔴'|booleanToImg|safe }} no gong scheduled{% endif %}</td>
+              </tr>
+              {% endif %}
+              <tr>
+                <th>Devices</th>
+                <td>{{ device_status.ok }} online, {{ device_status.warning }} warning, {{ device_status.failed }} offline, {{ device_status.disabled }} disabled</td>
+              </tr>
+              <tr>
+                <th>Playing</th>
+                <td>{{ playing }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <script>
+              let systemTime = "{{ system_time }}";
+              function updateSystemTime() {
+                  systemTime = tickSystemTime(systemTime)
+                  var elements = document.getElementById('systemTime').textContent = systemTime.toFormat('yyyy-MM-dd HH:mm:ss');
+              }
+
+              setInterval(updateSystemTime, 1000)
+          </script>
+        </div>
+        {# <div>
+
+        </div> #}
+      </div>
+
+      <hr>
+      {% include 'log.njk' %}
+    </div> 
+  </section>
+{% endblock %}

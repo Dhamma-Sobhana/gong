@@ -1,17 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <title>{{ title }}</title>
     <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <link rel="manifest" href="/manifest.json">
+
     <link rel="stylesheet" href="/style.css">
     <script src="/mqtt.min.js"></script>
     <script src="/luxon.min.js"></script>
     <script src="/script.js"></script>
   </head>
   <body>
+    <header>
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/schedule">Schedule</a></li>
+          <li><a href="/devices">Devices</a></li>
+          <li><a href="/system">System</a></li>
+          <li><a href="/settings">Settings</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main>
     {% block content %}{% endblock %}  
+    </main>
   </body>
 </html>

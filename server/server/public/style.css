@@ -1,5 +1,16 @@
+html, body {
+    height: 100vh;
+    margin: 0;
+}
+
 body {
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: #000;
+    color: #fff;
+}
+
+a, a:visited, a:active {
+    color: #e0e0e0;
 }
 
 th {
@@ -7,11 +18,58 @@ th {
 }
 
 ul {
-    padding-inline-start: 1rem;
+    padding-inline-start: 0rem;
+    margin: 0;
+}
+
+ul.courses {
+    list-style: none;
+}
+
+li {
+    margin: 1rem 0;
 }
 
 form {
     margin: 1rem 0;
+}
+
+header {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    background-color: #000;
+    display: flex;
+    height: 15vh;
+    align-items: center;
+}
+
+nav {
+    width: 100%;;
+    font-size: 3vmax;
+}
+
+nav ul {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+nav ul li {
+    list-style: none;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #bcbcbc;
+}
+
+main {
+    margin-top: 15vh;
+    height: 85vh;
+}
+
+table {
+    width: 100%;
 }
 
 th:not(:first-child), td:not(:first-child) {
@@ -22,19 +80,42 @@ table#device-status td {
     min-width: 5rem;
 }
 
+tr.disabled {
+    text-decoration: line-through;
+}
+
+td button {
+    width: 100%;
+}
+
 button {
-    background-color: #555555; /* Green */
+    background-color: #555555;
     border: none;
     color: white;
-    padding: 10px 20px;
+    padding: 1vmax 2vmax;
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 2vmax;
     cursor: pointer;
     border-radius: 4px;
     width: 50%;
-    max-width: 10rem;
+    max-width: 20vw;
+}
+
+.button {
+    background-color: #555555;
+    border: none;
+    color: white;
+    padding: 2vmax 4vmax;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 2vmax;
+    cursor: pointer;
+    border-radius: 4px;
+    /* width: 50%; */
+    /* max-width: 50vw; */
 }
   
 .green {background-color: #4CAF50;} /* Green */
@@ -48,12 +129,10 @@ button {
     white-space: nowrap;
 }
 
-tr.disabled {
-    text-decoration: line-through;
-}
-
-td button {
+.log {
     width: 100%;
+    font-size: 3vh;
+    max-width: 80vw;
 }
 
 form.test label {
@@ -67,10 +146,172 @@ form.test label {
 form.test select {
     width: 100%;
     max-width: 20rem;
+    font-size: 2.5vmax;
 }
 
 form.test button {
     margin-top: 1rem;
     width: 100%;
-    max-width: 10rem;
+}
+
+section {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+section.main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+section > div {
+    flex: 1;
+    padding: 2rem
+}
+
+section {
+    font-size: 4vh;
+}
+
+.status-big img {
+    max-height: 30vh;
+}
+
+section .gong {
+    text-align: center;
+}
+
+.main div.status {
+    height: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.main div.status .overall {
+    flex: 2;
+}
+
+.main div.status .time {
+    flex: 1;
+    align-items: end;
+}
+
+.gong h1 {
+    font-size: 4vh;
+}
+
+.gong h2.time {
+    font-size: 12vh;
+    margin: 3vh;
+}
+
+.gong h3 {
+    margin-top: 1vh;
+}
+
+section h1 {
+    margin-top: 0;
+}
+
+.time h2 {
+    font-size: 3vh;
+}
+
+.time h3 {
+    font-size: 5vh;
+    margin: 0;
+}
+
+
+dl dd {
+    font-size: 4vh;
+    font-weight: bold;
+    margin-inline-start: 0;
+}
+
+dt {
+    font-size: 3vh;
+    margin-top: 1rem;
+}
+
+div.columns {
+    display: flex;
+    flex-direction: row;
+    gap: 4vmax;
+}
+
+div.columns > div {
+    flex: 1;
+}
+
+img.status {
+    max-height: 2vmax;
+}
+
+@media (orientation: portrait) {
+    header {
+        height: 10vh;
+    }
+
+    main {
+        margin-top: 10vh;
+        height: 90vh;
+    }
+
+    nav {
+        font-size: 2vmax;
+    }
+
+    section {
+        font-size: 2vh;
+    }
+
+    button {
+        max-width: 50vw;
+    }
+
+    form.test select {
+        max-width: unset;
+    }
+
+    section > div {
+        padding: 1rem;
+    }
+
+    section.main {
+        flex-direction: column;
+    }
+
+    div.columns {
+        flex-direction: column;
+    }
+
+    .gong h2.time {
+        font-size: 8vh;
+    }
+
+    .time h3 {
+        font-size: 3vh;
+    }
+
+    .status-big img {
+        max-height: 20vh;
+    }
+
+    .log {
+        font-size: 2vh;
+    }
+
+    dt {
+        font-size: 2vh;
+    }
+
+    dl dd {
+        font-size: 3vh;
+    }
 }

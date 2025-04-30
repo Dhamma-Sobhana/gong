@@ -43,7 +43,14 @@ client.on('message', (topic, message) => {
 function formatTimeTillNextGong(nextGong) {
     let now = DateTime.now()
     let future = DateTime.fromISO(nextGong)
-    return future.diff(now, ['hours', 'minutes', 'seconds']).toFormat("hh:mm:ss")
+    let diff = future.diff(now, ['hours', 'minutes', 'seconds'])
+
+    if (diff < 0)
+        return '-'
+    else if (diff.hours <= 0)
+        return diff.toFormat("m:ss")
+
+    return diff.toFormat("h:mm:ss")
 }
 
 function tickSystemTime(currentTime) {

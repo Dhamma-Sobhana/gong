@@ -107,6 +107,7 @@ function setupWebRoutes(server:Server, client:any) {
             status: server.systemStatus(),
             playing: server.gongPlaying,
             automation: server.automation,
+            devices: server.devices,
             log: logArray.slice(),
             system_time: DateTime.now()
         })

@@ -1,12 +1,38 @@
 # Gong
 
-A system for playing gong sounds in multiple locations at meditation centers. Managed using [balenaCloud](https://www.balena.io/cloud). Can play manually by pressing a button or automatically by fetching course schedule from dhamma.org.
+A system for playing gong sounds in multiple locations at meditation centers. Running on multiple Raspberry Pis, managed using [balenaCloud](https://www.balena.io/cloud). Can play gong manually by pressing a button or automatically by fetching course schedule from dhamma.org.
 
-![Server CI](https://github.com/Dhamma-Sobhana/gong/actions/workflows/server.node.js.yml/badge.svg)
+![Build](https://github.com/Dhamma-Sobhana/gong/actions/workflows/server.node.js.yml/badge.svg)
 
-# Videos
+![Open Issues](https://img.shields.io/github/issues/Dhamma-Sobhana/gong?style=flat&label=Issues)
+
+![GitHub Release](https://img.shields.io/github/v/release/Dhamma-Sobhana/gong?label=Latest%20Release)
+
+# Media
 
 [![How to add a device](https://img.youtube.com/vi/TO895aauBFo/default.jpg)](https://youtu.be/TO895aauBFo)
+
+**System status on wall mounted tablet**
+
+![Wall mounted tablet](/img/tablet-wall.jpeg)
+
+**Amplifier and Raspberry Pi player**
+
+![Amplifier and Pi](/img/amplifier.jpeg)
+
+**Raspberry Pis with DAC HATs**
+
+![Raspberry Pis](/img/raspberry-pis.jpeg)
+
+**Button for manually plaing gong**
+
+![Remote](/img/remote.jpeg)
+
+# Contact
+
+If you are interested in obtaining support deploying this system or customizing it for your needs, please contact:
+
+> [Marcus Götling](mailto:marcus@gotling.se?subject=Gong%20inquiry)
 
 # Table of Contents
 * [Device types](#device-types)

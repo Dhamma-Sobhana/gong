@@ -9,7 +9,7 @@ import { getCacheFilePath } from './storage';
 import { Course } from './models'
 
 const daysBefore = 14
-const daysAfter = 15
+const daysAfter = 30
 
 
 /**

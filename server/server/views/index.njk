@@ -7,7 +7,8 @@
     <div class="gong">
       {% if enabled and automation.enabled %}
       <h1>Next Gong</h1>
-      <h2 class="time">{{ automation.getNextGong().time.toFormat('HH:mm') }}</h2>
+      {% if automation.getNextGong() %}
+      <h2 class="time">{{  automation.getNextGong().time.toFormat('HH:mm') }}</h2>
       <h3>in <span class="nextGongDiff">-</span></h3>
       <dl>
         <dt>Schedule:</dt>
@@ -17,6 +18,9 @@
         <dt>Locations:</dt>
         <dd>{{ automation.getNextGong().locations }}</dd>
       </dl>
+      {% else %}
+      <h2>No gong scheduled</h2>
+      {% endif %}
       
       {% else %}
         {% if enabled %}

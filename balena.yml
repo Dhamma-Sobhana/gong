@@ -1,0 +1,24 @@
+name: gong-development
+type: sw.application
+description: >-
+  Contains all services for testing the application on one device.
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/Dhamma-Sobhana/gong'
+data:
+  applicationEnvironmentVariables:
+    - DEVICES: 
+    - GONG_REPEAT: 4
+    - AUTOMATION: false
+    - LOCATION_ID: 
+    - SENTRY_DSN:
+  defaultDeviceType: raspberrypi3
+  supportedDeviceTypes:
+    - raspberry-pi
+    - raspberry-pi2
+    - raspberrypi3
+    - raspberrypi3-64
+    - raspberrypi4-64
+version: 1.8.1

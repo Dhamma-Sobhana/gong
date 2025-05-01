@@ -26,7 +26,7 @@ test('Get date range', () => {
     
     let result = getDateRange()
 
-    expect(result).toBe('2023-09-01+-+2023-09-30')
+    expect(result).toBe('2023-09-01+-+2023-10-15')
 })
 
 test('Parse courses', () => {

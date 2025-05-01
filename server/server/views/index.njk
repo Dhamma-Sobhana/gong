@@ -57,12 +57,11 @@
   
   <script>
       let systemTime = "{{ system_time }}";
+
       function updateSystemTime() {
           systemTime = tickSystemTime(systemTime)
           var elements = document.getElementById('systemTime').textContent = systemTime.toFormat('yyyy-MM-dd HH:mm:ss');
       }
-
-      setInterval(updateSystemTime, 1000)
 
       function updateDiff() {
           let nextGongDiff = formatTimeTillNextGong('{{ automation.getNextGong().time }}');
@@ -72,6 +71,11 @@
           }
       }
 
-      setInterval(updateDiff, 1000)
+      function updateUi() {
+        updateSystemTime()
+        updateDiff()
+      }
+
+      setInterval(updateUi, 1000)
   </script>
 {% endblock %}

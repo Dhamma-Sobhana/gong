@@ -60,9 +60,10 @@ class Automation {
     scheduleFetch() {
         console.log(`[automation] Scheduling fetch of schedule every day at ${this.fetchTime.toLocaleString(DateTime.TIME_24_SIMPLE)}`)
         this.fetchJob?.cancel()
-        this.fetchJob = scheduleJob(`${this.fetchTime.minute} ${this.fetchTime.hour} * * *`, () => {
+        this.fetchJob = scheduleJob(`${this.fetchTime.minute} ${this.fetchTime.hour} * * *`, async () => {
             console.log(`[automation] Fetching schedule`);
-            this.fetch(this.locationId)
+            await this.fetch(this.locationId)
+            this.scheduleGong(this.getNextGong())
         });
     }
 

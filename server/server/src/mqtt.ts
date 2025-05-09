@@ -62,6 +62,7 @@ function handleMessage(topic: string, message: string, server:Server) {
           server.played()
           data.state = State.Played
           data.locations = undefined // To not overwrite locations in device list
+          client.publish(`reload-ui`)
           break;
       default:
           break;

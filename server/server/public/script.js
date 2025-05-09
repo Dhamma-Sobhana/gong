@@ -12,7 +12,7 @@ const options = {
     reconnectPeriod: 1000,
     connectTimeout: 30 * 1000,
 }
-const topics = ['activated', 'pong', 'play', 'playing', 'played', 'stop']
+const topics = ['play', 'stop', 'reload-ui']
 
 console.log('Connecting to MQTT server..')
 const client = mqtt.connect(host, options)
@@ -35,9 +35,17 @@ client.on('connect', () => {
 
 client.on('message', (topic, message) => {
     console.log(`Topic: ${topic} Message: ${message.toString()}`)
-    client.end()
 
-    location.reload()
+    if (topic === 'play') {
+        playGong(message);
+    } else if (topic === 'stop') {
+        stopGong();
+        client.end()
+        location.reload()
+    } else if (topic === 'reload-ui') {
+        client.end()
+        location.reload()
+    }
 })
 
 function formatTimeTillNextGong(nextGong) {
@@ -46,7 +54,7 @@ function formatTimeTillNextGong(nextGong) {
     let diff = future.diff(now, ['hours', 'minutes', 'seconds'])
 
     if (diff < 0)
-        return '-'
+        return ''
     else if (diff.hours <= 0)
         return diff.toFormat("m:ss")
 
@@ -55,4 +63,50 @@ function formatTimeTillNextGong(nextGong) {
 
 function tickSystemTime(currentTime) {
     return DateTime.fromISO(currentTime).plus({seconds: 1})
+}
+
+/* Local playback */
+
+function playGong(message) {
+    const enabled = (localStorage.getItem('play-locally-enabled') === 'true');
+    const location = localStorage.getItem('play-locally-location');
+    const repeat = localStorage.getItem('play-locally-repeat');
+
+    console.log('Playing sound', enabled, location, repeat);
+
+    if (!enabled)
+        return
+
+    message = JSON.parse(message);
+    let locationHandled = message.locations.some(r=> ["all", location].includes(r))
+    
+    console.log('Location handled', locationHandled);
+
+    if (!locationHandled)
+        return
+
+    let audio = document.getElementById('play-locally');
+    let repeatCount = repeat;
+    
+    audio.muted = false;
+    audio.currentTime = 0;
+    audio.volume = 0.5;
+
+    audio.onended = (event) => {
+        console.log('Audio ended', repeatCount);
+        repeatCount--;
+        audio.volume = 1;
+
+        if (repeatCount > 0) {
+            audio.play();
+        }
+    };
+
+    audio.play();
+}
+
+function stopGong() {
+    const audio = document.getElementById('play-locally');
+    audio.pause();
+    audio.currentTime = 0;
 }

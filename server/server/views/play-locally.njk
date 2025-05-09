@@ -1,0 +1,116 @@
+<div class="play-locally">
+    <h2>Play gong on this device</h2>
+
+    <h3 id="play-locally-status" class=""></h3>
+
+    <button id="play-locally-enabled" class="disable">Disable</button>
+
+    <button id="play-locally-test" class="blue">Test</button>
+
+    <br>
+
+    <label for="play-locally-location">According to what location should this device play?</label>
+    <select id="play-locally-location" name="play-locally-location">
+    <option value="staff-accommodation">staff-accommodation</option>
+    <option value="outside">outside</option>
+    <option value="student-accommodation">student-accommodation</option>
+    <option value="all">all</option>
+    </select>
+
+    <br>
+
+    <label for="play-locally-repeat">How many times should gong be repeated?</label>
+    <select id="play-locally-repeat" name="play-locally-repeat" value="4">
+    {% for repeat in range(1, 8) -%}
+        <option value="{{ repeat }}" {% if repeat == 4 %}selected{% endif %}>{{repeat}}</option>
+    {%- endfor %}
+    </select>
+</div>
+
+<script>
+    let audio = document.getElementById('play-locally');
+    let enabledButton = document.getElementById('play-locally-enabled');
+    let playLocallyStatus = document.getElementById('play-locally-status');
+    let locationSelect = document.getElementById('play-locally-location');
+    let repeatSelect = document.getElementById('play-locally-repeat');
+    let repeatCount = 0;
+
+    function reloadPlayLocally() {
+        const enabled = (localStorage.getItem('play-locally-enabled') === 'true');
+        const location = localStorage.getItem('play-locally-location');
+        const repeat = localStorage.getItem('play-locally-repeat');
+
+        if (enabled) {
+            enabledButton.classList.remove('enable');
+            enabledButton.classList.add('disable');
+            enabledButton.innerText = "Disable";
+
+            playLocallyStatus.innerHTML = 'Local play is enabled {{ true|booleanToImg|safe }}';
+            
+            localStorage.setItem('play-locally-enabled', 'true');
+        } else {
+            enabledButton.classList.remove('disable');
+            enabledButton.classList.add('enable');
+            enabledButton.innerText = "Enable";
+
+            playLocallyStatus.innerHTML = 'Local play is disabled {{ false|booleanToImg|safe }}';
+
+            localStorage.setItem('play-locally-enabled', 'false');
+        }
+
+        if (location !== null) {
+            locationSelect.value = location;
+        } else {
+            locationSelect.value = "staff-accommodation";
+            localStorage.setItem('play-locally-location', locationSelect.value);
+        }
+
+        if (repeat !== null) {
+            repeatSelect.value = repeat;
+        } else {
+            repeatSelect.value = 4;
+            localStorage.setItem('play-locally-repeat', repeatSelect.value);
+        }
+    }
+
+    audio.onended = (event) => {
+      repeatCount--;
+      console.log("Gong ended, repeatCount: " + repeatCount);
+
+      if (repeatCount > 0) {
+        audio.play();
+      }
+    };
+
+    document.getElementById('play-locally-test').addEventListener('click', function() {
+      const location = document.getElementById('play-locally-location').value;
+      const repeat = document.getElementById('play-locally-repeat').value;
+      repeatCount = repeat;
+
+      audio.play();
+    });
+
+    document.getElementById('play-locally-enabled').addEventListener('click', function() {
+      const enabled = (localStorage.getItem('play-locally-enabled') === 'true');
+
+      if (enabled) {
+        localStorage.setItem('play-locally-enabled', 'false');
+      } else {
+        localStorage.setItem('play-locally-enabled', 'true');
+      }
+
+      reloadPlayLocally();
+    });
+
+    locationSelect.addEventListener('change', function() {
+      const location = locationSelect.value;
+      localStorage.setItem('play-locally-location', location);
+    });
+
+    repeatSelect.addEventListener('change', function() {
+      const repeat = repeatSelect.value;
+      localStorage.setItem('play-locally-repeat', repeat);
+    });
+
+    reloadPlayLocally();
+</script>

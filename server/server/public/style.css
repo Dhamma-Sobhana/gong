@@ -193,7 +193,7 @@ section .gong {
 }
 
 .main div.status {
-    height: 100%;
+    /* height: 100%; */
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -208,7 +208,15 @@ section .gong {
     align-items: end;
 }
 
-.gong h1 {
+.main .top {
+    flex: 1;
+}
+
+.main .bottom {
+    flex: 1;
+}
+
+.gong h1, .status h1 {
     font-size: 4vh;
 }
 
@@ -239,7 +247,7 @@ dl {
 }
 
 dl dd {
-    font-size: 4vh;
+    font-size: 5vh;
     font-weight: bold;
     margin-inline-start: 0;
 }

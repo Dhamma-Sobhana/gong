@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Gong Unavailable</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-size: 3vmax;
+        }
+
+        main {
+            padding: 0 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            flex-direction: column;
+        }
+
+        img {
+            height: 30vh;
+        }
+    </style>
+  </head>
+  <body>
+    <main>
+        <img src="unavailable.png" alt="Gong Unavailable">
+        <h1>Gong currently unavailable</h1>
+        <p>This can happen due to updates being installed or system settings being changed.</p>
+        <p>Testing again in <span id="countdown"></span> seconds.</p>
+    </main>
+    <script>
+        let countdown = 60;
+
+        let countdownElement = document.getElementById('countdown');
+        countdownElement.innerText = countdown;
+
+        let interval = setInterval(() => {
+            countdown--;
+            countdownElement.innerText = countdown;
+
+            if (countdown <= 0) {
+                clearInterval(interval);
+                // Redirect to non existing URL that is not Android Kiosk Allowed URLs ,
+                // and is therefore redirected to Home Page. 
+                window.location = `http://gong`;
+            }
+        }, 1000);
+    </script>
+  </body>
+</html>

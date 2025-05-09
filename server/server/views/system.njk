@@ -33,18 +33,20 @@
                 <th>System time</th>
                 <td><span id="systemTime">-</span></td>
               </tr>
+              {% if enabled %}
               <tr>
                 <th>Automation</th>
-                <td>{% if automation.enabled %}{{ '🟢'|booleanToImg|safe }} ON{% else %}{{ '🔴'|booleanToImg|safe }} OFF{% endif %}</td>
+                <td>{% if automation.enabled %}{{ true|booleanToImg|safe }} ON{% else %}{{ false|booleanToImg|safe }} OFF{% endif %}</td>
               </tr>
+              {% endif %}
               {% if enabled and automation.enabled %}
               <tr>
                 <th>Last fetch</th>
-                <td>{% if automation.lastFetch %}{{ '🟢'|booleanToImg|safe }} {{ automation.lastFetch.toFormat('yyyy-MM-dd HH:mm') }}{% else %}{{ '🔴'|booleanToImg|safe }} Not fetched{% endif %}</th>
+                <td>{% if automation.lastFetch %}{{ true|booleanToImg|safe }} {{ automation.lastFetch.toFormat('yyyy-MM-dd HH:mm') }}{% else %}{{ false|booleanToImg|safe }} Not fetched{% endif %}</th>
               </tr>
               <tr>
                 <th>Next gong</th>
-                <td>{% if automation.getNextGong() %}{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span>{% else %}{{ '🔴'|booleanToImg|safe }} No gong scheduled{% endif %}</td>
+                <td>{% if automation.getNextGong() %}{{ automation.getNextGong().time.toFormat('yyyy-MM-dd HH:mm') }} in <span class="nextGongDiff">-</span>{% else %}{{ false|booleanToImg|safe }} No gong scheduled{% endif %}</td>
               </tr>
               {% endif %}
               <tr>

@@ -19,7 +19,7 @@
         <th>Type</th>
         <th>Location</th>
         <th>Course</th>
-        <th>Status</th>
+        <th>Action</th>
     </tr>
 </thead>
 {% for entry in automation.getSchedule() %}
@@ -30,9 +30,9 @@
     <td>{{ entry.getCourse() }}</td>
     <td>
         {% if entry.active %}
-        <button name="entry_id" value="{{entry.time}}" formaction="/automation/entry/disable" type="submit" class="red">Disable</button>
+        <button name="entry_id" value="{{entry.time}}" formaction="/automation/entry/disable" type="submit" class="disable">Disable</button>
         {% else %}
-        <button name="entry_id" value="{{entry.time}}" formaction="/automation/entry/enable" type="submit" class="blue">Enable</button>
+        <button name="entry_id" value="{{entry.time}}" formaction="/automation/entry/enable" type="submit" class="enable">Enable</button>
         {% endif %}
     <td>
 </tr>

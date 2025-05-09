@@ -120,9 +120,16 @@ button {
   
 .green {background-color: #4CAF50;} /* Green */
 .blue {background-color: #008CBA;} /* Blue */
-.red {background-color: #f44336;} /* Red */
+.red {background-color: #fc2323;} /* Red */
 .grey {background-color: #e7e7e7; color: black;} /* Gray */
 .black {background-color: #555555;} /* Black */
+
+.enable {background-color: #3e7140;}
+.disable {background-color: #949494;} */
+
+.hidden {
+    display: none;
+}
 
 .overflow-scroll {
     overflow-x: auto;
@@ -135,15 +142,15 @@ button {
     max-width: 80vw;
 }
 
-form.test label {
+label {
     width: 100%;
-    margin: 1rem 0 0.5rem;
+    margin: 2rem 0 0.5rem;
     display: block;
-    max-width: 20rem;
+    /* max-width: 20rem; */
     font-weight: bold;
 }
 
-form.test select {
+select {
     width: 100%;
     max-width: 20rem;
     font-size: 2.5vmax;
@@ -227,6 +234,9 @@ section h1 {
     margin: 0;
 }
 
+dl {
+    margin-bottom: 0;
+}
 
 dl dd {
     font-size: 4vh;
@@ -242,10 +252,9 @@ dt {
 div.columns {
     display: flex;
     flex-direction: row;
-    gap: 4vmax;
 }
 
-div.columns > div {
+div.columns > div, div.columns > dl {
     flex: 1;
 }
 

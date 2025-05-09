@@ -10,14 +10,23 @@
       {% if automation.getNextGong() %}
       <h2 class="time">{{  automation.getNextGong().time.toFormat('HH:mm') }}</h2>
       <h3>in <span class="nextGongDiff">-</span></h3>
+
       <dl>
-        <dt>Schedule:</dt>
-        <dd>{{ automation.getNextGong().courseType }}</dd>
-        <dt>Day:</dt>
-        <dd>{{ automation.getNextGong().courseDay }}</dd>
         <dt>Locations:</dt>
-        <dd>{{ automation.getNextGong().locations }}</dd>
+        <dd>{{ automation.getNextGong().locations.join(', ') }}</dd>
       </dl>
+
+      <div class="columns">
+        <dl>
+          <dt>Schedule:</dt>
+          <dd>{{ automation.getNextGong().courseType }}</dd>
+        </dl>
+        <dl>
+          <dt>Day:</dt>
+          <dd>{{ automation.getNextGong().courseDay }}</dd>
+        </dl>
+      </div>
+      
       {% else %}
       <h2>No gong scheduled for today or tomorrow.</h2>
       {% endif %}

@@ -10,30 +10,42 @@
       <div class="columns">
         <div>
       {% if enabled %}
-      <h3>System: enabled</h3>
+      <h3>System is enabled {{ true|booleanToImg|safe }}</h3>
+      {% if automation.enabled %}
+      <p>Gong can be played with button or automatically.</p>
+      {% else %}
+      <p>Automation is disabled. Play gong by using button.</p>
+      {% endif %}
+      
       <form action="/enable" method="post">
-        <button type="submit" class="red">Disable</button>
+        <button type="submit" class="disable">Disable</button>
       </form>
       {% else %}
-      <h3>System: disabled  </h3>
+      <h3>System i disabled {{ false|booleanToImg|safe }}</h3>
+      <p>System is disabled. No gong will be played.</p>
       <form action="/enable" method="post">
-        <button type="submit" class="green">Enable</button>
+        <button type="submit" class="enable">Enable</button>
       </form>
       {% endif %}
       </div>
       <div>
 
+      {% if enabled %}
       {% if automation.enabled %}
-      <h3>Automation: enabled</h3>
+      <h3>Automation is enabled {{ true|booleanToImg|safe }}</h3>
+      <p>Gong will be played automatically according to schedule.</p>
+      
       <form action="/automation/disable" method="post">
-          <button type="submit" class="red">Disable</button>
+          <button type="submit" class="disable">Disable</button>
       </form>
       {% else %}
-      <h3>Automation: disabled</h3>
+      <h3>Automation is disabled {{ false|booleanToImg|safe }}</h3>
+      <p>Gong will not be automated.</p>
 
       <form action="/automation/enable" method="post">
-          <button type="submit" class="green">Enable</button>
+          <button type="submit" class="enable">Enable</button>
       </form>
+      {% endif %}
       {% endif %}
 
       </div>

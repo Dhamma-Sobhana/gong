@@ -41,6 +41,8 @@ njEnv.addFilter('statusToImg', function(status:string) {
             return '<img src="/images/warning.png" alt="Warning" class="status" />'
         case Status.Failed:
             return '<img src="/images/error.png" alt="Failed" class="status" />'
+        case Status.Disabled:
+            return '<img src="/images/disabled.png" alt="Disabled" class="status" />'
         default:
             return '<img src="/images/unknown.png" alt="Unknown" class="status" />'
     }

@@ -5,26 +5,29 @@
 {% block content %}
   <section class="main">
     <div class="gong">
-      {% if enabled and automation.enabled %}
-      <h1>Next Gong</h1>
-      {% if automation.getNextGong() %}
-      <h2 class="time">{{  automation.getNextGong().time.toFormat('HH:mm') }}</h2>
-      <h3>in <span class="nextGongDiff">-</span></h3>
-
-      <dl>
-        <dt>Locations:</dt>
-        <dd>{{ automation.getNextGong().locations.join(', ') }}</dd>
-      </dl>
-
-      <div class="columns">
+      <div class="top">
+        {% if enabled and automation.enabled %}
+        <h1>Next Gong</h1>
+        {% if automation.getNextGong() %}
+        <h2 class="time">{{  automation.getNextGong().time.toFormat('HH:mm') }}</h2>
+        <h3 id="nextGong">loading..</h3>
+      </div>
+      <div class="bottom">
         <dl>
-          <dt>Schedule:</dt>
-          <dd>{{ automation.getNextGong().courseType }}</dd>
+          <dt>Locations:</dt>
+          <dd>{{ automation.getNextGong().locations.join(', ') }}</dd>
         </dl>
-        <dl>
-          <dt>Day:</dt>
-          <dd>{{ automation.getNextGong().courseDay }}</dd>
-        </dl>
+
+        <div class="columns">
+          <dl>
+            <dt>Schedule:</dt>
+            <dd>{{ automation.getNextGong().courseType }}</dd>
+          </dl>
+          <dl>
+            <dt>Day:</dt>
+            <dd>{{ automation.getNextGong().courseDay }}</dd>
+          </dl>
+        </div>
       </div>
       
       {% else %}
@@ -69,14 +72,17 @@
 
       function updateSystemTime() {
           systemTime = tickSystemTime(systemTime)
-          var elements = document.getElementById('systemTime').textContent = systemTime.toFormat('yyyy-MM-dd HH:mm:ss');
+          document.getElementById('systemTime').textContent = systemTime.toFormat('yyyy-MM-dd HH:mm:ss');
       }
 
       function updateDiff() {
           let nextGongDiff = formatTimeTillNextGong('{{ automation.getNextGong().time }}');
-          var elements = document.querySelectorAll('.nextGongDiff');
-          for (let element of elements) {
-              element.textContent = nextGongDiff;
+          var elements = document.getElementById('nextGong');
+
+          if (nextGongDiff.length > 0) {
+              elements.textContent = `in ${nextGongDiff}`;
+          } else {
+              elements.textContent = 'Gong playing';
           }
       }
 

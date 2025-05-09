@@ -50,7 +50,12 @@ class Server {
 
         this.deviceStatusTimer = setInterval(() => {
             client.publish(`ping`);
-            updateDevicesStatus(this.devices)
+            let changed = updateDevicesStatus(this.devices)
+
+            if (changed) {
+                client.publish(`reload-ui`);
+                console.log(`[server] Device status changed`)
+            }
         }, 60000)
 
         console.log(`[server] Gong server starting. Required devices: ${this.devices}`)

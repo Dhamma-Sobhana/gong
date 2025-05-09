@@ -96,25 +96,36 @@ function numberOfActivePlayers(devices: Array<DeviceStatus>):number {
  * Change device status based on time since timestamp was updated
  * @param devices list
  */
-function updateDevicesStatus(devices: Array<DeviceStatus>) {
+function updateDevicesStatus(devices: Array<DeviceStatus>):boolean {
+    let changed = false
+
     for (let device of devices) {
         if ((device.timestamp) && (device.status !== Status.Disabled)) {
             if ((DateTime.now() >= device.timestamp.plus({minutes: 10}))) {
-                if (device.status !== Status.Failed)
+                if (device.status !== Status.Failed) {
                     Sentry.captureMessage(`Device failed. Name: ${device.name}, Type: ${device.type}`)
-
-                device.updateStatus(Status.Failed)
+                    device.updateStatus(Status.Failed)
+                    changed = true
+                }
             }
             else if ((DateTime.now() >= device.timestamp.plus({minutes: 2}))) {
-                device.updateStatus(Status.Warning)
+                if (device.status !== Status.Warning) {
+                    device.updateStatus(Status.Warning)
+                    changed = true
+                }
             }
             else {
-                device.updateStatus(Status.OK)   
+                if (device.status !== Status.OK) {
+                    changed = true
+                    device.updateStatus(Status.OK)   
+                }
             }
         }
         if (device.state !== State.Playing)
             device.state = State.Waiting
     }
+
+    return changed
 }
 
 export { updateDeviceLists, updateDevice, aggregateDeviceStatus, numberOfActivePlayers, updateDevicesStatus }

@@ -9,9 +9,10 @@
 
 <h1>Gong Schedule</h1>
 
+<p>Gong schedule for today and tomorrow. Press <strong>Disable</strong> to skip that specific time.</p>
+
 {% if automation.enabled %}
 <div class="overflow-scroll">
-<form method="post">
 <table>
 <thead>
     <tr>
@@ -22,6 +23,7 @@
         <th>Action</th>
     </tr>
 </thead>
+<tbody>
 {% for entry in automation.getSchedule() %}
 <tr class="{% if not entry.active %}disabled{% endif %}">
     <td>{{ entry.time.toFormat('yyyy-MM-dd HH:mm') }}</td>
@@ -41,18 +43,39 @@
     <td>Schedule not available</td>
 </tr>
 {% endfor %}
+</tbody>
 </table>
-</form>
 </div>
+
+<p>Full available gong schedule for currently fetched courses.</p>
 
 <a href="/automation/schedule" class="button">Show full gong schedule</a>
 
 <h3>Courses</h3>
-<ul class="courses">
+<p>Current and upcoming courses.</p>
+
+<div class="overflow-scroll">
+<form method="post">
+<table>
+<thead>
+    <tr>
+        <th>From</th>
+        <th>To</th>
+        <th>Type</th>
+    </tr>
+</thead>
+<tbody>
 {% for course in automation.getCourses() %}
-    <li>{{ course.start.toISODate() }} - {{ course.end.toISODate() }} - {{ course.type }}</li>
-{% endfor%}
-</ul>
+    <tr>
+        <td>{{ course.start.toISODate() }}</td>
+        <td>{{ course.end.toISODate() }}</td>
+        <td>{{ course.type }}</td>
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+</form>
+</div>
 
 {% else %}
 <h3>Automation: disabled</h3>

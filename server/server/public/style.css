@@ -64,8 +64,7 @@ nav ul li a {
 }
 
 main {
-    margin-top: 15vh;
-    height: 85vh;
+    padding-top: 15vh;
 }
 
 table {
@@ -221,7 +220,7 @@ section .gong {
 }
 
 .gong h2.time {
-    font-size: 12vh;
+    font-size: 16vh;
     margin: 3vh;
 }
 
@@ -235,6 +234,8 @@ section h1 {
 
 .time h2 {
     font-size: 3vh;
+    margin-bottom: 0;
+    color: lightgray;
 }
 
 .time h3 {
@@ -253,6 +254,7 @@ dl dd {
 }
 
 dt {
+    color: lightgray;
     font-size: 3vh;
     margin-top: 1rem;
 }
@@ -260,6 +262,14 @@ dt {
 div.columns {
     display: flex;
     flex-direction: row;
+}
+
+div.columns.test {
+    gap: 2rem;
+}
+
+.test select {
+    max-width: 90%;
 }
 
 div.columns > div, div.columns > dl {
@@ -276,8 +286,7 @@ img.status {
     }
 
     main {
-        margin-top: 10vh;
-        height: 90vh;
+        padding-top: 10vh;
     }
 
     nav {
@@ -292,6 +301,10 @@ img.status {
         max-width: 50vw;
     }
 
+    .play-locally button {
+        max-width: 48%;
+    }
+    
     form.test select {
         max-width: unset;
     }
@@ -310,6 +323,10 @@ img.status {
 
     .gong h2.time {
         font-size: 8vh;
+    }
+
+    .time h2 {
+        font-size: 2vh;
     }
 
     .time h3 {

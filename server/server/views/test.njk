@@ -1,13 +1,19 @@
 <h2>Test</h2>
+<p>Functions for testing devices during installation.
+
+<h3>Stop</h3>
+<p>Send stop signal to all devices.</p>
 
 <form action="/test/stop" method="post">
     <button type="submit" class="red">STOP ALL</button>
 </form>
 
-<div class="columns">
+<div class="columns test">
     <div>
 
-<h3>Test player</h3>
+<h3>Player</h3>
+
+<p>Repeatedly play a sound on the selected device until the <strong>STOP ALL</strong> button is pressed.</p>
 
 <form action="/test/device/play" method="post" class="test">
     <label for="device">Device</label>
@@ -36,7 +42,9 @@
 </div>
 <div>
 
-<h3>Test remote</h3>
+<h3>Remote</h3>
+
+<p>Light the LED of the device until the <strong>STOP ALL</strong> button is pressed.</p>
 
 <form action="/test/device/play" method="post" class="test">
     <input type="hidden" name="type" value="silence"/>
@@ -53,7 +61,7 @@
 
     <br>
 
-    <button type="submit" class="blue">Toggle LED</button>
+    <button type="submit" class="blue">LED ON</button>
 </form>
 
 </div>

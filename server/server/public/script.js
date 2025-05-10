@@ -72,14 +72,14 @@ function tickSystemTime(currentTime) {
 
 /* Local playback */
 
-function playGong(message) {
+function playGong(message, test = false) {
     const enabled = (localStorage.getItem('play-locally-enabled') === 'true');
     const location = localStorage.getItem('play-locally-location');
     const repeat = localStorage.getItem('play-locally-repeat');
 
-    console.log('Playing sound', enabled, location, repeat);
+    console.log('Playing sound', enabled, test, location, repeat);
 
-    if (!enabled)
+    if (!test && !enabled)
         return
 
     message = JSON.parse(message);

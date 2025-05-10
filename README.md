@@ -39,7 +39,7 @@ If you are interested in obtaining support deploying this system or customizing 
 
 # Device types
 
-The system consists of 3 device types:
+The system consists of 4 device types:
 
 ## Server
 
@@ -54,6 +54,10 @@ Connected to an amplifier with speakers.
 ## Remote
 
 Has a button connected on [GPIO](https://projects.raspberrypi.org/en/projects/physical-computing/1) pins of the device. Sends a message to the server when the button is activated or inactivated. Shows current status of playing from the server using a LED.
+
+## Status screen
+
+A wall mounted tablet that shows upcoming gong, schedule, devices and system status. Allows system and automation to be disabled or enabled. Can act as a player to play gong.
 
 # Architecture
 
@@ -193,6 +197,9 @@ Sent by remote when button has been pressed.
 Example data:
 
     {"name": "main-house-remote"}
+
+### reload-ui (server -> server)
+Sent when the data has been updated that requires the status display to reload.
 
 # Configuration
 Configuration is set using fleet or device variables in *balenaCloud* dashboard.
@@ -463,6 +470,19 @@ Allow system and automation to be turned on and off.
 > When disabling or enabling system or automation, the updated configuration will be pushed to balenaCloud which will restart the server container. This might cause the web ui to not be available for a short time.
 
 ![Settings](/img/settings.jpeg)
+
+### Local play
+
+The wall mounted tablet can also act as a player. Set the location the device should simulate and how many times the gong should be repeated.
+
+> [!IMPORTANT]
+> For this to work properly the web ui must be running in a browser which allows automatic playback of audio without user interaction. In Android Lockdown this is done by enabling *Auto Play HTML5 Audio* in *Page & Content*.
+
+### Testing
+
+For help when installing the system a sound can be repeatedly played on a device. This can help with finding the optimal placement of speakers.
+
+Select which device to test and which sound type to play. Silence can be useful to test that the device is responding correctly wihtout causing any disturbance.
 
 # Development
 

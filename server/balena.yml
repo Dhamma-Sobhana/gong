@@ -21,4 +21,4 @@ data:
     - raspberrypi3
     - raspberrypi3-64
     - raspberrypi4-64
-version: 1.8.2
+version: 1.9.0

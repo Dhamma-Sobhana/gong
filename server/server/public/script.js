@@ -48,6 +48,11 @@ client.on('message', (topic, message) => {
     }
 })
 
+window.onbeforeunload = function(event) {
+    client.end()
+    console.log('Client disconnected')
+};
+
 function formatTimeTillNextGong(nextGong) {
     let now = DateTime.now()
     let future = DateTime.fromISO(nextGong)

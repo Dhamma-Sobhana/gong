@@ -108,6 +108,12 @@ function playGong(message) {
     };
 
     audio.play();
+
+    // While playing gong, prevent Android Kiosk reloading due to idle timeout
+    if (typeof(Android) !== 'undefined')
+        Android.delayIdleTimeout();
+    else
+        console.log('Not running on Android');
 }
 
 function stopGong() {

@@ -10,7 +10,7 @@ body {
 }
 
 a, a:visited, a:active {
-    color: #e0e0e0;
+    color: lightgrey;
 }
 
 th {
@@ -60,7 +60,7 @@ nav ul li {
 
 nav ul li a, nav a:visited, nav a:active {
     text-decoration: none;
-    color: #c2bdbd;
+    color: lightgrey;
 }
 
 nav li.active a{
@@ -221,6 +221,7 @@ section .gong {
 
 .gong h1, .status h1 {
     font-size: 4vh;
+    color: lightgray
 }
 
 .gong h2.time {

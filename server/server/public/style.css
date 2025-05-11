@@ -58,9 +58,13 @@ nav ul li {
     list-style: none;
 }
 
-nav ul li a {
+nav ul li a, nav a:visited, nav a:active {
     text-decoration: none;
-    color: #bcbcbc;
+    color: #c2bdbd;
+}
+
+nav li.active a{
+    color: #fff;
 }
 
 main {

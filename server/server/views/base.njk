@@ -22,12 +22,20 @@
     <audio id="play-locally" src="/sounds/gong-8s.mp3" autoplay muted></audio>
     <header>
       <nav>
+        {% set navigation_bar = [
+            ['/', 'home', 'Home'],
+            ['/schedule', 'schedule', 'Schedule'],
+            ['/devices', 'devices', 'Devices'],
+            ['/system', 'system', 'System'],
+            ['/settings', 'settings', 'Settings']
+        ] -%}
+        {% set active_page = active_page|default('home') -%}
+
         <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/schedule">Schedule</a></li>
-          <li><a href="/devices">Devices</a></li>
-          <li><a href="/system">System</a></li>
-          <li><a href="/settings">Settings</a></li>
+          {% for href, id, caption in navigation_bar %}
+            <li{% if id == active_page %} class="active"{% endif %}>
+            <a href="{{ href }}">{{ caption }}</a></li>
+          {% endfor %}
         </ul>
       </nav>
     </header>

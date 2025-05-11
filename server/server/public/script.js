@@ -48,10 +48,18 @@ client.on('message', (topic, message) => {
     }
 })
 
+// Disconnect from MQTT server when navigating to new page
 window.onbeforeunload = function(event) {
     client.end()
     console.log('Client disconnected')
 };
+
+// Navigate home if left on non-home page for 4 minutes
+if (location.pathname !== '/') {
+    setTimeout(() => {
+        location.href = '/';
+    }, 4 * 60 * 1000);
+}
 
 function formatTimeTillNextGong(nextGong) {
     let now = DateTime.now()

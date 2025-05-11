@@ -89,7 +89,7 @@
       const repeat = document.getElementById('play-locally-repeat').value;
       repeatCount = repeat;
 
-      playGong('{"locations": ["all"]}', true);
+      playGong({"locations": ["all"]}, true);
     });
 
     document.getElementById('play-locally-enabled').addEventListener('click', function() {

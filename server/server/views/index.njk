@@ -5,7 +5,14 @@
 
 {% block content %}
   <section class="main">
-    <div class="gong">
+    <div id="gong-playing" class="gong">
+      <div class="top">
+        <h1>Gong<br>playing</h1>
+        <h2>Locations</h2>
+        <h3 id="gong-location"></h3>
+      </div>
+    </div>
+    <div id="gong-countdown" class="gong">
       <div class="top">
         {% if enabled and automation.enabled %}
         <h1>Next Gong</h1>

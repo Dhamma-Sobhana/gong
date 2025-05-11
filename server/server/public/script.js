@@ -37,7 +37,9 @@ client.on('message', (topic, message) => {
     console.log(`Topic: ${topic} Message: ${message.toString()}`)
 
     if (topic === 'play') {
+        message = JSON.parse(message);
         playGong(message);
+        showGongPlaying(message);
     } else if (topic === 'stop') {
         stopGong();
         client.end()
@@ -47,6 +49,20 @@ client.on('message', (topic, message) => {
         location.reload()
     }
 })
+
+function showGongPlaying(message) {
+    const gongPlaying = document.getElementById('gong-playing');
+    const gongCountdown = document.getElementById('gong-countdown');
+
+    if (gongPlaying && gongCountdown) {
+        const gongLocation = document.getElementById('gong-location');
+        
+        gongCountdown.style.display = 'none';
+        gongLocation.innerText = message.locations.join(', ');
+        gongPlaying.style.display = 'block';
+
+    }
+}
 
 // Disconnect from MQTT server when navigating to new page
 window.onbeforeunload = function(event) {
@@ -90,7 +106,6 @@ function playGong(message, test = false) {
     if (!test && !enabled)
         return
 
-    message = JSON.parse(message);
     let locationHandled = message.locations.some(r=> ["all", location].includes(r))
     
     console.log('Location handled', locationHandled);

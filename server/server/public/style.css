@@ -195,6 +195,28 @@ section .gong {
     text-align: center;
 }
 
+#gong-countdown {
+    display: block;
+}
+
+#gong-playing {
+    display: none;
+}
+
+#gong-playing h1 {
+    font-size: 14vh;
+    color: #fff;
+    margin-bottom: 8vh;
+}
+
+#gong-playing h2 {
+    font-size: 4vh;
+}
+
+#gong-playing h3 {
+    font-size: 6vh;
+}
+
 .main div.status {
     /* height: 100%; */
     text-align: center;

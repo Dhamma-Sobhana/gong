@@ -10,7 +10,7 @@
   "scripts": {
     "start": "NODE_PATH=./build node build/main.js",
     "build": "./node_modules/typescript/bin/tsc -p .",
-    "dev": "DEVICES=remote,player AUTOMATION=true NODE_ENV=development LOCATION_ID=1392 nodemon src/main.ts",
+    "dev": "DEVICES=dev-remote,dev-player AUTOMATION=true NODE_ENV=development LOCATION_ID=1392 nodemon src/main.ts",
     "dev-device": "node node_modules/nodemon/bin/nodemon.js src/main.ts",
     "test": "jest",
     "coverage": "jest --coverage"

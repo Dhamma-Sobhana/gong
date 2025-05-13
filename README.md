@@ -261,6 +261,9 @@ Format: `nnnn`
 ## SENTRY_DSN (server)
 Optional Data Source Name for error tracking using [Sentry](https://sentry.io/).
 
+## PIN_CODE (server)
+Optional numeric PIN code to access the web interface. Valid for 12 hours but extended on main screen reload to have tablet persistently logged in.
+
 # Automation
 The system can fetch a centers schedule for automatic plying of gong. Locally stored time table definitions are used to transform this data into a time table for playing gong.
 

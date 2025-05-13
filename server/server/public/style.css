@@ -308,6 +308,47 @@ img.status {
     max-height: 2vmax;
 }
 
+.login {
+    display: flex;
+    height: 100vh;
+    width: 90vw;
+    padding: 0 5vw;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.login h1 {
+    font-size: 7vh;
+    margin-bottom: 2vh;
+}
+
+.login label {
+    font-size: 4vh;
+    margin: 0 0 3vh;
+}
+
+.login input {
+    font-size: 4vh;
+    padding: 1vh;
+    margin-bottom: 2vh;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.login button {
+    font-size: 4vh;
+    width: 100%;
+    max-width: unset;
+}
+
+.login .error {
+    color: rgb(160, 0, 0);
+    font-size: 5vh;
+}
+
+
 @media (orientation: portrait) {
     header {
         height: 10vh;

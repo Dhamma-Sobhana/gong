@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Gong - Login</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    <link rel="manifest" href="/manifest.json">
+
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <div class="login">
+      <h1>Gong</h1>
+      <form method="POST" action="/login">
+        <input type="password" id="pin" name="pin" required pattern="[0-9]*" inputmode="numeric" placeholder="Enter code" autocomplete="off" autofocus>
+        <button type="submit">Login</button>
+      </form>
+      {% if  error %} 
+        <div class="error">
+          <p>Failed to login</p>
+        </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 const bodyParser = require('body-parser')
 const nunjucks = require('nunjucks')
 const dateFilter = require('nunjucks-date')
+const cookieParser = require('cookie-parser');
 
 import { aggregateDeviceStatus } from './devices';
 import { Server } from './server';
@@ -14,6 +15,22 @@ import { balenaUpdateEnvironmentVariable } from './balena';
 // Express.js and Nunjucks for web interface
 const app: Express = express();
 const http_port = process.env.HTTP_PORT || 8080;
+
+const pin_code = process.env.PIN_CODE;
+const salt = 'gong';
+const access_hash = require('crypto').createHash('sha256').update(`${pin_code}${salt}`, 'utf8').digest('hex');
+const cookie_max_age = 1000 * 60 * 60 * 12; // 12 hours
+
+app.use(cookieParser(), function(req, res, next) {
+    let token = req.cookies.token;
+
+    // If pin is disabled, token is correct, accessing login screen or static files
+    if (pin_code === undefined || token == access_hash || req.path === '/login' || req.path.endsWith('.css') || req.path.endsWith('.js') || req.path.endsWith('.png') || req.path.endsWith('.json') || req.path.endsWith('.mp3')) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+});
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
@@ -55,8 +72,33 @@ let server = app.listen(http_port, () => {
     console.log(`[web]: Listening on port ${http_port}`)
 })
 
+function setAccessCookie(res: Response) {
+    if (pin_code !== undefined)
+        res.cookie('token', access_hash, { maxAge: cookie_max_age, httpOnly: true });
+}
+
 function setupWebRoutes(server:Server, client:any) {
+    app.get('/login', (req: Request, res: Response) => {
+        res.render('login.njk', {
+            "error": req.query.error
+        })
+    })
+
+    app.post('/login', (req: Request, res: Response) => {
+        let pin = req.body.pin;
+        const hash = require('crypto').createHash('sha256').update(`${pin}${salt}`, 'utf8').digest('hex');
+
+        if (hash == access_hash) {
+            setAccessCookie(res)
+            res.redirect('/');
+        } else {
+            res.redirect('/login?error=1');
+        }
+    })
+
     app.get('/', (req: Request, res: Response) => {
+        setAccessCookie(res)
+
         res.render('index.njk', {
             enabled: server.enabled,
             status: server.systemStatus(),

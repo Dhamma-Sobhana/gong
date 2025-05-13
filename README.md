@@ -439,6 +439,9 @@ Gong is not played anywhere as no period is handling that time.
 # Web interface
 A web interface is hosted on the server device and is available to check system status and enabling or disabling system and automation. This interface is customized to be shown on a wall mounted tablet in landscape mode to give an overall system performance view at a glance.
 
+> [!WARNING]
+> Unless configuration PIN_CODE is set on the server this interface will be open to any device in the local network.
+
 ## Overview
 
 Gives at a glance view of the overall system performance. Shows next gong coming up and if all parts of the system are working correctly.

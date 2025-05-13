@@ -51,7 +51,7 @@ nav {
 
 nav ul {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
 }
 
 nav ul li {
@@ -65,6 +65,7 @@ nav ul li a, nav a:visited, nav a:active {
 
 nav li.active a{
     color: #fff;
+    font-weight: bold;
 }
 
 main {

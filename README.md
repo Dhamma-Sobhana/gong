@@ -484,11 +484,15 @@ The wall mounted tablet can also act as a player. Set the location the device sh
 > [!IMPORTANT]
 > For this to work properly the web ui must be running in a browser which allows automatic playback of audio without user interaction. In Android Lockdown this is done by enabling *Auto Play HTML5 Audio* in *Page & Content*.
 
+![Local play](/img/local-play.jpeg)
+
 ### Testing
 
 For help when installing the system a sound can be repeatedly played on a device. This can help with finding the optimal placement of speakers.
 
 Select which device to test and which sound type to play. Silence can be useful to test that the device is responding correctly wihtout causing any disturbance.
+
+![Testing](/img/test.jpeg)
 
 # Development
 

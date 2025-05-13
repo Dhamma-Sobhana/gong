@@ -26,6 +26,9 @@ Format: `nnnn`
 ## SENTRY_DSN (server)
 Optional Data Source Name for error tracking using [Sentry](https://sentry.io/).
 
+## PIN_CODE (server)
+Optional numeric PIN code to access the web interface. Valid for 12 hours but extended on main screen reload to have tablet persistently logged in.
+
 # Local mode development
 
 If the device is set to local mode in balena cloud, push code to it like this:

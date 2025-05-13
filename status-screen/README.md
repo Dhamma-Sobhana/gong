@@ -15,15 +15,15 @@ To access Android Kiosk Browser settings, tap the screen 4 times and enter passw
 
 ### Custom error page
 
-For the custom error screen to work copy `index.htm` and `unavailable.png` from [kioskbrowser/errorpage]() to `kioskbrowser/errorpage` on the device.
+For the custom error screen to work copy `index.htm` and `unavailable.png` from [kioskbrowser/errorpage](kioskbrowser/errorpage) to `kioskbrowser/errorpage` on the device.
 
 ### Configuration
 
-Restore configuration from [`configuration.json`]() to get most settings correct.
+Restore configuration from [`configuration.json`](https://raw.githubusercontent.com/Dhamma-Sobhana/gong/refs/heads/main/status-screen/configuration.json) to get most settings correct.
 
 Open Settings and go to *Advanced, Automatic Config Url*.
 
-Fill in URL: ``
+Fill in URL: `https://tinyurl.com/gong-kiosk-config`
 
 Settings needing change after restore:
 

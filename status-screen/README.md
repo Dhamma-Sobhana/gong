@@ -23,9 +23,9 @@ Restore configuration from [`configuration.json`](https://raw.githubusercontent.
 
 Open Settings and go to *Advanced, Automatic Config Url*.
 
-Fill in URL: `https://tinyurl.com/gong-kiosk-config`
+Fill in `tinyurl.com/gong-kiosk-config`, press OK and wait a few seconds while configuration is being applied.
 
-Settings needing change after restore:
+Then continue by changing the following settings:
 
 #### General, Kiosk URL
 Set to the IP or hostname of the server, including http://

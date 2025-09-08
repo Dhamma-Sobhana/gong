@@ -45,11 +45,11 @@ class Automation {
         if (entry === undefined)
             return
         
-        console.log(`[automation] Scheduling playback of gong at ${entry.time.toLocaleString(DateTime.TIME_24_SIMPLE)} in ${entry.locations}`)
+        console.log(`[automation] Scheduling playback of gong at ${entry.time.toLocaleString(DateTime.TIME_24_SIMPLE)} in ${entry.locations}, repeat ${entry.repeat} times`);
         this.job?.cancel()
         this.job = scheduleJob(entry.time.toJSDate(), () => {
             console.log(`[automation] Executing playing of gong in ${entry.locations}`);
-            this.callback(entry.locations)
+            this.callback(entry.locations, entry.repeat)
             this.scheduleGong(this.getNextGong())
         });
     }

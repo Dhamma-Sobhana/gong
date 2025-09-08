@@ -58,7 +58,7 @@ class Server {
             }
         }, 60000)
 
-        console.log(`[server] Gong server starting. Required devices: ${this.devices}`)
+        console.log(`[server] Gong server starting. Enabled: ${this.enabled}, required devices: ${this.devices}, repeat: ${this.gongRepeat}, automation: ${automationEnabled}, locationId: ${locationId}`)
         console.log(`[server] System time: ${DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss')}`)
 
         this.resetWatchdog()

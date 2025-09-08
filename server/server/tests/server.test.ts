@@ -5,9 +5,11 @@ import { server as webServer } from "../src/web"
 import { Status } from "../src/models"
 import { DateTime } from "luxon"
 
+jest.useFakeTimers()
 let server: Server
 
 beforeEach(() => {
+    jest.setSystemTime(DateTime.fromISO('2023-09-17T12:00:00').toJSDate())
     server = new Server(client, ["remote", "player"], 3)
 });
 

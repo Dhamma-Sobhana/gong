@@ -22,7 +22,8 @@ test('Schedule playing next gong', () => {
     expect(automation.job).toBeUndefined()
     expect(callback).not.toBeCalled();
 
-    let entry = new TimeTableEntry(DateTime.fromISO('2023-09-17T12:00:00'), '12:01', 'gong', ['accommodation'], 'Default', 0)
+    let entry = new TimeTableEntry(DateTime.fromISO('2023-09-17T12:00:00'), '12:01', 'gong', ['accommodation'], 'Default', 0, 4)
+    console.log(entry.repeat)
     automation.scheduleGong(entry)
     expect(automation.job).toBeDefined()
     expect(callback).not.toBeCalled();
@@ -36,7 +37,7 @@ test('Schedule playing next gong', () => {
     expect(automation.job).toBeDefined()
     expect(callback).toBeCalled();
     expect(callback).toHaveBeenCalledTimes(1);
-    expect(callback).toHaveBeenCalledWith(["accommodation"])
+    expect(callback).toHaveBeenCalledWith(["accommodation"], 4)
 })
 
 test('Cancel schedule', () => {
@@ -44,7 +45,7 @@ test('Cancel schedule', () => {
     expect(automation.job?.nextInvocation()).toBeFalsy()
     expect(callback).not.toBeCalled();
 
-    let entry = new TimeTableEntry(DateTime.fromISO('2023-09-17T12:00:00'), '12:01', 'gong', ['accommodation'], 'Default', 0)
+    let entry = new TimeTableEntry(DateTime.fromISO('2023-09-17T12:00:00'), '12:01', 'gong', ['accommodation'], 'Default', 0, 4)
     automation.scheduleGong(entry)
 
     expect(callback).not.toBeCalled();
@@ -80,7 +81,7 @@ test('Daylight saving spring', () => {
     // Swedish DST spring 2024: Under natten från lördag 30 mars 2024 till söndag 31 mars 2024, 02:00 -> 03:00
     jest.setSystemTime(DateTime.fromISO('2024-03-30T22:00:00').toJSDate())
 
-    let entry = new TimeTableEntry(DateTime.fromISO('2024-03-31T04:00:00'), '04:00', 'gong', ['student-accommodation'], 'Default', 0)
+    let entry = new TimeTableEntry(DateTime.fromISO('2024-03-31T04:00:00'), '04:00', 'gong', ['student-accommodation'], 'Default', 0, 4)
     automation.scheduleGong(entry)
 
     expect(callback).not.toBeCalled();
@@ -105,7 +106,7 @@ test('Daylight saving autumn', () => {
     // Swedish DST autumn 2024: Under natten från lördag 26 oktober 2024 till söndag 27 oktober 2024, 03:00 -> 02.00
     jest.setSystemTime(DateTime.fromISO('2024-10-26T22:00:00').toJSDate())
 
-    let entry = new TimeTableEntry(DateTime.fromISO('2024-10-27T04:00:00'), '04:00', 'gong', ['student-accommodation'], 'Default', 0)
+    let entry = new TimeTableEntry(DateTime.fromISO('2024-10-27T04:00:00'), '04:00', 'gong', ['student-accommodation'], 'Default', 0, 4)
     automation.scheduleGong(entry)
 
     expect(callback).not.toBeCalled();

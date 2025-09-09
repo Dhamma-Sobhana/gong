@@ -12,7 +12,7 @@
       { "time": "04:20", "type": "gong", "locations": ["student-accommodation"], "repeat": 8 },
       { "time": "07:48", "type": "gong", "locations": ["all"] },
       { "time": "12:50", "type": "gong", "locations": ["student-accommodation", "outside"] },
-      { "time": "14:15", "type": "gong", "locations": ["student-accommodation", "outside"] },
+      { "time": "14:15", "type": "gong", "locations": ["student-accommodation", "outside"], "repeat": 4 },
       { "time": "14:23", "type": "gong", "locations": ["all"] },
       { "time": "17:48", "type": "gong", "locations": ["all"] }
     ],

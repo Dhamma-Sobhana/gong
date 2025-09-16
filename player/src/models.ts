@@ -56,5 +56,10 @@ class PlayMessage {
     }
 }
 
+type GongType = {
+    name: string;
+    file_name: string;
+    test?: boolean;
+};
 
-export { Message, DeviceStatus, PlayMessage }
+export { Message, DeviceStatus, PlayMessage, GongType }

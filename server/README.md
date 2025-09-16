@@ -8,6 +8,11 @@ See README in root for detailed explaination.
 ## DEVICES (server)
 Comma separated list of devices that should be online. Used to check status of devices.
 
+## GONG_TYPE (server)
+What gong type should be played. One of `brass-bowl`, `big-ben` or `big-gong`.
+
+Default: `brass-bowl`
+
 ## GONG_REPEAT (server)
 How many times a gong should be played in a row by default. Time table entries can override this value.
 

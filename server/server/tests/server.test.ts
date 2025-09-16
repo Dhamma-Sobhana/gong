@@ -85,7 +85,7 @@ test('Disable system', () => {
 
     expect(spy).toHaveBeenCalled()
 
-    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"all\"],\"repeat\":3}")
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"brass-bowl\",\"locations\":[\"all\"],\"repeat\":3}")
 })
 
 test('Play gong by remote action', () => {
@@ -97,7 +97,7 @@ test('Play gong by remote action', () => {
     handleMessage('activated', JSON.stringify({name: test}), server)
 
     expect(spy).toHaveBeenCalled()
-    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"all\"],\"repeat\":3}")  
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"brass-bowl\",\"locations\":[\"all\"],\"repeat\":3}")  
 })
 
 
@@ -165,7 +165,7 @@ test('Play gong by automtion', () => {
     server.playAutomatedGong(['student-accommodation'], 4)
 
     expect(spy).toHaveBeenCalled()
-    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"student-accommodation\"],\"repeat\":4}")    
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"brass-bowl\",\"locations\":[\"student-accommodation\"],\"repeat\":4}")    
 })
 
 test('Only play if players active', () => {
@@ -180,5 +180,40 @@ test('Only play if players active', () => {
 
     server.playAutomatedGong(['student-accommodation'], 4)
 
-    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"gong\",\"locations\":[\"student-accommodation\"],\"repeat\":4}")
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"brass-bowl\",\"locations\":[\"student-accommodation\"],\"repeat\":4}")
+})
+
+test('Change gong signal', () => {
+    let spy = jest.spyOn(client, 'publish')
+
+    server.devices[1].type = 'player'
+    server.devices[1].status = Status.OK
+    
+    expect(server.gong_type).toEqual({'name': 'brass-bowl', 'file_name': 'sounds/brass-bowl.mp3'})
+
+    server.playAutomatedGong(['student-accommodation'], 4)
+
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"brass-bowl\",\"locations\":[\"student-accommodation\"],\"repeat\":4}")
+
+    server.gongPlaying = false
+
+    server.setGongType('unknown')
+
+    expect(server.gong_type).toEqual({'name': 'brass-bowl', 'file_name': 'sounds/brass-bowl.mp3'})
+
+    server.setGongType('big-ben')
+
+    expect(server.gong_type).toEqual({'name': 'big-ben', 'file_name': 'sounds/big-ben.mp3'})
+
+    server.playAutomatedGong(['student-accommodation'], 4)
+
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"big-ben\",\"locations\":[\"student-accommodation\"],\"repeat\":4}")
+
+    server.gongPlaying = false
+
+    server.setGongType('big-gong')
+
+    server.playAutomatedGong(['student-accommodation'], 4)
+
+    expect(spy).toHaveBeenCalledWith("play", "{\"type\":\"big-gong\",\"locations\":[\"student-accommodation\"],\"repeat\":4}")
 })

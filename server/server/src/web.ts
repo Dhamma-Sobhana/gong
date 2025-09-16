@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 import { aggregateDeviceStatus } from './devices';
 import { Server } from './server';
 import { logArray } from './log'
+import { getGongTypes } from './lib'
 import { PlayMessage, Status, StatusMessage } from './models';
 import { balenaUpdateEnvironmentVariable } from './balena';
 
@@ -42,6 +43,9 @@ let njEnv = nunjucks.configure('views', {
 
 dateFilter.install(njEnv)
 dateFilter.setDefaultFormat('YYYY-MM-DD HH:mm:ss.SS');
+
+
+njEnv.addFilter('safeFilter', (str: string) => njEnv.filters.safe(str));
 
 njEnv.addFilter('booleanToImg', function(status:boolean) {
     if (status)
@@ -152,6 +156,9 @@ function setupWebRoutes(server:Server, client:any) {
             playing: server.gongPlaying,
             automation: server.automation,
             devices: server.devices,
+            gong_repeat: server.gongRepeat,
+            getGongTypes: getGongTypes,
+            gong_type: server.gong_type,
             log: logArray.slice(),
             system_time: DateTime.now()
         })
@@ -167,6 +174,26 @@ function setupWebRoutes(server:Server, client:any) {
         server.enable(!server.enabled)
         
         balenaUpdateEnvironmentVariable('DISABLED', (!server.enabled).toString())
+        res.redirect('/settings')
+    })
+
+    app.post('/settings/gong-type', (req: Request, res: Response) => {
+        let type = req.body['gong-type']
+
+        console.log(`[web] Change gong type to '${type}'`)
+        
+        server.setGongType(type)
+
+        res.redirect('/settings')
+    })
+
+    app.post('/settings/gong-repeat', (req: Request, res: Response) => {
+        let repeat = req.body['gong-repeat']
+
+        console.log(`[web] Change gong repeat to ${repeat}`)
+        
+        server.setGongRepeat(repeat)
+
         res.redirect('/settings')
     })
 

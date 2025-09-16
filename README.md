@@ -156,15 +156,15 @@ Example data:
 ### play (server -> player)
 Play gong sound if player is configured to handle the zone requested.
 
-- type: string referring to sound type on player, usually 'gong'.
+- type: string referring to sound type on player.
 - locations: array of locations.
 - repeat: number of times sound should be played.
 
 Example data:
 
-    { "type": "gong", "locations": ["all"], "repeat": 6 }
-    { "type": "gong", "locations": ["student-accommodation"], "repeat": 6 }
-    { "type": "gong", "locations": ["student-accommodation", "outside"], "repeat": 4 }
+    { "type": "brass-bowl", "locations": ["all"], "repeat": 6 }
+    { "type": "brass-bowl", "locations": ["student-accommodation"], "repeat": 6 }
+    { "type": "brass-bowl", "locations": ["student-accommodation", "outside"], "repeat": 4 }
 
 ### playing (player -> server)
 Report that playback has started.
@@ -240,6 +240,11 @@ Example: **student-accommodation,outside**
 
 ## DEVICES (server)
 Comma separated list of devices that should be online. Used to check status of devices.
+
+## GONG_TYPE (server)
+What gong type should be played. One of `brass-bowl`, `big-ben` or `big-gong`.
+
+Default: `brass-bowl`
 
 ## GONG_REPEAT (server)
 How many times a gong should be played in a row by default. Time table entries can override this value.
@@ -539,3 +544,11 @@ Status icons:
 Application icon:
 
 <a href="https://www.flaticon.com/free-icons/gong">Gong icon by Pixel perfect</a>
+
+Gong sounds:
+
+<a href="https://freesound.org/s/88744/">Bowl 16 bit 44100 mono.wav by Duendevision -- License: Sampling+</a>
+
+<a href="https://freesound.org/s/150106/">SB 02 big ben.wav by Peter Lustig-- License: Attribution 3.0</a>
+
+<a href="https://freesound.org/s/467110/">Gong (Vietnam, big) 02 by cdrk -- License: Attribution 4.0</a>

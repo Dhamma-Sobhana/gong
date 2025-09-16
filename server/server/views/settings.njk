@@ -6,7 +6,7 @@
 {% block content %}
   <section class="main">
     <div class="settings">
-      <h1>Settings</h1>
+      <h1>System Settings</h1>
 
       <div class="columns">
         <div>
@@ -50,6 +50,36 @@
       {% endif %}
 
       </div>
+      <div>
+          <h3>Gong type: {{ gong_type.name }}</h3>
+
+          <form action="/settings/gong-type" method="post">
+            <label for="gong-type">New gong type:</label>
+            <select id="gong-type" name="gong-type">
+              {% for type in getGongTypes() %}
+              <option value="{{ type.name }}" {% if type.name == gong_type.name %}selected{% endif %}>{{ type.name }}</option>
+              {% endfor %}
+            </select>
+            <br>
+            <audio id="gong-type-preview-audio" src="/{{ gong_type.file_name }}"></audio>
+            <button type="submit" class="margin-h">Change</button>
+            <button type="button" class="margin-h blue" id="gong-type-preview">Preview</button>
+          </form>
+        </div>
+        <div>
+          <h3>Gong repeat: {{ gong_repeat }}</h3>
+
+          <form action="/settings/gong-repeat" method="post">
+            <label for="gong-repeat">New gong repeat:</label>
+            <select id="gong-repeat" name="gong-repeat">
+              {% for repeat in range(2, 9) %}
+              <option value="{{ repeat }}" {% if repeat == gong_repeat %}selected{% endif %}>{{ repeat }}</option>
+              {% endfor %}
+            </select>
+            <br>
+            <button type="submit" class="margin-h">Change</button>
+          </form>
+        </div>
       </div>
 
       <hr>
@@ -59,4 +89,27 @@
       {% include 'test.njk' %}
     </div> 
   </section>
+
+  <script>
+    const gong_types = {{ getGongTypes() | dump | safe }};
+
+    let gong_type_audio = document.getElementById('gong-type-preview-audio');
+
+    document.getElementById('gong-type-preview').addEventListener('click', function() {
+      if (!gong_type_audio.paused || gong_type_audio.currentTime) {
+        gong_type_audio.pause();
+        gong_type_audio.currentTime = 0;
+        return;
+      }
+      const type = document.getElementById('gong-type').value;
+
+      console.log("Playing gong type preview: " + type);
+
+      let gong_type = gong_types.find(t => t.name === type);
+
+      gong_type_audio.src = `/${gong_type.file_name}`;
+      gong_type_audio.load();
+      gong_type_audio.play();
+    });
+  </script>
 {% endblock %}

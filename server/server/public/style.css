@@ -146,6 +146,11 @@ button {
     max-width: 80vw;
 }
 
+.margin-h {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
 label {
     width: 100%;
     margin: 2rem 0 0.5rem;
@@ -288,7 +293,8 @@ dt {
 }
 
 div.columns {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     flex-direction: row;
 }
 

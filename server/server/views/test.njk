@@ -30,9 +30,9 @@
 
     <label for="type">Type</label>
     <select id="type" name="type">
-        <option value="gong">Gong</option>
-        <option value="beep">Beep</option>
-        <option value="silence">Silence</option>
+        {% for type in getGongTypes(true) %}
+            <option value="{{ type.name }}" {% if type.name == gong_type.name %}selected{% endif %}>{{ type.name }}</option>
+        {% endfor %}
     </select>
 
     <br>

@@ -3,6 +3,7 @@ var Interval = luxon.Interval
 
 const clientId = 'mqttjs_' + Math.random().toString(16).substring(2, 10)
 const host = `ws://${location.hostname}:9001`
+// const host = `ws://10.0.0.80:9001`
 const options = {
     keepalive: 60,
     clientId: clientId,

@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { getLocations, getManualEntry } from '../src/lib'
+import { getGongTypeByName, getGongTypes, getLocations, getManualEntry } from '../src/lib'
 
 test('get all locations', () => {
     let locationsHandled = ['all']
@@ -64,4 +64,18 @@ test('Get manual activation location based on time', () => {
 
     entry = getManualEntry(DateTime.fromFormat('23:59', 'HH:mm'))
     expect(entry.locations).toEqual([])
+})
+
+
+const expectedFileNames = ['public/sounds/brass-bowl.mp3', 'public/sounds/big-ben.mp3', 'public/sounds/big-gong.mp3', 'public/sounds/silence.mp3', 'public/sounds/beep.mp3']
+
+test('Gong sounds exist', () => {
+    const fs = require('fs');
+    const path = require('path');
+
+    for (let type of getGongTypes(true)) {
+        let file_name = `public/${getGongTypeByName(type.name).file_name}`
+        expect(expectedFileNames).toContain(file_name)
+        expect(fs.existsSync(path.resolve(file_name))).toBe(true)
+    }
 })

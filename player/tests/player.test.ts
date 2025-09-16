@@ -5,7 +5,6 @@ import { AuthInfo, ClientInfo, ServerInfo } from '@tmigone/pulseaudio';
 
 import { Player } from "../src/player"
 import BalenaAudio from "balena-audio";
-import { typeStringToFileName } from "../src/lib";
 
 const EventEmitter = require('events').EventEmitter;
 class Client extends EventEmitter { }
@@ -46,11 +45,4 @@ test('Player instance', async () => {
 
     expect(clientOnSpy.called).toBe(true)
     expect(audioListenSpy.called).toBe(true)
-})
-
-test('Type to file path', () => {
-    expect(typeStringToFileName('gong')).toEqual('./sound/gong-8s.mp3')
-    expect(typeStringToFileName('unknown')).toEqual('./sound/gong-8s.mp3')
-    expect(typeStringToFileName('silence')).toEqual('./sound/silence-8s.mp3')
-    expect(typeStringToFileName('beep')).toEqual('./sound/beep.mp3')
 })

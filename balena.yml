@@ -10,6 +10,7 @@ assets:
 data:
   applicationEnvironmentVariables:
     - DEVICES: 
+    - GONG_TYPE:
     - GONG_REPEAT: 4
     - AUTOMATION: false
     - LOCATION_ID: 
@@ -21,4 +22,4 @@ data:
     - raspberrypi3
     - raspberrypi3-64
     - raspberrypi4-64
-version: 1.9.1
+version: 1.10.0

@@ -4,11 +4,13 @@ import * as Sentry from "@sentry/node";
 
 import { DateTime } from "luxon";
 
-import { DeviceStatus, PlayMessage, Status } from "./models"
+import { DeviceStatus, GongType, PlayMessage, Status } from "./models"
 import { Automation } from './automation';
 import { aggregateDeviceStatus, numberOfActivePlayers, updateDevicesStatus } from './devices';
 import { setupWebRoutes } from './web'
 import { handleMessage as handleMqttMessage } from "./mqtt";
+import { getGongTypes, default_gong_type, getGongTypeByName } from "./lib";
+import { balenaUpdateEnvironmentVariable } from './balena';
 
 let client:any
 
@@ -19,6 +21,7 @@ class Server {
     enabled: boolean = true
     gongPlaying: boolean = false
     gongRepeat: number = 4
+    gong_type: GongType = default_gong_type
     devices: Array<DeviceStatus> = []
     unknownDevices: Array<DeviceStatus> = []
     automation: Automation
@@ -31,10 +34,11 @@ class Server {
      * @param devices which devices should exist in the network
      * @param gongRepeat how many times a gong should be played
      */
-    constructor(mqttClient:any, devices: Array<string>, gongRepeat: number = 4, automationEnabled:boolean = false, locationId?:number, enabled:boolean = true) {
+    constructor(mqttClient:any, devices: Array<string>, gongRepeat: number = 4, gongType: GongType = default_gong_type, automationEnabled:boolean = false, locationId?:number, enabled:boolean = true) {
         client = mqttClient
         this.enabled = enabled
         this.gongRepeat = gongRepeat
+        this.gong_type = gongType
         this.automation = new Automation(this.playAutomatedGong, locationId, automationEnabled, this.gongRepeat)
 
         for (let device of devices) {
@@ -58,7 +62,7 @@ class Server {
             }
         }, 60000)
 
-        console.log(`[server] Gong server starting. Enabled: ${this.enabled}, required devices: ${this.devices}, repeat: ${this.gongRepeat}, automation: ${automationEnabled}, locationId: ${locationId}`)
+        console.log(`[server] Gong server starting. Enabled: ${this.enabled}, required devices: ${this.devices}, repeat: ${this.gongRepeat}, gong type: ${this.gong_type.name}, automation: ${automationEnabled}, locationId: ${locationId}`)
         console.log(`[server] System time: ${DateTime.now().toFormat('yyyy-MM-dd HH:mm:ss')}`)
 
         this.resetWatchdog()
@@ -142,7 +146,7 @@ class Server {
                 return
             }
 
-            let message = JSON.stringify(new PlayMessage('gong', location, repeatGong))
+            let message = JSON.stringify(new PlayMessage(this.gong_type.name, location, repeatGong))
 
             // If no player reports playback started within 5 seconds after message sent,
             // send stop to inform remotes
@@ -188,6 +192,35 @@ class Server {
 
         if (!this.gongPlaying)
             this.playGong(location, repeat)
+    }
+
+    /**
+     * Change the default gong type and update environment variable in balenaCloud
+     * @param type which type to play [brass-bowl, big-ben, big-gong]
+     */
+    setGongType(name: string) {
+        this.gong_type = getGongTypeByName(name)
+        
+        balenaUpdateEnvironmentVariable('GONG_TYPE', this.gong_type.name)
+        
+        console.log(`[server] Gong type set to '${this.gong_type.name}'`)
+    }
+
+    /**
+     * Change the default gong repeat and update environment variable in balenaCloud
+     * @param repeat how many times to play the gong [2-8]
+     */
+    setGongRepeat(repeat: number) {
+        if (isNaN(repeat) || repeat < 2 || repeat > 8) {
+            console.error(`[server] Invalid gong repeat: ${repeat}. Setting to default 4`)
+            repeat = 4
+        }
+
+        this.gongRepeat = repeat
+        
+        balenaUpdateEnvironmentVariable('GONG_REPEAT', this.gongRepeat.toString())
+        
+        console.log(`[server] Gong repeat set to ${repeat}`)
     }
 
     /**

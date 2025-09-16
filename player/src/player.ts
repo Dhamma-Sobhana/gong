@@ -6,8 +6,8 @@ import play from 'play-sound'
 import { MqttClient } from 'mqtt'
 import BalenaAudio from 'balena-audio'
 
-import { getLocations, parseJson, typeStringToFileName } from './lib'
-import { Message } from './models'
+import { getGongTypeByName, getLocations, parseJson } from './lib'
+import { GongType, Message } from './models'
 
 const playSound = play({})
 
@@ -103,13 +103,15 @@ class Player {
             this.sendPong()
         } else if (topic === `test/${this.name}`) {
             console.log('[player] Test playback started')
-            this.playGong(data.type, ['all'], 1000)
+            let type = getGongTypeByName(data.type)
+            this.playGong(type, ['all'], 1000)
         } else if (topic == 'stop' && this.audio !== undefined) {
             this.audio.kill()
             this.audio = undefined
             console.log('[player] Stopping playback')
         } else if (topic == 'play' && !this.disabled) {
-            this.playGong(data.type, data.locations, data.repeat)
+            let type = getGongTypeByName(data.type)
+            this.playGong(type, data.locations, data.repeat)
         }
     }
 
@@ -119,7 +121,7 @@ class Player {
      * @param locations to play in
      * @param repeat number of times to play
      */
-    playGong = async (type:string, locations: Array<string>, repeat: number) => {
+    playGong = async (type:GongType, locations: Array<string>, repeat: number) => {
         locations = getLocations(this.locations, locations)
 
         if (locations.length === 0) {
@@ -133,7 +135,7 @@ class Player {
             this.audio.kill()
         }
 
-        console.log(`[player] Playing '${type}' in locations '${locations}'`)
+        console.log(`[player] Playing '${type.name}' in locations '${locations}'`)
 
         let message = JSON.stringify(new Message(this.name, locations))
         this.client.publish(`playing`, message);
@@ -145,13 +147,12 @@ class Player {
 
     /**
      * Start playback of sound
+     * @param type of sound to play
      * @param locations where to play
      * @param repeat number of times to play
      */
-    startPlayback = (type:string , locations: Array<string>, repeat: number) => {
-        let file_name = typeStringToFileName(type)
-
-        this.audio = playSound.play(file_name, (err: any) => {
+    startPlayback = (type:GongType, locations: Array<string>, repeat: number) => {
+        this.audio = playSound.play(type.file_name, (err: any) => {
             if (err && err.killed) {
                 console.log(`[player] Playback stopped by server`)
             } else if (err) {
@@ -168,7 +169,7 @@ class Player {
      * @param locations where to play
      * @param repeat number of times left to play
      */
-    playBackFinished = async (type:string, locations: Array<string>, repeat: number) => {
+    playBackFinished = async (type:GongType, locations: Array<string>, repeat: number) => {
         await this.setVolume(audioVolume)
 
         // Play again

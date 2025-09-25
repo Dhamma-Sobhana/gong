@@ -26,10 +26,17 @@ test('Time table exists', () => {
 });
 
 test('Get TimeTable Json', () => {
-    expect(getTimeTableJson('unknown').days.default.length).toBe(0);
+    expect(getTimeTableJson('default').days.default.length).toBe(3);
     expect(getTimeTableJson(undefined).days.default.length).toBe(3);
+    expect(getTimeTableJson('unknown').days.default.length).toBe(0);
     expect(getTimeTableJson('ServicePeriod').days.default.length).toBe(3);
+    
+    expect(getTimeTableJson('3-DayOSC').days[4].length).toBe(3);
     expect(getTimeTableJson('10-Day').days[11].length).toBe(3);
+    expect(getTimeTableJson('Satipatthana').days[9].length).toBe(3);
+
+    expect(getTimeTableJson('OSProgram').days[0].length).toBe(2);
+    expect(getTimeTableJson('OpenHouse').days.default.length).toBe(2);
 });
 
 test('Get TimeTable', () => {

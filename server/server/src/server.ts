@@ -25,7 +25,7 @@ class Server {
     devices: Array<DeviceStatus> = []
     unknownDevices: Array<DeviceStatus> = []
     automation: Automation
-    deviceStatusTimer: NodeJS.Timer
+    deviceStatusTimer: NodeJS.Timeout
     watchdog?: NodeJS.Timeout
     playTimeout?: NodeJS.Timeout = undefined
 

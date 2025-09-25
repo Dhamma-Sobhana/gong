@@ -122,6 +122,20 @@ function setupWebRoutes(server:Server, client:any) {
         })
     })
 
+    app.get('/schedule/list', (req: Request, res: Response) => {
+        let courses = server.automation.getCourses()
+        let start = courses[0].start
+        let end = courses[courses.length - 1].end
+        
+        let schedule = server.automation.schedule.getScheduleByDatePeriod(start, end)
+        
+        res.render('schedule-list.njk', {
+            schedule: schedule?.entries || [],
+            start: start,
+            end: end,
+        })
+    })
+
     app.get('/devices', (req: Request, res: Response) => {
         res.render('devices.njk', {
             enabled: server.enabled,
@@ -235,20 +249,6 @@ function setupWebRoutes(server:Server, client:any) {
         server.automation.scheduleGong(server.automation.getNextGong())
 
         res.redirect('/schedule')
-    })
-
-    app.get('/automation/schedule', (req: Request, res: Response) => {
-        let courses = server.automation.getCourses()
-        let start = courses[0].start
-        let end = courses[courses.length - 1].end
-        
-        let schedule = server.automation.schedule.getScheduleByDatePeriod(start, end)
-        
-        res.render('schedule.njk', {
-            schedule: schedule?.entries || [],
-            start: start,
-            end: end,
-        })
     })
 
     app.post('/test/stop', (req: Request, res: Response) => {

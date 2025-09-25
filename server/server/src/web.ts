@@ -113,7 +113,7 @@ function setupWebRoutes(server:Server, client:any) {
     })
 
     app.get('/schedule', (req: Request, res: Response) => {
-        res.render('automation.njk', {
+        res.render('schedule.njk', {
             enabled: server.enabled,
             status: server.systemStatus(),
             playing: server.gongPlaying,

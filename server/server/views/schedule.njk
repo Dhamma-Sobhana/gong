@@ -1,96 +1,86 @@
 {% extends 'base.njk' %}
 
-{% set title = 'Gong Schedule ' + start.toISODate() + ' - ' + end.toISODate() %}
+{% set title = 'Gong - Schedule' %}
+{% set active_page = "schedule" %}
 
 {% block content %}
-<style>
-    body {
-        background-color: #fff;
-        color: #000;
-        margin-left: 1rem;
-    }
 
-    header {
-        display: none;
-    }
-
-    main {
-        margin-top: 0;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    th, td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-    th {
-        background-color: #f2f2f2;
-    }
-    tr.date_change {
-        border-top: 2px solid darkgrey;
-    }
-
-    .overflow-scroll {
-        overflow-x: auto;
-    }
-
-    a {
-        display: inline-block;
-        padding: 2rem 0;
-        font-size: 20px;
-    }
-
-    button {
-        margin: 10px 0;
-    }
-
-    @media print {
-        .no-print, .no-print * {
-            display: none !important;
-        }
-    }
-</style>
-
-<a href="/" class="no-print">Go back</a>
-
-<br>
-
-<button class="no-print" onClick="window.print()">Print schedule</button>
+<section>
+    <div>
 
 <h1>Gong Schedule</h1>
-<h2>From {{ start.toISODate() }} to {{ end.toISODate() }}</h2>
+
+<p>Gong schedule for today and tomorrow. Press <strong>Disable</strong> to skip that specific time.</p>
+
+{% if automation.enabled %}
+<div class="overflow-scroll">
+<table>
+<thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Location</th>
+        <th>Course</th>
+        <th>Action</th>
+    </tr>
+</thead>
+<tbody>
+{% for entry in automation.getSchedule() %}
+<tr class="{% if not entry.active %}disabled{% endif %}">
+    <td>{{ entry.time.toFormat('yyyy-MM-dd HH:mm') }}</td>
+    <td>{{ entry.type }}</td>
+    <td>{{ entry.locations }}</td>
+    <td>{{ entry.getCourse() }}</td>
+    <td>
+        {% if entry.active %}
+        <button name="entry_id" value="{{entry.time}}" formaction="/automation/entry/disable" type="submit" class="disable">Disable</button>
+        {% else %}
+        <button name="entry_id" value="{{entry.time}}" formaction="/automation/entry/enable" type="submit" class="enable">Enable</button>
+        {% endif %}
+    <td>
+</tr>
+{% else %}
+<tr>
+    <td>Schedule not available</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+
+<p>Full available gong schedule for currently fetched courses.</p>
+
+<a href="/schedule/list" class="button">Show full gong schedule</a>
+
+<h3>Courses</h3>
+<p>Current and upcoming courses.</p>
 
 <div class="overflow-scroll">
 <form method="post">
 <table>
 <thead>
     <tr>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Location</th>
-        <th>Course</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Type</th>
     </tr>
 </thead>
-{% for entry in schedule %}
-<tr class="{% if last_date != entry.time.toISODate() %}date_change{% endif %}">
-    <td>{{ entry.time.toFormat('yyyy-MM-dd') }}</td>
-    <td>{{ entry.time.toFormat('HH:mm') }}</td>
-    <td>{{ entry.locations }}</td>
-    <td>{{ entry.getCourse() }}</td>
-</tr>
-{% set last_date = entry.time.toISODate() %}
-{% else %}
-<tr>
-    <td>Schedule not available</td>
-</tr>
+<tbody>
+{% for course in automation.getCourses() %}
+    <tr>
+        <td>{{ course.start.toISODate() }}</td>
+        <td>{{ course.end.toISODate() }}</td>
+        <td>{{ course.type }}</td>
+    </tr>
 {% endfor %}
+</tbody>
 </table>
 </form>
 </div>
 
-<a href="/" class="no-print">Go back</a>
+{% else %}
+<h3>Automation: disabled</h3>
+{% endif %}
+</div>
+</section>
 {% endblock %}

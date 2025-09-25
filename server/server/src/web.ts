@@ -26,7 +26,7 @@ app.use(cookieParser(), function(req, res, next) {
     let token = req.cookies.token;
 
     // If pin is disabled, token is correct, accessing login screen or static files
-    if (pin_code === undefined || token == access_hash || req.path === '/login' || req.path.endsWith('.css') || req.path.endsWith('.js') || req.path.endsWith('.png') || req.path.endsWith('.json') || req.path.endsWith('.mp3')) {
+    if (pin_code === undefined || token == access_hash || req.path === '/login' || req.path === '/schedule/list' || req.path.endsWith('.css') || req.path.endsWith('.js') || req.path.endsWith('.png') || req.path.endsWith('.json') || req.path.endsWith('.mp3')) {
         next();
     } else {
         res.redirect('/login');

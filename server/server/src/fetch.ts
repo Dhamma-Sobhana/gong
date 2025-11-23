@@ -49,14 +49,15 @@ async function fetchSchedule(locationId:number) {
 }
 
 /**
- * Get course type, start and end from schedule
+ * Get course type, start and end from schedule, excluding sub-locations
  * @param schedule that was fetched in json format
  * @returns array of Course
  */
 function parseSchedule(schedule: any): Array<Course> {
     let courses: Array<Course> = []
     for (let course of schedule['courses']) {
-        courses.push(new Course(course['raw_course_type'], course['course_start_date'], course['course_end_date']))
+        if (course['location']['sub_location_id'] == null)
+            courses.push(new Course(course['raw_course_type'], course['course_start_date'], course['course_end_date']))
     }
 
     return courses

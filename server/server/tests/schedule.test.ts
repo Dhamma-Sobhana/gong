@@ -95,24 +95,24 @@ test('Get day with multiple courses', () => {
 
 test('Get course day by date', () => {
     let date = DateTime.fromISO('2023-09-17T00:00:00');
-    let result = getCourseDayByDate(schedule.courses[4], date);
+    let result = getCourseDayByDate(schedule.courses[3], date);
 
     expect(result).toBe(11);
 
     date = DateTime.fromISO('2023-09-12T23:59:59');
-    result = getCourseDayByDate(schedule.courses[4], date);
+    result = getCourseDayByDate(schedule.courses[3], date);
 
     expect(result).toBe(6);
 
     date = DateTime.fromISO('2023-09-06T23:59:59');
-    result = getCourseDayByDate(schedule.courses[4], date);
+    result = getCourseDayByDate(schedule.courses[3], date);
 
     expect(result).toBe(0);
 });
 
 test('Get timetable with default day on dynamic course', () => {
     let date = DateTime.fromISO('2023-09-06T00:00:00');
-    let course = schedule.courses[4]
+    let course = schedule.courses[3]
     expect(getCourseDayByDate(course, date)).toBe(0)
 
     let timeTable = getTimeTable('10-Day', date, getCourseDayByDate(course, date), REPEAT_COUNT)

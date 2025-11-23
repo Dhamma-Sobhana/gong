@@ -33,8 +33,10 @@ test('Parse courses', () => {
     let result:Array<Course> = parseSchedule(data)
 
     expect(result).toBeDefined()
-    expect(result.length).toBe(6)
+    expect(result.length).toBe(5)
     expect(result[0]['type']).toBe('Child')
     expect(result[0]['start'].toISODate()).toBe('2023-08-25')
     expect(result[0]['end'].toISODate()).toBe('2023-08-27')
+
+    expect(result[1]['type']).toBe('3-DayOSC')
 })

@@ -75,5 +75,10 @@ test('ButtonChanged', () => {
     let pressTimeBefore = remote.pressTime
     remote.buttonChanged(undefined, Gpio.LOW)
     //expect(remote.pressTime).toBeGreaterThan(pressTimeBefore)
+    expect(remote.error).toBeDefined()
+    expect(remote.timeout).toBeUndefined()
+
+    remote.cancelErrorMode()
+    remote.buttonChanged(undefined, Gpio.LOW)
     expect(remote.timeout).toBeDefined()
 })

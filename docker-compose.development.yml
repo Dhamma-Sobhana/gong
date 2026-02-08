@@ -9,7 +9,7 @@ services:
       - 'mqtt-config-dir:/mosquitto/config'
     restart: "no"
   mqtt:
-    image: eclipse-mosquitto:2
+    image: eclipse-mosquitto:2.0
     volumes:
       - 'mqtt-config-dir:/mosquitto/config'
     ports:

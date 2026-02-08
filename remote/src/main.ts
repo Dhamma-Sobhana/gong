@@ -27,6 +27,8 @@ const buttonGpio = new Gpio(buttonPin, 'in', 'both');
 const client = mqtt.connect(`mqtt://${server}`, {
     'username': 'mqtt',
     'password': `${process.env.MQTT_PASSWORD}`,
+    'queueQoSZero': false,
+    'keepalive': 5,
 })
 
 console.log(`[remote] Gong remote starting.\n\nName: ${name}\nServer: ${server}`)

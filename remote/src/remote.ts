@@ -137,6 +137,10 @@ class Remote {
             throw err;
         }
 
+        if (this.error !== undefined)
+            return;
+        
+
         if (value == Gpio.LOW) { //  Button presseed            
             if (this.timeout !== undefined)
                 return;

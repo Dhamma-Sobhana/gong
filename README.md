@@ -513,7 +513,7 @@ For running all services on a single device in local mode using *balenaCloud*:
 
 Or to run all services on a single device deployed to **gong/development** on *balenaCloud*:
 
-    balena push gong/development
+    balena push gong_2/development
 
 # Deployment
 
@@ -528,12 +528,12 @@ Deployment to *balenaCloud* and devices is done from subfolders for each device 
 
     cd player
     balena push gong/player
+    balena push gong_2/player
 
 ## Remote
 
     cd remote
     balena push gong/remote
-
 
 # Attribution
 
